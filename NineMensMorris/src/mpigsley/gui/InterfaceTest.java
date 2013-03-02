@@ -1221,7 +1221,7 @@ public class InterfaceTest {
 
 		// Create button posThirteen and add to pieces
 		final JButton posThirteen = new JButton(
-				new ImageIcon("images/blue.png"));
+				new ImageIcon("src/images/blue.png"));
 		posThirteen.setBounds(859, 365, 50, 50);
 		posThirteen.setVisible(true);
 		posThirteen.setOpaque(false);
@@ -1241,7 +1241,7 @@ public class InterfaceTest {
 
 		// Create button posFourteen and add to pieces
 		final JButton posFourteen = new JButton(
-				new ImageIcon("images/blue.png"));
+				new ImageIcon("src/images/blue.png"));
 		posFourteen.setBounds(947, 365, 50, 50);
 		posFourteen.setVisible(true);
 		posFourteen.setOpaque(false);
@@ -1299,7 +1299,7 @@ public class InterfaceTest {
 
 		// Create button posSeventeen and add to pieces
 		final JButton posSeventeen = new JButton(new ImageIcon(
-				"images/blue.png"));
+				"src/images/blue.png"));
 		posSeventeen.setBounds(695, 529, 50, 50);
 		posSeventeen.setVisible(true);
 		posSeventeen.setOpaque(false);
@@ -1319,7 +1319,7 @@ public class InterfaceTest {
 
 		// Create button posEighteen and add to pieces
 		final JButton posEighteen = new JButton(
-				new ImageIcon("images/blue.png"));
+				new ImageIcon("src/images/blue.png"));
 		posEighteen.setBounds(859, 529, 50, 50);
 		posEighteen.setVisible(true);
 		posEighteen.setOpaque(false);
@@ -1339,7 +1339,7 @@ public class InterfaceTest {
 
 		// Create button posNineteen and add to pieces
 		final JButton posNineteen = new JButton(
-				new ImageIcon("images/blue.png"));
+				new ImageIcon("src/images/blue.png"));
 		posNineteen.setBounds(443, 617, 50, 50);
 		posNineteen.setVisible(true);
 		posNineteen.setOpaque(false);
@@ -1378,7 +1378,7 @@ public class InterfaceTest {
 
 		// Create button posTwentyOne and add to pieces
 		final JButton posTwentyOne = new JButton(new ImageIcon(
-				"images/blue.png"));
+				"src/images/blue.png"));
 		posTwentyOne.setBounds(947, 617, 50, 50);
 		posTwentyOne.setVisible(true);
 		posTwentyOne.setOpaque(false);
@@ -1398,7 +1398,7 @@ public class InterfaceTest {
 
 		// Create button posTwentyTwo and add to pieces
 		final JButton posTwentyTwo = new JButton(new ImageIcon(
-				"images/blue.png"));
+				"src/images/blue.png"));
 		posTwentyTwo.setBounds(355, 705, 50, 50);
 		posTwentyTwo.setVisible(true);
 		posTwentyTwo.setOpaque(false);
@@ -1418,7 +1418,7 @@ public class InterfaceTest {
 
 		// Create button posTwentyThree and add to pieces
 		final JButton posTwentyThree = new JButton(new ImageIcon(
-				"images/blue.png"));
+				"src/images/blue.png"));
 		posTwentyThree.setBounds(695, 705, 50, 50);
 		posTwentyThree.setVisible(true);
 		posTwentyThree.setOpaque(false);
@@ -1438,7 +1438,7 @@ public class InterfaceTest {
 
 		// Create button posTwentyFour and add to pieces
 		final JButton posTwentyFour = new JButton(new ImageIcon(
-				"images/blue.png"));
+				"src/images/blue.png"));
 		posTwentyFour.setBounds(1035, 705, 50, 50);
 		posTwentyFour.setVisible(true);
 		posTwentyFour.setOpaque(false);
