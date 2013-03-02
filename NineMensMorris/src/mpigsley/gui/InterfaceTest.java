@@ -23,8 +23,8 @@ public class InterfaceTest {
 	private int slideNum = 1;
 	private int flyMode = 1;
 	private boolean timer = false;
-	private ImageIcon bluePiece = new ImageIcon("images/blue.png");
-	private ImageIcon redPiece = new ImageIcon("images/red.png");
+	private ImageIcon bluePiece = new ImageIcon("src/images/blue.png");
+	private ImageIcon redPiece = new ImageIcon("src/images/red.png");
 
 	public InterfaceTest() {
 		// Initialize contentPane
@@ -49,7 +49,7 @@ public class InterfaceTest {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
 		try {
-			background = new JPanelWithBackground("images/background.jpg");
+			background = new JPanelWithBackground("src/images/background.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 			background = null;
@@ -231,7 +231,7 @@ public class InterfaceTest {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
 		try {
-			background = new JPanelWithBackground("images/background.jpg");
+			background = new JPanelWithBackground("src/images/background.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 			background = null;
@@ -301,7 +301,7 @@ public class InterfaceTest {
 		buttons.add(fly);
 
 		// Create Fly Mode 4 Radio button & add to Layer
-		final JButton fMThree = new JButton(new ImageIcon("images/off.png"));
+		final JButton fMThree = new JButton(new ImageIcon("src/images/off.png"));
 		fMThree.setBounds(660, 470, 30, 30);
 		fMThree.setVisible(true);
 		fMThree.setOpaque(false);
@@ -310,7 +310,7 @@ public class InterfaceTest {
 		buttons.add(fMThree);
 
 		// Create Fly Mode 3 Radio button & add to Layer
-		final JButton fMFour = new JButton(new ImageIcon("images/off.png"));
+		final JButton fMFour = new JButton(new ImageIcon("src/images/off.png"));
 		fMFour.setBounds(810, 470, 30, 30);
 		fMFour.setVisible(true);
 		fMFour.setOpaque(false);
@@ -319,7 +319,7 @@ public class InterfaceTest {
 		buttons.add(fMFour);
 
 		// Create Fly Mode Off Radio button & add to Layer
-		final JButton fMOff = new JButton(new ImageIcon("images/off.png"));
+		final JButton fMOff = new JButton(new ImageIcon("src/images/off.png"));
 		fMOff.setBounds(960, 470, 30, 30);
 		fMOff.setVisible(true);
 		fMOff.setOpaque(false);
@@ -332,10 +332,10 @@ public class InterfaceTest {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Set all others to off
-				fMFour.setIcon(new ImageIcon("images/off.png"));
-				fMOff.setIcon(new ImageIcon("images/off.png"));
+				fMFour.setIcon(new ImageIcon("src/images/off.png"));
+				fMOff.setIcon(new ImageIcon("src/images/off.png"));
 				// Set to this one to on
-				fMThree.setIcon(new ImageIcon("images/on.png"));
+				fMThree.setIcon(new ImageIcon("src/images/on.png"));
 				// Update global flyMode var
 				flyMode = 1;
 			}
@@ -345,10 +345,10 @@ public class InterfaceTest {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Set all others to off
-				fMThree.setIcon(new ImageIcon("images/off.png"));
-				fMOff.setIcon(new ImageIcon("images/off.png"));
+				fMThree.setIcon(new ImageIcon("src/images/off.png"));
+				fMOff.setIcon(new ImageIcon("src/images/off.png"));
 				// Set to this one to on
-				fMFour.setIcon(new ImageIcon("images/on.png"));
+				fMFour.setIcon(new ImageIcon("src/images/on.png"));
 				// Update global flyMode var
 				flyMode = 2;
 			}
@@ -358,10 +358,10 @@ public class InterfaceTest {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Set all others to off
-				fMFour.setIcon(new ImageIcon("images/off.png"));
-				fMThree.setIcon(new ImageIcon("images/off.png"));
+				fMFour.setIcon(new ImageIcon("src/images/off.png"));
+				fMThree.setIcon(new ImageIcon("src/images/off.png"));
 				// Set to this one to on
-				fMOff.setIcon(new ImageIcon("images/on.png"));
+				fMOff.setIcon(new ImageIcon("src/images/on.png"));
 				// Update global flyMode var
 				flyMode = 3;
 			}
@@ -376,7 +376,7 @@ public class InterfaceTest {
 		buttons.add(timerTitle);
 
 		// Create Timer On Radio button & add to Layer
-		final JButton tOn = new JButton(new ImageIcon("images/off.png"));
+		final JButton tOn = new JButton(new ImageIcon("src/images/off.png"));
 		tOn.setBounds(660, 575, 30, 30);
 		tOn.setVisible(true);
 		tOn.setOpaque(false);
@@ -385,7 +385,7 @@ public class InterfaceTest {
 		buttons.add(tOn);
 
 		// Create Timer Off Radio button & add to Layer
-		final JButton tOff = new JButton(new ImageIcon("images/off.png"));
+		final JButton tOff = new JButton(new ImageIcon("src/images/off.png"));
 		tOff.setBounds(860, 575, 30, 30);
 		tOff.setVisible(true);
 		tOff.setOpaque(false);
@@ -398,9 +398,9 @@ public class InterfaceTest {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Set other to off
-				tOff.setIcon(new ImageIcon("images/off.png"));
+				tOff.setIcon(new ImageIcon("src/images/off.png"));
 				// Set to this one to on
-				tOn.setIcon(new ImageIcon("images/on.png"));
+				tOn.setIcon(new ImageIcon("src/images/on.png"));
 				// Update global timer var
 				timer = true;
 			}
@@ -410,9 +410,9 @@ public class InterfaceTest {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Set all others to off
-				tOn.setIcon(new ImageIcon("images/off.png"));
+				tOn.setIcon(new ImageIcon("src/images/off.png"));
 				// Set to this one to on
-				tOff.setIcon(new ImageIcon("images/on.png"));
+				tOff.setIcon(new ImageIcon("src/images/on.png"));
 				// Update global timer var
 				timer = false;
 			}
@@ -450,16 +450,16 @@ public class InterfaceTest {
 
 		// Set Default Settings for Options Menu
 		if (this.timer) {
-			tOn.setIcon(new ImageIcon("images/on.png"));
+			tOn.setIcon(new ImageIcon("src/images/on.png"));
 		} else {
-			tOff.setIcon(new ImageIcon("images/on.png"));
+			tOff.setIcon(new ImageIcon("src/images/on.png"));
 		}
 		if (flyMode == 1) {
-			fMThree.setIcon(new ImageIcon("images/on.png"));
+			fMThree.setIcon(new ImageIcon("src/images/on.png"));
 		} else if (flyMode == 2) {
-			fMFour.setIcon(new ImageIcon("images/on.png"));
+			fMFour.setIcon(new ImageIcon("src/images/on.png"));
 		} else {
-			fMOff.setIcon(new ImageIcon("images/on.png"));
+			fMOff.setIcon(new ImageIcon("src/images/on.png"));
 		}
 
 	}
@@ -474,7 +474,7 @@ public class InterfaceTest {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
 		try {
-			background = new JPanelWithBackground("images/board.jpg");
+			background = new JPanelWithBackground("src/images/board.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 			background = null;
@@ -760,7 +760,7 @@ public class InterfaceTest {
 		// Create bOne & add the pieces
 		JPanel bOne;
 		try {
-			bOne = new JPanelWithBackground("images/blue.png");
+			bOne = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bOne = null;
@@ -773,7 +773,7 @@ public class InterfaceTest {
 		// Create bTwo & add the pieces
 		JPanel bTwo;
 		try {
-			bTwo = new JPanelWithBackground("images/blue.png");
+			bTwo = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bTwo = null;
@@ -786,7 +786,7 @@ public class InterfaceTest {
 		// Create bThree & add the pieces
 		JPanel bThree;
 		try {
-			bThree = new JPanelWithBackground("images/blue.png");
+			bThree = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bThree = null;
@@ -799,7 +799,7 @@ public class InterfaceTest {
 		// Create bFour & add the pieces
 		JPanel bFour;
 		try {
-			bFour = new JPanelWithBackground("images/blue.png");
+			bFour = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bFour = null;
@@ -812,7 +812,7 @@ public class InterfaceTest {
 		// Create bFive & add the pieces
 		JPanel bFive;
 		try {
-			bFive = new JPanelWithBackground("images/blue.png");
+			bFive = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bFive = null;
@@ -825,7 +825,7 @@ public class InterfaceTest {
 		// Create bSix & add the pieces
 		JPanel bSix;
 		try {
-			bSix = new JPanelWithBackground("images/blue.png");
+			bSix = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bSix = null;
@@ -838,7 +838,7 @@ public class InterfaceTest {
 		// Create bSeven & add the pieces
 		JPanel bSeven;
 		try {
-			bSeven = new JPanelWithBackground("images/blue.png");
+			bSeven = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bSeven = null;
@@ -851,7 +851,7 @@ public class InterfaceTest {
 		// Create bEight & add the pieces
 		JPanel bEight;
 		try {
-			bEight = new JPanelWithBackground("images/blue.png");
+			bEight = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bEight = null;
@@ -864,7 +864,7 @@ public class InterfaceTest {
 		// Create bNine & add the pieces
 		JPanel bNine;
 		try {
-			bNine = new JPanelWithBackground("images/blue.png");
+			bNine = new JPanelWithBackground("src/images/blue.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			bNine = null;
@@ -877,7 +877,7 @@ public class InterfaceTest {
 		// Create aOne & add the pieces
 		JPanel aOne;
 		try {
-			aOne = new JPanelWithBackground("images/red.png");
+			aOne = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aOne = null;
@@ -890,7 +890,7 @@ public class InterfaceTest {
 		// Create aTwo & add the pieces
 		JPanel aTwo;
 		try {
-			aTwo = new JPanelWithBackground("images/red.png");
+			aTwo = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aTwo = null;
@@ -903,7 +903,7 @@ public class InterfaceTest {
 		// Create aThree & add the pieces
 		JPanel aThree;
 		try {
-			aThree = new JPanelWithBackground("images/red.png");
+			aThree = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aThree = null;
@@ -916,7 +916,7 @@ public class InterfaceTest {
 		// Create aFour & add the pieces
 		JPanel aFour;
 		try {
-			aFour = new JPanelWithBackground("images/red.png");
+			aFour = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aFour = null;
@@ -929,7 +929,7 @@ public class InterfaceTest {
 		// Create aFive & add the pieces
 		JPanel aFive;
 		try {
-			aFive = new JPanelWithBackground("images/red.png");
+			aFive = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aFive = null;
@@ -942,7 +942,7 @@ public class InterfaceTest {
 		// Create aSix & add the pieces
 		JPanel aSix;
 		try {
-			aSix = new JPanelWithBackground("images/red.png");
+			aSix = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aSix = null;
@@ -955,7 +955,7 @@ public class InterfaceTest {
 		// Create aSeven & add the pieces
 		JPanel aSeven;
 		try {
-			aSeven = new JPanelWithBackground("images/red.png");
+			aSeven = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aSeven = null;
@@ -968,7 +968,7 @@ public class InterfaceTest {
 		// Create aEight & add the pieces
 		JPanel aEight;
 		try {
-			aEight = new JPanelWithBackground("images/red.png");
+			aEight = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aEight = null;
@@ -981,7 +981,7 @@ public class InterfaceTest {
 		// Create bNine & add the pieces
 		JPanel aNine;
 		try {
-			aNine = new JPanelWithBackground("images/red.png");
+			aNine = new JPanelWithBackground("src/images/red.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 			aNine = null;
@@ -992,7 +992,7 @@ public class InterfaceTest {
 		pieces.add(aNine);
 
 		// Create button posOne and add to pieces
-		final JButton posOne = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posOne = new JButton(new ImageIcon("src/images/blue.png"));
 		posOne.setBounds(355, 25, 50, 50);
 		posOne.setVisible(true);
 		posOne.setOpaque(false);
@@ -1011,7 +1011,7 @@ public class InterfaceTest {
 		pieces.add(posOne);
 
 		// Create button posTwo and add to pieces
-		final JButton posTwo = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posTwo = new JButton(new ImageIcon("src/images/blue.png"));
 		posTwo.setBounds(695, 25, 50, 50);
 		posTwo.setVisible(true);
 		posTwo.setOpaque(false);
@@ -1030,7 +1030,7 @@ public class InterfaceTest {
 		pieces.add(posTwo);
 
 		// Create button posThree and add to pieces
-		final JButton posThree = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posThree = new JButton(new ImageIcon("src/images/blue.png"));
 		posThree.setBounds(1035, 25, 50, 50);
 		posThree.setVisible(true);
 		posThree.setOpaque(false);
@@ -1049,7 +1049,7 @@ public class InterfaceTest {
 		pieces.add(posThree);
 
 		// Create button posFour and add to pieces
-		final JButton posFour = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posFour = new JButton(new ImageIcon("src/images/blue.png"));
 		posFour.setBounds(443, 113, 50, 50);
 		posFour.setVisible(true);
 		posFour.setOpaque(false);
@@ -1068,7 +1068,7 @@ public class InterfaceTest {
 		pieces.add(posFour);
 
 		// Create button posFive and add to pieces
-		final JButton posFive = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posFive = new JButton(new ImageIcon("src/images/blue.png"));
 		posFive.setBounds(695, 113, 50, 50);
 		posFive.setVisible(true);
 		posFive.setOpaque(false);
@@ -1087,7 +1087,7 @@ public class InterfaceTest {
 		pieces.add(posFive);
 
 		// Create button posSix and add to pieces
-		final JButton posSix = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posSix = new JButton(new ImageIcon("src/images/blue.png"));
 		posSix.setBounds(947, 113, 50, 50);
 		posSix.setVisible(true);
 		posSix.setOpaque(false);
@@ -1106,7 +1106,7 @@ public class InterfaceTest {
 		pieces.add(posSix);
 
 		// Create button posSeven and add to pieces
-		final JButton posSeven = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posSeven = new JButton(new ImageIcon("src/images/blue.png"));
 		posSeven.setBounds(531, 201, 50, 50);
 		posSeven.setVisible(true);
 		posSeven.setOpaque(false);
@@ -1125,7 +1125,7 @@ public class InterfaceTest {
 		pieces.add(posSeven);
 
 		// Create button posEight and add to pieces
-		final JButton posEight = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posEight = new JButton(new ImageIcon("src/images/blue.png"));
 		posEight.setBounds(695, 201, 50, 50);
 		posEight.setVisible(true);
 		posEight.setOpaque(false);
@@ -1144,7 +1144,7 @@ public class InterfaceTest {
 		pieces.add(posEight);
 
 		// Create button posNine and add to pieces
-		final JButton posNine = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posNine = new JButton(new ImageIcon("src/images/blue.png"));
 		posNine.setBounds(859, 201, 50, 50);
 		posNine.setVisible(true);
 		posNine.setOpaque(false);
@@ -1163,7 +1163,7 @@ public class InterfaceTest {
 		pieces.add(posNine);
 
 		// Create button posTen and add to pieces
-		final JButton posTen = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posTen = new JButton(new ImageIcon("src/images/blue.png"));
 		posTen.setBounds(355, 365, 50, 50);
 		posTen.setVisible(true);
 		posTen.setOpaque(false);
@@ -1182,7 +1182,7 @@ public class InterfaceTest {
 		pieces.add(posTen);
 
 		// Create button posEleven and add to pieces
-		final JButton posEleven = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posEleven = new JButton(new ImageIcon("src/images/blue.png"));
 		posEleven.setBounds(443, 365, 50, 50);
 		posEleven.setVisible(true);
 		posEleven.setOpaque(false);
@@ -1201,7 +1201,7 @@ public class InterfaceTest {
 		pieces.add(posEleven);
 
 		// Create button posTwelve and add to pieces
-		final JButton posTwelve = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posTwelve = new JButton(new ImageIcon("src/images/blue.png"));
 		posTwelve.setBounds(531, 365, 50, 50);
 		posTwelve.setVisible(true);
 		posTwelve.setOpaque(false);
@@ -1260,7 +1260,7 @@ public class InterfaceTest {
 		pieces.add(posFourteen);
 
 		// Create button posFifteen and add to pieces
-		final JButton posFifteen = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posFifteen = new JButton(new ImageIcon("src/images/blue.png"));
 		posFifteen.setBounds(1035, 365, 50, 50);
 		posFifteen.setVisible(true);
 		posFifteen.setOpaque(false);
@@ -1279,7 +1279,7 @@ public class InterfaceTest {
 		pieces.add(posFifteen);
 
 		// Create button posSixteen and add to pieces
-		final JButton posSixteen = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posSixteen = new JButton(new ImageIcon("src/images/blue.png"));
 		posSixteen.setBounds(531, 529, 50, 50);
 		posSixteen.setVisible(true);
 		posSixteen.setOpaque(false);
@@ -1358,7 +1358,7 @@ public class InterfaceTest {
 		pieces.add(posNineteen);
 
 		// Create button posTwenty and add to pieces
-		final JButton posTwenty = new JButton(new ImageIcon("images/blue.png"));
+		final JButton posTwenty = new JButton(new ImageIcon("src/images/blue.png"));
 		posTwenty.setBounds(695, 617, 50, 50);
 		posTwenty.setVisible(true);
 		posTwenty.setOpaque(false);
@@ -1471,7 +1471,7 @@ public class InterfaceTest {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
 		try {
-			background = new JPanelWithBackground("images/background.jpg");
+			background = new JPanelWithBackground("src/images/background.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 			background = null;
