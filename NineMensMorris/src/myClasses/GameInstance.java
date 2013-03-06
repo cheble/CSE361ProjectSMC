@@ -7,6 +7,9 @@ package myClasses;
  * @author Mitchel Pigsley, Chase Heble, Sam Troxel
  */
 public class GameInstance {
+	
+	//TODO Should we have the playerID (array index) as a Player attribute?  This will get rid of a parameter in a number of functions.
+	//TODO Also, should we do use playerID instead of players[] index?  We could then call the players player1 and player2.
 
 	private GameInterface boardInterface;
 	private Player[] players;
