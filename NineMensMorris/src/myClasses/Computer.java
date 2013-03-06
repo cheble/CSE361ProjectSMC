@@ -1,5 +1,11 @@
+package myClasses;
+
+
 public class Computer extends Player {
 
+	/**
+	 * creates placement move
+	 */
 	public int[][] placePiece() {
 		throw new UnsupportedOperationException();
 	}

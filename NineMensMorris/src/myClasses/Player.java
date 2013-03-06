@@ -1,3 +1,5 @@
+package myClasses;
+
 public class Player {
 
 	private String name;

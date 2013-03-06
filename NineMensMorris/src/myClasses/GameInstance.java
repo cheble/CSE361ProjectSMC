@@ -1,9 +1,40 @@
-public class GameInstance {
+package myClasses;
 
-	private GameInterface myInterface;
+/**
+ * <b>Game Instance</b><p>
+ * The main instance of the game. It controls the gameboard gui, the players, and the piece movement logic.
+ * @version 0.1
+ * @author Mitchel Pigsley, Chase Heble, Sam Troxel
+ */
+public class GameInstance {
+	
+	//TODO Should we have the playerID (array index) as a Player attribute?  This will get rid of a parameter in a number of functions.
+	//TODO Also, should we do use playerID instead of players[] index?  We could then call the players player1 and player2.
+
+	private GameInterface boardInterface;
 	private Player[] players;
 	private Options myOptions;
-	private Gameboard myBoard;
+	private GameBoard myBoard;
+
+	/**
+	 * @param options - The options for the game selected in the main menu.
+	 */
+	public GameInstance(Options options) {
+		// create the players
+		myOptions = options;
+		players = new Player[2];
+		players[0] = new Player();
+		if (myOptions.getComputerPlayer()){
+			players[1] = new Computer();
+		} else {
+			players[1] = new Player();
+		}
+		
+		// create the gameboard and draw the Board gui
+		myBoard = new GameBoard(players);
+		boardInterface = new GameGUI();
+		((GameGUI)boardInterface).drawBoard();
+	}
 
 	public int chooseStartingPlayer() {
 		throw new UnsupportedOperationException();
