@@ -1,4 +1,11 @@
+package myClasses;
+
 public class Piece {
+
+	public Piece(Player owner) {
+		super();
+		Owner = owner;
+	}
 
 	private Player Owner;
 

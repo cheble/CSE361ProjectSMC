@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.InputStream;
 //This is for font TEST TEST
 import java.io.File;
 //-------------------------
@@ -30,8 +31,15 @@ public class InterfaceTest {
 	private ImageIcon redPiece = new ImageIcon("src/images/red.png");
 	//CHASE EDITED HERE!------------------------------------------------------------
 	//File fontFile = new File("src/font/Coalition_v2.ttf");
-	File fontFile = new File("src/font/Calibri.ttf");
-	Font myFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+	//File fontFile = new File("/NineMensMorris/src/font/Calibri.ttf");
+	//Font myFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+	
+	
+	
+	InputStream fontStream = this.getClass().getResourceAsStream("/NineMensMorris/src/font/Calibri.ttf");
+	Font baseFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+	fontStream.close;
+	
 	//------------------------------------------------------------------------------
 	public InterfaceTest() {
 		// Initialize contentPane
