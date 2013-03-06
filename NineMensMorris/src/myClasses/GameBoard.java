@@ -25,29 +25,57 @@ public class GameBoard {
 
 	/**
 	 * 
+	 * @return returns -1 for error
 	 * @param position
 	 */
 	public int addPiece(int playerID, int[] position) {
 		//look for highest indexed piece on players side
-		int index = piecesOnSide(playerID);
-		//no pieces on side
-		if(index == 0){
-			
+		int index = piecesOnSide(playerID)-1;
+		
+		//--------Conditions BEGIN
+		//check for no pieces on side
+		if(index == -1){
+			return -1;	
 		}
+		//check if board position is taken
+		if(board[position[0]][position[1]] != null){
+			return -1;
+		}
+		//--------Conditions END
+		
 		//add piece to board
 		board[position[0]][position[1]] = side[playerID][index];
 		//remove piece from side
 		side[playerID][index] = null;
 		
+		return 0;
 	}
 
 	/**
 	 * 
+	 * @return returns -1 for error
 	 * @param position1
 	 * @param position2
 	 */
-	public void movePiece(int[] position1, int[] postition2) {
-		throw new UnsupportedOperationException();
+	public int movePiece(int[] position1, int[] position2) {
+		
+		//--------Conditions BEGIN
+		//check if a piece is at position1 on board
+		if(board[position1[0]][position1[1]] == null){
+			return -1;
+		}
+		//check if board at position2 is taken
+		if(board[position2[0]][position2[1]] != null){
+			return -1;
+		}
+		//--------Conditions END
+		
+		//move piece to position2
+		board[position2[0]][position2[1]] = board[position1[0]][position1[1]];
+		//remove piece from position1
+		board[position1[0]][position1[1]] = null;
+		
+		return 0;
 	}
 
 	/**
