@@ -1667,4 +1667,68 @@ public class InterfaceTest {
 		return slideNum;
 	}
 
+}			public void mouseEntered(MouseEvent arg0) {
+				previous.setForeground(Color.LIGHT_GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				previous.setForeground(Color.WHITE);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (slideNum > 1) {
+					slideNum--;
+					cl.show(cardPanel, "" + slideNum);
+				}
+			}
+		});
+
+	}
+
+	public int getFlyMode() {
+		return flyMode;
+	}
+
+	public boolean isTimer() {
+		return timer;
+	}
+
+	public int getSlideNum() {
+		return slideNum;
+	}
+
+}			public void mouseEntered(MouseEvent arg0) {
+				previous.setForeground(Color.LIGHT_GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				previous.setForeground(Color.WHITE);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (slideNum > 1) {
+					slideNum--;
+					cl.show(cardPanel, "" + slideNum);
+				}
+			}
+		});
+
+	}
+
+	public int getFlyMode() {
+		return flyMode;
+	}
+
+	public boolean isTimer() {
+		return timer;
+	}
+
+	public int getSlideNum() {
+		return slideNum;
+	}
+
 }
