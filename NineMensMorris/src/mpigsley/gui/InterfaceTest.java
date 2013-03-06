@@ -7,10 +7,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.io.InputStream;
-//This is for font TEST TEST
-import java.io.File;
-//-------------------------
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,13 +29,7 @@ public class InterfaceTest {
 	//CHASE EDITED HERE!------------------------------------------------------------
 	//File fontFile = new File("src/font/Coalition_v2.ttf");
 	//File fontFile = new File("/NineMensMorris/src/font/Calibri.ttf");
-	//Font myFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-	
-	
-	
-	InputStream fontStream = this.getClass().getResourceAsStream("/NineMensMorris/src/font/Calibri.ttf");
-	Font baseFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-	fontStream.close;
+	//Font myFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);	
 	
 	//------------------------------------------------------------------------------
 	public InterfaceTest() {
