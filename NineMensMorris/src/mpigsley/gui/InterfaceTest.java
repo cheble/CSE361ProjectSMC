@@ -7,6 +7,9 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+//This is for font TEST TEST
+import java.io.File;
+//-------------------------
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,7 +28,11 @@ public class InterfaceTest {
 	private boolean timer = false;
 	private ImageIcon bluePiece = new ImageIcon("src/images/blue.png");
 	private ImageIcon redPiece = new ImageIcon("src/images/red.png");
-
+	//CHASE EDITED HERE!------------------------------------------------------------
+	//File fontFile = new File("src/font/Coalition_v2.ttf");
+	File fontFile = new File("src/font/Calibri.ttf");
+	Font myFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+	//------------------------------------------------------------------------------
 	public InterfaceTest() {
 		// Initialize contentPane
 		contentPane = new JFrame();
@@ -40,7 +47,7 @@ public class InterfaceTest {
 	}
 
 	public void createMain() {
-		// Initialize LayeredPane
+		// Initialize LayeredPane	
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, 1440, 900);
 		layeredPane.setLayout(null);
