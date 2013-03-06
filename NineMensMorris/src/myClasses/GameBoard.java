@@ -170,11 +170,57 @@ public class GameBoard {
 	}
 
 	/**
+	 * @author Chase
+	 * 
 	 * 
 	 * @param player
 	 */
 	public boolean isMill(Player player) {
-		throw new UnsupportedOperationException();
+		//check outer square mills
+		if( isMill(new int[]{0,0}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		if( isMill(new int[]{0,4}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		//check inner square mills
+		if( isMill(new int[]{2,0}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		if( isMill(new int[]{2,4}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		//check middle square and across square mills
+		if( isMill(new int[]{1,1}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		if( isMill(new int[]{1,3}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		if( isMill(new int[]{1,5}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		if( isMill(new int[]{1,7}) &&
+			board[0][0].getOwner() == player)
+		{
+			return true;
+		}
+		//No mill owned by player on board
+		return false;
 	}
 
 	/**
@@ -192,6 +238,8 @@ public class GameBoard {
 	}
 
 	/**
+	 * @author Chase
+	 * 
 	 * 
 	 * @param position
 	 */
