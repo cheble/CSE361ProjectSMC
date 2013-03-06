@@ -41,5 +41,15 @@ public class Player {
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
+	
+	
+	/**
+	 * @author Chase
+	 * 
+	 */
+	public void incrementNumMoves(){
+		numMoves++;
+		
+	}
 
 }
