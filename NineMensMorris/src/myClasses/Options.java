@@ -1,3 +1,6 @@
+package myClasses;
+
+
 public class Options {
 
 	private int flyRule;
@@ -28,6 +31,13 @@ public class Options {
 		this.timer = timer;
 	}
 
+	/**
+	 * <b>Get Computer Player</b><p>
+	 * This returns what type of game is selected. 
+	 * @return 
+	 * True = Computer vs Human;<p>
+	 * False = Human vs Human
+	 */
 	public boolean getComputerPlayer() {
 		return this.computerPlayer;
 	}

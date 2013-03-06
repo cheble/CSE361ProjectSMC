@@ -1,8 +1,22 @@
+package myClasses;
+
+import javax.swing.JPanel;
+
+import mpigsley.gui.InterfaceTest;
+
 public class Main {
 
-	private GameInstance game;
+	private static GameInstance game;
 	private JPanel contentPane;
-	private MenuInterface menu;
+	private static MenuInterface menu;
+	
+	public static void main(String[] args) {
+		// Instantiate new Menu GUI
+		menu = new MenuGUI();
+		while(!menu.isGameReady()){
+		}
+		game = new GameInstance(menu.getOptions());
+	}
 
 	public void playGame() {
 		throw new UnsupportedOperationException();
