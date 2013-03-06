@@ -26,16 +26,17 @@ public class InterfaceTest {
 	private boolean timer = false;
 	private boolean resolution = false;
 
-	private ImageIcon bluePiece = new ImageIcon("images/blue.png");
-	private ImageIcon redPiece = new ImageIcon("images/red.png");
-	private ImageIcon off = new ImageIcon("images/off.png");
-	private ImageIcon on = new ImageIcon("images/on.png");
-	private String backL = "images/backgroundLarge.jpg";
-	private String backS = "images/backgroundSmall.jpg";
-	private String boardL = "images/boardLarge.jpg";
-	private String boardS = "images/boardSmall.jpg";
-	private String blue = "images/blue.png";
-	private String red = "images/red.png";
+	private String backL = "src/images/backgroundLarge.jpg";
+	private String backS = "src/images/backgroundSmall.jpg";
+	private String boardL = "src/images/boardLarge.jpg";
+	private String boardS = "src/images/boardSmall.jpg";
+	private String blue = "src/images/blue.png";
+	private String red = "src/images/red.png";
+	private ImageIcon bluePiece = new ImageIcon(blue);
+	private ImageIcon redPiece = new ImageIcon(red);
+	private ImageIcon off = new ImageIcon("src/images/off.png");
+	private ImageIcon on = new ImageIcon("src/images/on.png");
+	
 
 	public InterfaceTest() {
 		// Initialize contentPane
@@ -466,7 +467,7 @@ public class InterfaceTest {
 				// Set to this one to on
 				rOn.setIcon(on);
 				// Update global timer var
-				timer = true;
+				resolution = true;
 			}
 		});
 
@@ -478,7 +479,7 @@ public class InterfaceTest {
 				// Set to this one to on
 				rOff.setIcon(on);
 				// Update global timer var
-				timer = false;
+				resolution = false;
 			}
 		});
 
@@ -687,7 +688,7 @@ public class InterfaceTest {
 						createHowTo(howToPanel);
 					}
 				});
-				howTo.setFont(new Font("Coalition", Font.PLAIN, 35));
+				howTo.setFont(new Font("Coalition", Font.PLAIN, 40));
 				howTo.setForeground(Color.BLACK);
 				howTo.setBounds(0, menuTitle.getY() + 150, menu.getWidth(), 65);
 				howTo.setOpaque(false);
@@ -713,7 +714,7 @@ public class InterfaceTest {
 						// DO SOMETHING
 					}
 				});
-				restart.setFont(new Font("Coalition", Font.PLAIN, 35));
+				restart.setFont(new Font("Coalition", Font.PLAIN, 40));
 				restart.setForeground(Color.BLACK);
 				restart.setBounds(0, howTo.getY() + 80, menu.getWidth(), 65);
 				restart.setOpaque(false);
@@ -743,7 +744,7 @@ public class InterfaceTest {
 						createMain();
 					}
 				});
-				main.setFont(new Font("Coalition", Font.PLAIN, 35));
+				main.setFont(new Font("Coalition", Font.PLAIN, 40));
 				main.setForeground(Color.BLACK);
 				main.setBounds(0, restart.getY() + 80, menu.getWidth(), 65);
 				main.setOpaque(false);
@@ -770,7 +771,7 @@ public class InterfaceTest {
 						menu.setVisible(false);
 					}
 				});
-				close.setFont(new Font("Coalition", Font.PLAIN, 35));
+				close.setFont(new Font("Coalition", Font.PLAIN, 40));
 				close.setForeground(Color.BLACK);
 				close.setBounds(0, main.getY() + 80, menu.getWidth(), 65);
 				close.setOpaque(false);
@@ -847,7 +848,7 @@ public class InterfaceTest {
 			e.printStackTrace();
 			bThree = null;
 		}
-		bThree.setBounds(bTwo.getX(), bTwo.getY(), 50, 50);
+		bThree.setBounds(bTwo.getX() + 50, bTwo.getY(), 50, 50);
 		bThree.setVisible(true);
 		bThree.setOpaque(false);
 		pieces.add(bThree);
@@ -925,7 +926,7 @@ public class InterfaceTest {
 			e.printStackTrace();
 			bNine = null;
 		}
-		bNine.setBounds(bSeven.getX() + 50, bSeven.getY(), 50, 50);
+		bNine.setBounds(bEight.getX() + 50, bEight.getY(), 50, 50);
 		bNine.setVisible(true);
 		bNine.setOpaque(false);
 		pieces.add(bNine);
@@ -964,7 +965,7 @@ public class InterfaceTest {
 			e.printStackTrace();
 			aThree = null;
 		}
-		aThree.setBounds(aTwo.getX(), aTwo.getY(), 50, 50);
+		aThree.setBounds(aTwo.getX() + 50, aTwo.getY(), 50, 50);
 		aThree.setVisible(true);
 		aThree.setOpaque(false);
 		pieces.add(aThree);

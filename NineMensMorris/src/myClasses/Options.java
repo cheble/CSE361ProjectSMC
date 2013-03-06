@@ -5,8 +5,16 @@ public class Options {
 
 	private int flyRule;
 	private boolean timer;
+	private boolean gameRes;
 	private boolean computerPlayer;
 
+	/**
+	 * 1 means 3 pieces left until flyRule starts
+	 * 2 means 4 pieces left until flyRule starts
+	 * 3 means flyRule off
+	 * 
+	 * @return flyRule
+	 */
 	public int getFlyRule() {
 		return this.flyRule;
 	}
@@ -48,6 +56,20 @@ public class Options {
 	 */
 	public void setComputerPlayer(boolean PC) {
 		this.computerPlayer = PC;
+	}
+
+	/**
+	 * @return the gameRes
+	 */
+	public boolean isGameRes() {
+		return gameRes;
+	}
+
+	/**
+	 * @param gameRes the gameRes to set
+	 */
+	public void setGameRes(boolean gameRes) {
+		this.gameRes = gameRes;
 	}
 
 }
