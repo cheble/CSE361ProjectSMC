@@ -6,15 +6,15 @@ public class Computer extends Player {
 	/**
 	 * creates placement move
 	 */
-	public int[][] placePiece() {
+	public int[] placePiece() {
 		throw new UnsupportedOperationException();
 	}
 
-	public int[][] movePiece() {
+	public int[] movePiece() {
 		throw new UnsupportedOperationException();
 	}
 
-	public int[][] takePiece() {
+	public int[] takePiece() {
 		throw new UnsupportedOperationException();
 	}
 
