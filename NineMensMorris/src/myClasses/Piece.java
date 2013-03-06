@@ -2,23 +2,22 @@ package myClasses;
 
 public class Piece {
 
-	public Piece(Player owner) {
-		super();
-		Owner = owner;
+	public Piece(Player player) {
+		player = owner;
 	}
 
-	private Player Owner;
+	private Player owner;
 
 	public Player getOwner() {
-		throw new UnsupportedOperationException();
+		return owner;
 	}
 
 	/**
 	 * 
 	 * @param Owner
 	 */
-	public void setOwner(Player Owner) {
-		throw new UnsupportedOperationException();
+	public void setOwner(Player player) {
+		owner = player;
 	}
 
 }

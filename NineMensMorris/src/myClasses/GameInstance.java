@@ -37,7 +37,7 @@ public class GameInstance {
 	}
 
 	public int chooseStartingPlayer() {
-		throw new UnsupportedOperationException();
+		return (int) ((Math.random()*99.0) % 2);
 	}
 
 	public void playerTurnPlace() {
@@ -57,11 +57,28 @@ public class GameInstance {
 	}
 
 	public boolean isGameOver() {
-		throw new UnsupportedOperationException();
+		//if game is in movement phase
+		if(true){
+			//make a variable for phase of the game
+		}
+		//If a player has more than 6 of his nine pieces taken
+		if( myBoard.piecesOnSide(0) > 6 ||
+			myBoard.piecesOnSide(1) > 6)
+		{
+			return true;	//Game is over
+		}
+		
+		return false;
 	}
 
 	public Player getWinner() {
-		throw new UnsupportedOperationException();
+		if( myBoard.piecesOnSide(0) > 6){
+			return players[0];	//Game is over
+		}
+		if(myBoard.piecesOnSide(1) > 6){
+			
+		}
+		return null;
 	}
 
 	public void Undo() {
