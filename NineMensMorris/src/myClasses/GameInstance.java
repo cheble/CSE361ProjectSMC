@@ -35,13 +35,42 @@ public class GameInstance {
 		boardInterface = new GameGUI();
 		((GameGUI)boardInterface).drawBoard();
 	}
+	
+
+	public void placementPhase() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void movementPhase() {
+		throw new UnsupportedOperationException();
+	}
 
 	public int chooseStartingPlayer() {
+		//choose random player to start the game
 		return (int) ((Math.random()*99.0) % 2);
 	}
 
-	public void playerTurnPlace() {
-		throw new UnsupportedOperationException();
+	public void playerTurnPlace(int playerID) {
+		int position[] = players[playerID].placePiece();
+		//TODO Might have to get rid of function call and implement here 
+		//			using condition for human or computer
+		
+		//TODO implement skip/undo somehow
+		
+		
+		//TODO put some conditions in here
+		//TODO Check if move is valid to game rules
+		
+		//TODO Set to board and check if move is valid to board
+		while(myBoard.addPiece(playerID, position) == -1){
+			//invalid move
+			//tell player or computer
+			//get new move
+			position = players[playerID].placePiece();
+		}
+		players[playerID].incrementNumMoves();
+		//pass the board to the gui
+		passBoard();
 	}
 
 	/**
@@ -53,6 +82,11 @@ public class GameInstance {
 	}
 
 	public boolean isTurnValid() {
+		//
+		
+		//
+		
+		//
 		throw new UnsupportedOperationException();
 	}
 
@@ -73,20 +107,27 @@ public class GameInstance {
 
 	public Player getWinner() {
 		if( myBoard.piecesOnSide(0) > 6){
-			return players[0];	//Game is over
+			return players[0];	//players[0] wins
 		}
 		if(myBoard.piecesOnSide(1) > 6){
-			
+			return players[1];	//players[1] wins
 		}
 		return null;
 	}
 
-	public void Undo() {
+	public void undo() {
 		throw new UnsupportedOperationException();
 	}
 
-	public void Skip() {
+	public void skip() {
 		throw new UnsupportedOperationException();
 	}
+	
+	//Pass board to gameInterface
+	//Or use drawBaord in gameInterface class???
+	public void passBoard(){
+		//
+	}
+	
 
 }
