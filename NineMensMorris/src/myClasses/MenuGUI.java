@@ -2,7 +2,6 @@ package myClasses;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,7 +36,9 @@ public class MenuGUI implements MenuInterface {
 
 	public MenuGUI(JFrame contentPane) {
 		this.contentPane = contentPane;
-
+		this.myOptions = new Options();
+		isGameReady = false;
+		
 		// Draw Main Menu
 		drawMenu();
 	}
@@ -96,11 +97,14 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Set isGameReady
-				isGameReady = true;
+				// Clear contentPane
+				contentPane.remove(layeredPane);
 				
 				// Update Options
 				myOptions.setComputerPlayer(true);
+				
+				// Set isGameReady
+				isGameReady = true;
 			}
 		});
 		hvc.setFont(new Font("Coalition", Font.PLAIN, 40));
@@ -126,11 +130,14 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Set isGameReady
-				isGameReady = true;
+				// Clear contentPane
+				contentPane.remove(layeredPane);
 				
 				// Update Options
 				myOptions.setComputerPlayer(false);
+				
+				// Set isGameReady
+				isGameReady = true;
 			}
 		});
 		hvh.setFont(new Font("Coalition", Font.PLAIN, 40));
@@ -222,6 +229,7 @@ public class MenuGUI implements MenuInterface {
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		buttons.add(exit);
+		
 	}
 
 	public void drawOptions() {
@@ -742,8 +750,13 @@ public class MenuGUI implements MenuInterface {
 	}
 
 	@Override
+	public void setOptions(Options myOptions) {
+		this.myOptions = myOptions;	
+	}
+	
+	@Override
 	public boolean isGameReady() {
 		return isGameReady;
 	}
-
+	
 }

@@ -1,15 +1,19 @@
+package myClasses;
+
+import javax.swing.JPanel;
+
 public interface GameInterface {
 
 	int[][] pieceSelect();
 
 	int[][] positionSelect();
 
-	int buttonSelect();
+	void drawGameMenu(final JPanel panel);
 
-	boolean detectInput();
-
-	int gameMenu();
-
-	int WinnerMenu();
+	void drawWinnerMenu(final JPanel panel);
+	
+	void drawBoard();
+	
+	boolean isGameQuit();
 
 }

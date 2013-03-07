@@ -2,11 +2,11 @@ package myClasses;
 
 public class Piece {
 
+	private Player owner;
+	
 	public Piece(Player player) {
 		player = owner;
 	}
-
-	private Player owner;
 
 	public Player getOwner() {
 		return owner;

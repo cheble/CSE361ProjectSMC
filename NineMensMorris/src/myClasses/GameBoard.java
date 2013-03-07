@@ -17,9 +17,14 @@ public class GameBoard {
 	private Piece[][] side;
 
 	public GameBoard(Player[] players) {
-		for (int i = 0; i <= 1; i++) {
-			for (int j = 0; j <= 9; j++) {
-				this.side[i][j] = new Piece(players[i]);
+		// Initialize Global Variables
+		board = new Piece[3][8];
+		side = new Piece[2][9];
+		
+		// Place all Pieces on Player's Sides
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 9; j++) {
+				side[i][j] = new Piece(players[i]);
 			}
 		}
 	}
@@ -244,7 +249,6 @@ public class GameBoard {
 	 * @param position
 	 */
 	public Piece getPiece(int[] position) {
-
 		return board[position[0]][position[1]];
 	}
 
