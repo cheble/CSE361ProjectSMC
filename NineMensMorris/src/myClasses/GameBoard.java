@@ -284,6 +284,8 @@ public class GameBoard {
 		return true;
 	}
 	
-	
+	public Piece[][] getBoard() {
+		return board;
+	}
 
 }

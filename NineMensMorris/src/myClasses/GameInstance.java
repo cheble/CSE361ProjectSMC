@@ -54,7 +54,7 @@ public class GameInstance {
 
 		// Start Placement Phase
 		while (!isGameOver()) {
-			if (boardInterface.isPlacement()) {
+			if (isPlacement) {
 				// PlacementPhase
 				placementPhase();
 			} else {

@@ -30,7 +30,6 @@ public class GameGUI implements GameInterface {
 	private boolean isPositionSelected;
 	private int[] pieceSelectedPos;
 	private int[] selectedPos;
-	private boolean isPlacement;
 	private Player[] players;
 
 	// Side Images
@@ -55,7 +54,6 @@ public class GameGUI implements GameInterface {
 		this.contentPane = contentPane;
 		isGameQuit = false;
 		slideNum = 1;
-		isPlacement = true;
 		names = new String[numHumans];
 		isPieceSelected = false;
 		isPositionSelected = false;
@@ -569,11 +567,11 @@ public class GameGUI implements GameInterface {
 		board[0][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][0])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 0;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][0].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 0;
@@ -595,11 +593,11 @@ public class GameGUI implements GameInterface {
 		board[0][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][1])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 1;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][1].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 1;
@@ -621,11 +619,11 @@ public class GameGUI implements GameInterface {
 		board[0][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][2])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 2;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][2].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 2;
@@ -647,11 +645,11 @@ public class GameGUI implements GameInterface {
 		board[1][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][0])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 0;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][0].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 0;
@@ -672,11 +670,11 @@ public class GameGUI implements GameInterface {
 		board[1][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][1])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 1;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][1].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 1;
@@ -698,11 +696,11 @@ public class GameGUI implements GameInterface {
 		board[1][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][2])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 2;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][2].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 2;
@@ -724,11 +722,11 @@ public class GameGUI implements GameInterface {
 		board[2][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][0])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 0;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][0].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 0;
@@ -749,11 +747,11 @@ public class GameGUI implements GameInterface {
 		board[2][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][1])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 1;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][1].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 1;
@@ -775,11 +773,11 @@ public class GameGUI implements GameInterface {
 		board[2][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][2])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 2;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][2].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 2;
@@ -801,11 +799,11 @@ public class GameGUI implements GameInterface {
 		board[0][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][7])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 7;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][7].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 7;
@@ -826,11 +824,11 @@ public class GameGUI implements GameInterface {
 		board[1][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][7])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 7;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][7].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 7;
@@ -851,11 +849,11 @@ public class GameGUI implements GameInterface {
 		board[2][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][7])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 7;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][7].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 7;
@@ -876,11 +874,11 @@ public class GameGUI implements GameInterface {
 		board[2][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][3])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 3;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][3].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 3;
@@ -901,11 +899,11 @@ public class GameGUI implements GameInterface {
 		board[1][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][3])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 3;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][3].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 3;
@@ -926,11 +924,11 @@ public class GameGUI implements GameInterface {
 		board[0][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][3])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 3;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][3].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 3;
@@ -952,11 +950,11 @@ public class GameGUI implements GameInterface {
 		board[2][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][6])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 6;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][6].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 6;
@@ -977,11 +975,11 @@ public class GameGUI implements GameInterface {
 		board[2][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][5])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 5;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][5].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 5;
@@ -1002,11 +1000,11 @@ public class GameGUI implements GameInterface {
 		board[2][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[2][4])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 4;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[2][4].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 2;
 					selectedPos[1] = 4;
@@ -1028,11 +1026,11 @@ public class GameGUI implements GameInterface {
 		board[1][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][6])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 6;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][6].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 6;
@@ -1053,11 +1051,11 @@ public class GameGUI implements GameInterface {
 		board[1][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][5])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 5;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][5].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 5;
@@ -1078,11 +1076,11 @@ public class GameGUI implements GameInterface {
 		board[1][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[1][4])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 1;
 					pieceSelectedPos[1] = 4;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[1][4].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 1;
 					selectedPos[1] = 4;
@@ -1104,11 +1102,11 @@ public class GameGUI implements GameInterface {
 		board[0][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][6])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 6;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][6].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 6;
@@ -1129,11 +1127,11 @@ public class GameGUI implements GameInterface {
 		board[0][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][5])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 5;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][5].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 5;
@@ -1154,11 +1152,11 @@ public class GameGUI implements GameInterface {
 		board[0][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected && !isPlacement) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]].equals(board[0][4])) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 0;
 					pieceSelectedPos[1] = 4;
-				} else if (!isPositionSelected) {
+				} else if (!isPositionSelected && board[0][4].getIcon() == null) {
 					isPositionSelected = true;
 					selectedPos[0] = 0;
 					selectedPos[1] = 4;
@@ -1541,16 +1539,12 @@ public class GameGUI implements GameInterface {
 		throw new UnsupportedOperationException();
 	}
 
-	public int[][] pieceSelect() {
-		return new int[pieceSelectedPos[0]][pieceSelectedPos[1]];
+	public int[] pieceSelect() {
+		return pieceSelectedPos;
 	}
 
-	public int[][] positionSelect() {
-		return new int[selectedPos[0]][selectedPos[1]];
-	}
-	
-	public boolean isPlacement() {
-		return isPlacement;
+	public int[] positionSelect() {
+		return selectedPos;
 	}
 
 	public boolean isGameQuit() {
@@ -1558,19 +1552,19 @@ public class GameGUI implements GameInterface {
 	}
 
 	@Override
-	public void setBoard(Piece[][] board) {
+	public void setBoard(GameBoard gm) {
 		// Clear The selected Positions on setBoard
 		for (int i = 0; i < pieceSelectedPos.length; i++) {
 			pieceSelectedPos[i] = (Integer) null;
 			selectedPos[i] = (Integer) null;
 		}
-		
-		// Set Pieces
+
+		// Set Pieces On Board
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (board[i][j].getOwner().equals(players[0])) {
+				if (gm.getBoard()[i][j].getOwner().equals(players[0])) {
 					this.board[i][j].setIcon(bluePiece);
-				} else if (board[i][j].getOwner().equals(players[1])) {
+				} else if (gm.getBoard()[i][j].getOwner().equals(players[1])) {
 					this.board[i][j].setIcon(redPiece);
 				} else {
 					// Do nothing
@@ -1578,8 +1572,34 @@ public class GameGUI implements GameInterface {
 			}
 		}
 
+		// Set Pieces on Side
+		for (int i = 0; i < 2; i++) {
+			setSideState(i, gm.piecesOnSide(i));
+		}
+
 		// Refresh the board
 		contentPane.getContentPane().repaint();
 	}
 
+	public void setSideState(int playerID, int numPieces) {
+		for (int i = 0; i < numPieces; i++) {
+			if (playerID == 0) {
+				try {
+					bSide[i] = new JPanelWithBackground(blue);
+				} catch (IOException e) {
+					e.printStackTrace();
+					bSide[i] = null;
+				}
+			} else {
+				try {
+					rSide[i] = new JPanelWithBackground(red);
+				} catch (IOException e) {
+					e.printStackTrace();
+					rSide[i] = null;
+				}
+			}
+		}
+	}
+
+	
 }

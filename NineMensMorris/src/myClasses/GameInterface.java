@@ -4,9 +4,9 @@ import javax.swing.JPanel;
 
 public interface GameInterface {
 
-	int[][] pieceSelect();
+	int[] pieceSelect();
 
-	int[][] positionSelect();
+	int[] positionSelect();
 
 	void drawGameMenu(final JPanel panel);
 
@@ -16,8 +16,6 @@ public interface GameInterface {
 	
 	boolean isGameQuit();
 	
-	boolean isPlacement();
-	
-	void setBoard(Piece[][] board);
+	void setBoard(GameBoard gm);
 
 }
