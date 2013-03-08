@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,22 +26,40 @@ public class MenuGUI implements MenuInterface {
 	private JFrame contentPane;
 	private boolean isGameReady;
 
-	private int slideNum = 1;
-	private int flyMode = 1;
-	private boolean timer = false;
-	private boolean resolution = false;
+	private int slideNum;
+	private int flyMode;
+	private boolean timer;
+	private boolean resolution;
 
-	private String backL = "src/images/backgroundLarge.jpg";
+	//private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "src/images/backgroundSmall.jpg";
 	private ImageIcon off = new ImageIcon("src/images/off.png");
 	private ImageIcon on = new ImageIcon("src/images/on.png");
-	
 
 	public MenuGUI(JFrame contentPane) {
+		// Initialize variables
 		this.contentPane = contentPane;
 		this.myOptions = new Options();
 		isGameReady = false;
-		
+		slideNum = 1;
+		flyMode = 1;
+		timer = false;
+		resolution = false;
+
+		// Draw Main Menu
+		drawMenu();
+	}
+	
+	public MenuGUI(JFrame contentPane, Options lastOptions) {
+		// Initialize variables
+		this.contentPane = contentPane;
+		this.myOptions = new Options();
+		isGameReady = false;
+		slideNum = 1;
+		flyMode = lastOptions.getFlyRule();
+		timer = lastOptions.getTimer();
+		resolution = lastOptions.getGameRes();
+
 		// Draw Main Menu
 		drawMenu();
 	}
@@ -82,7 +99,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel title = new JLabel("NINE MEN'S MORRIS");
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Coalition", Font.BOLD, 70));
+		title.setFont(new Font("Coalition", Font.PLAIN, 70));
 		title.setBounds(0, 86, contentPane.getWidth(), 127);
 		buttons.add(title);
 
@@ -103,10 +120,10 @@ public class MenuGUI implements MenuInterface {
 			public void mouseClicked(MouseEvent arg0) {
 				// Clear contentPane
 				contentPane.remove(layeredPane);
-				
+
 				// Update Options
 				myOptions.setComputerPlayer(true);
-				
+
 				// Set isGameReady
 				isGameReady = true;
 			}
@@ -136,10 +153,10 @@ public class MenuGUI implements MenuInterface {
 			public void mouseClicked(MouseEvent arg0) {
 				// Clear contentPane
 				contentPane.remove(layeredPane);
-				
+
 				// Update Options
 				myOptions.setComputerPlayer(false);
-				
+
 				// Set isGameReady
 				isGameReady = true;
 			}
@@ -233,7 +250,7 @@ public class MenuGUI implements MenuInterface {
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		buttons.add(exit);
-		
+
 	}
 
 	public void drawOptions() {
@@ -747,7 +764,7 @@ public class MenuGUI implements MenuInterface {
 	public void drawLeaderboards() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public Options getOptions() {
 		return myOptions;
@@ -755,12 +772,12 @@ public class MenuGUI implements MenuInterface {
 
 	@Override
 	public void setOptions(Options myOptions) {
-		this.myOptions = myOptions;	
+		this.myOptions = myOptions;
 	}
-	
+
 	@Override
 	public boolean isGameReady() {
 		return isGameReady;
 	}
-	
+
 }

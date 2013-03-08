@@ -40,4 +40,16 @@ public class GameTest implements GameInterface {
 		return false;
 	}
 
+	@Override
+	public boolean isPlacement() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setBoard(Piece[][] board) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

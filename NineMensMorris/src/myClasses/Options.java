@@ -61,7 +61,7 @@ public class Options {
 	/**
 	 * @return the gameRes
 	 */
-	public boolean isGameRes() {
+	public boolean getGameRes() {
 		return gameRes;
 	}
 

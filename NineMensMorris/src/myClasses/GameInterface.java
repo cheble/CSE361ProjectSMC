@@ -15,5 +15,9 @@ public interface GameInterface {
 	void drawBoard();
 	
 	boolean isGameQuit();
+	
+	boolean isPlacement();
+	
+	void setBoard(Piece[][] board);
 
 }
