@@ -10,7 +10,7 @@ public class Computer extends Player {
 		throw new UnsupportedOperationException();
 	}
 
-	public int[] movePiece() {
+	public int[][] movePiece() {
 		throw new UnsupportedOperationException();
 	}
 

@@ -1,9 +1,6 @@
 package myClasses;
 
 public class GameBoard {
-
-	//TODO see GameInstance for todo about players array
-	//TODO add conditions for position, make sure position[0] is 0..2, position[1] is 0..7
 	
 	//Game rules Validation is not handled in this class
 
@@ -36,6 +33,10 @@ public class GameBoard {
 	 * @param position
 	 */
 	public int addPiece(int playerID, int[] position) {
+		//check if position is in range
+		if(!isPositionValid(position)){
+			return -1;
+		}
 		// look for highest indexed piece on players side
 		int index = piecesOnSide(playerID) - 1;
 
@@ -66,7 +67,10 @@ public class GameBoard {
 	 * @param position2
 	 */
 	public int movePiece(int[] position1, int[] position2) {
-
+		//check if position1 and position2 are in range
+		if(!isPositionValid(position1) || !isPositionValid(position1)){
+			return -1;
+		}
 		//--------Conditions BEGIN
 		//check if a piece is at position1 on board
 		if (board[position1[0]][position1[1]] == null) {
@@ -93,6 +97,10 @@ public class GameBoard {
 	 * @param position
 	 */
 	public int takePiece(int playerID, int[] position) {
+		//check if position is in range
+		if(!isPositionValid(position)){
+			return -1;
+		}
 		//--------Conditions BEGIN
 		//check if a piece is at position1 on board
 		if (board[position[0]][position[1]] == null) {
@@ -117,6 +125,10 @@ public class GameBoard {
 	 * @param position
 	 */
 	public boolean isMill(int[] position) {
+		//check if position is in range
+		if(!isPositionValid(position)){
+			return false;
+		}
 		//--------Conditions BEGIN
 		//check if a piece is at position on board
 		if(board[position[0]][position[1]] == null){
@@ -249,7 +261,29 @@ public class GameBoard {
 	 * @param position
 	 */
 	public Piece getPiece(int[] position) {
+		//check if position is in range
+		if(!isPositionValid(position)){
+			return null;
+		}
 		return board[position[0]][position[1]];
 	}
+	
+	/**
+	 * @author Chase
+	 * 
+	 * 
+	 * @param position
+	 */
+	public boolean isPositionValid(int[] position) {
+		if(position[0] < 0 && position[0] > 2){
+			return false;
+		}
+		if(position[1] < 0 && position[1] > 7){
+			return false;
+		}
+		return true;
+	}
+	
+	
 
 }
