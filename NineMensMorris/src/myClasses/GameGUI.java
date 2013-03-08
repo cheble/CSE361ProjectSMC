@@ -21,25 +21,50 @@ import mpigsley.gui.JPanelWithBackground;
 
 public class GameGUI implements GameInterface {
 
+	// Variables
 	private JFrame contentPane;
 	private int slideNum;
 	private boolean isGameQuit;
 	private String names[];
+	private boolean isPieceSelected;
+	private boolean isPositionSelected;
+	private int[] pieceSelectedPos;
+	private int[] selectedPos;
+	private boolean isPlacement;
+	private Player[] players;
 
-	private String backL = "src/images/backgroundLarge.jpg";
+	// Side Images
+	private JPanel[] bSide;
+	private JPanel[] rSide;
+
+	// Button Game Board
+	private JButton[][] board;
+
+	// Image Locations, etc.
+	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "src/images/backgroundSmall.jpg";
-	private String boardL = "src/images/boardLarge.jpg";
+	// private String boardL = "src/images/boardLarge.jpg";
 	private String boardS = "src/images/boardSmall.jpg";
 	private String blue = "src/images/blue.png";
 	private String red = "src/images/red.png";
 	private ImageIcon bluePiece = new ImageIcon(blue);
 	private ImageIcon redPiece = new ImageIcon(red);
 
-	public GameGUI(JFrame contentPane, int numHumans) {
+	public GameGUI(JFrame contentPane, int numHumans, Player players[]) {
+		// Initiate Variables
 		this.contentPane = contentPane;
 		isGameQuit = false;
 		slideNum = 1;
+		isPlacement = true;
 		names = new String[numHumans];
+		isPieceSelected = false;
+		isPositionSelected = false;
+		pieceSelectedPos = new int[2];
+		selectedPos = new int[2];
+		bSide = new JPanel[9];
+		rSide = new JPanel[9];
+		board = new JButton[3][8];
+		this.players = players;
 
 		// Ask for Player Names
 		playerNames(numHumans);
@@ -121,6 +146,7 @@ public class GameGUI implements GameInterface {
 		ready.setVisible(true);
 		ready.setBounds(200, info.getHeight() - 150, info.getWidth() - 400, 50);
 		ready.setFont(new Font("Coalition", Font.PLAIN, 30));
+		ready.setOpaque(false);
 		info.add(ready);
 		ready.addMouseListener(new MouseAdapter() {
 
@@ -315,701 +341,833 @@ public class GameGUI implements GameInterface {
 		layeredPane.setLayer(pieces, 3);
 
 		// Create bOne & add the pieces
-		JPanel bOne;
 		try {
-			bOne = new JPanelWithBackground(blue);
+			bSide[0] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bOne = null;
+			bSide[0] = null;
 		}
-		bOne.setBounds(50, 350, 50, 50);
-		bOne.setVisible(true);
-		bOne.setOpaque(false);
-		pieces.add(bOne);
+		bSide[0].setBounds(50, 350, 50, 50);
+		bSide[0].setVisible(true);
+		bSide[0].setOpaque(false);
+		pieces.add(bSide[0]);
 
 		// Create bTwo & add the pieces
-		JPanel bTwo;
 		try {
-			bTwo = new JPanelWithBackground(blue);
+			bSide[1] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bTwo = null;
+			bSide[1] = null;
 		}
-		bTwo.setBounds(bOne.getX() + 50, bOne.getY(), 50, 50);
-		bTwo.setVisible(true);
-		bTwo.setOpaque(false);
-		pieces.add(bTwo);
+		bSide[1].setBounds(bSide[0].getX() + 50, bSide[0].getY(), 50, 50);
+		bSide[1].setVisible(true);
+		bSide[1].setOpaque(false);
+		pieces.add(bSide[1]);
 
 		// Create bThree & add the pieces
-		JPanel bThree;
 		try {
-			bThree = new JPanelWithBackground(blue);
+			bSide[2] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bThree = null;
+			bSide[2] = null;
 		}
-		bThree.setBounds(bTwo.getX() + 50, bTwo.getY(), 50, 50);
-		bThree.setVisible(true);
-		bThree.setOpaque(false);
-		pieces.add(bThree);
+		bSide[2].setBounds(bSide[1].getX() + 50, bSide[1].getY(), 50, 50);
+		bSide[2].setVisible(true);
+		bSide[2].setOpaque(false);
+		pieces.add(bSide[2]);
 
 		// Create bFour & add the pieces
-		JPanel bFour;
 		try {
-			bFour = new JPanelWithBackground(blue);
+			bSide[3] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bFour = null;
+			bSide[3] = null;
 		}
-		bFour.setBounds(bThree.getX() + 50, bThree.getY(), 50, 50);
-		bFour.setVisible(true);
-		bFour.setOpaque(false);
-		pieces.add(bFour);
+		bSide[3].setBounds(bSide[2].getX() + 50, bSide[2].getY(), 50, 50);
+		bSide[3].setVisible(true);
+		bSide[3].setOpaque(false);
+		pieces.add(bSide[3]);
 
 		// Create bFive & add the pieces
-		JPanel bFive;
 		try {
-			bFive = new JPanelWithBackground(blue);
+			bSide[4] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bFive = null;
+			bSide[4] = null;
 		}
-		bFive.setBounds(bOne.getX() - (bOne.getWidth() / 2), bFour.getY() + 50,
-				50, 50);
-		bFive.setVisible(true);
-		bFive.setOpaque(false);
-		pieces.add(bFive);
+		bSide[4].setBounds(bSide[0].getX() - (bSide[0].getWidth() / 2),
+				bSide[3].getY() + 50, 50, 50);
+		bSide[4].setVisible(true);
+		bSide[4].setOpaque(false);
+		pieces.add(bSide[4]);
 
 		// Create bSix & add the pieces
-		JPanel bSix;
 		try {
-			bSix = new JPanelWithBackground(blue);
+			bSide[5] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bSix = null;
+			bSide[5] = null;
 		}
-		bSix.setBounds(bFive.getX() + 50, bFive.getY(), 50, 50);
-		bSix.setVisible(true);
-		bSix.setOpaque(false);
-		pieces.add(bSix);
+		bSide[5].setBounds(bSide[4].getX() + 50, bSide[4].getY(), 50, 50);
+		bSide[5].setVisible(true);
+		bSide[5].setOpaque(false);
+		pieces.add(bSide[5]);
 
 		// Create bSeven & add the pieces
-		JPanel bSeven;
 		try {
-			bSeven = new JPanelWithBackground(blue);
+			bSide[6] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bSeven = null;
+			bSide[6] = null;
 		}
-		bSeven.setBounds(bSix.getX() + 50, bSix.getY(), 50, 50);
-		bSeven.setVisible(true);
-		bSeven.setOpaque(false);
-		pieces.add(bSeven);
+		bSide[6].setBounds(bSide[5].getX() + 50, bSide[5].getY(), 50, 50);
+		bSide[6].setVisible(true);
+		bSide[6].setOpaque(false);
+		pieces.add(bSide[6]);
 
 		// Create bEight & add the pieces
-		JPanel bEight;
 		try {
-			bEight = new JPanelWithBackground(blue);
+			bSide[7] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bEight = null;
+			bSide[7] = null;
 		}
-		bEight.setBounds(bSeven.getX() + 50, bSeven.getY(), 50, 50);
-		bEight.setVisible(true);
-		bEight.setOpaque(false);
-		pieces.add(bEight);
+		bSide[7].setBounds(bSide[6].getX() + 50, bSide[6].getY(), 50, 50);
+		bSide[7].setVisible(true);
+		bSide[7].setOpaque(false);
+		pieces.add(bSide[7]);
 
 		// Create bNine & add the pieces
-		JPanel bNine;
 		try {
-			bNine = new JPanelWithBackground(blue);
+			bSide[8] = new JPanelWithBackground(blue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			bNine = null;
+			bSide[8] = null;
 		}
-		bNine.setBounds(bEight.getX() + 50, bEight.getY(), 50, 50);
-		bNine.setVisible(true);
-		bNine.setOpaque(false);
-		pieces.add(bNine);
+		bSide[8].setBounds(bSide[7].getX() + 50, bSide[7].getY(), 50, 50);
+		bSide[8].setVisible(true);
+		bSide[8].setOpaque(false);
+		pieces.add(bSide[8]);
 
 		// Create aOne & add the pieces
-		JPanel aOne;
 		try {
-			aOne = new JPanelWithBackground(red);
+			rSide[0] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aOne = null;
+			rSide[0] = null;
 		}
-		aOne.setBounds(contentPane.getWidth() - 250, bOne.getY(), 50, 50);
-		aOne.setVisible(true);
-		aOne.setOpaque(false);
-		pieces.add(aOne);
+		rSide[0].setBounds(contentPane.getWidth() - 250, bSide[0].getY(), 50,
+				50);
+		rSide[0].setVisible(true);
+		rSide[0].setOpaque(false);
+		pieces.add(rSide[0]);
 
 		// Create aTwo & add the pieces
-		JPanel aTwo;
 		try {
-			aTwo = new JPanelWithBackground(red);
+			rSide[1] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aTwo = null;
+			rSide[1] = null;
 		}
-		aTwo.setBounds(aOne.getX() + 50, aOne.getY(), 50, 50);
-		aTwo.setVisible(true);
-		aTwo.setOpaque(false);
-		pieces.add(aTwo);
+		rSide[1].setBounds(rSide[0].getX() + 50, rSide[0].getY(), 50, 50);
+		rSide[1].setVisible(true);
+		rSide[1].setOpaque(false);
+		pieces.add(rSide[1]);
 
 		// Create aThree & add the pieces
-		JPanel aThree;
 		try {
-			aThree = new JPanelWithBackground(red);
+			rSide[2] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aThree = null;
+			rSide[2] = null;
 		}
-		aThree.setBounds(aTwo.getX() + 50, aTwo.getY(), 50, 50);
-		aThree.setVisible(true);
-		aThree.setOpaque(false);
-		pieces.add(aThree);
+		rSide[2].setBounds(rSide[1].getX() + 50, rSide[1].getY(), 50, 50);
+		rSide[2].setVisible(true);
+		rSide[2].setOpaque(false);
+		pieces.add(rSide[2]);
 
 		// Create aFour & add the pieces
-		JPanel aFour;
 		try {
-			aFour = new JPanelWithBackground(red);
+			rSide[3] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aFour = null;
+			rSide[3] = null;
 		}
-		aFour.setBounds(aThree.getX() + 50, aThree.getY(), 50, 50);
-		aFour.setVisible(true);
-		aFour.setOpaque(false);
-		pieces.add(aFour);
+		rSide[3].setBounds(rSide[2].getX() + 50, rSide[2].getY(), 50, 50);
+		rSide[3].setVisible(true);
+		rSide[3].setOpaque(false);
+		pieces.add(rSide[3]);
 
 		// Create aFive & add the pieces
-		JPanel aFive;
 		try {
-			aFive = new JPanelWithBackground(red);
+			rSide[4] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aFive = null;
+			rSide[4] = null;
 		}
-		aFive.setBounds(aOne.getX() - (aOne.getWidth() / 2), aFour.getY() + 50,
-				50, 50);
-		aFive.setVisible(true);
-		aFive.setOpaque(false);
-		pieces.add(aFive);
+		rSide[4].setBounds(rSide[0].getX() - (rSide[0].getWidth() / 2),
+				rSide[3].getY() + 50, 50, 50);
+		rSide[4].setVisible(true);
+		rSide[4].setOpaque(false);
+		pieces.add(rSide[4]);
 
 		// Create aSix & add the pieces
-		JPanel aSix;
 		try {
-			aSix = new JPanelWithBackground(red);
+			rSide[5] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aSix = null;
+			rSide[5] = null;
 		}
-		aSix.setBounds(aFive.getX() + 50, aFive.getY(), 50, 50);
-		aSix.setVisible(true);
-		aSix.setOpaque(false);
-		pieces.add(aSix);
+		rSide[5].setBounds(rSide[4].getX() + 50, rSide[4].getY(), 50, 50);
+		rSide[5].setVisible(true);
+		rSide[5].setOpaque(false);
+		pieces.add(rSide[5]);
 
 		// Create aSeven & add the pieces
-		JPanel aSeven;
 		try {
-			aSeven = new JPanelWithBackground(red);
+			rSide[6] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aSeven = null;
+			rSide[6] = null;
 		}
-		aSeven.setBounds(aSix.getX() + 50, aSix.getY(), 50, 50);
-		aSeven.setVisible(true);
-		aSeven.setOpaque(false);
-		pieces.add(aSeven);
+		rSide[6].setBounds(rSide[5].getX() + 50, rSide[5].getY(), 50, 50);
+		rSide[6].setVisible(true);
+		rSide[6].setOpaque(false);
+		pieces.add(rSide[6]);
 
 		// Create aEight & add the pieces
-		JPanel aEight;
 		try {
-			aEight = new JPanelWithBackground(red);
+			rSide[7] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aEight = null;
+			rSide[7] = null;
 		}
-		aEight.setBounds(aSeven.getX() + 50, aSeven.getY(), 50, 50);
-		aEight.setVisible(true);
-		aEight.setOpaque(false);
-		pieces.add(aEight);
+		rSide[7].setBounds(rSide[6].getX() + 50, rSide[6].getY(), 50, 50);
+		rSide[7].setVisible(true);
+		rSide[7].setOpaque(false);
+		pieces.add(rSide[7]);
 
-		// Create bNine & add the pieces
-		JPanel aNine;
+		// Create aNine & add the pieces
 		try {
-			aNine = new JPanelWithBackground(red);
+			rSide[8] = new JPanelWithBackground(red);
 		} catch (IOException e) {
 			e.printStackTrace();
-			aNine = null;
+			rSide[8] = null;
 		}
-		aNine.setBounds(aEight.getX() + 50, aSeven.getY(), 50, 50);
-		aNine.setVisible(true);
-		aNine.setOpaque(false);
-		pieces.add(aNine);
+		rSide[8].setBounds(rSide[7].getX() + 50, rSide[7].getY(), 50, 50);
+		rSide[8].setVisible(true);
+		rSide[8].setOpaque(false);
+		pieces.add(rSide[8]);
 
 		// Create button posOne and add to pieces
-		final JButton posOne = new JButton(bluePiece);
-		posOne.setBounds(270, 12, 50, 50);
-		posOne.setVisible(true);
-		posOne.setOpaque(false);
-		posOne.setContentAreaFilled(false);
-		posOne.setBorderPainted(false);
-		posOne.addMouseListener(new MouseAdapter() {
+		board[0][0] = new JButton();
+		board[0][0].setBounds(270, 12, 50, 50);
+		board[0][0].setVisible(true);
+		board[0][0].setOpaque(false);
+		board[0][0].setContentAreaFilled(false);
+		board[0][0].setBorderPainted(false);
+		board[0][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posOne.getIcon().equals(bluePiece)) {
-					posOne.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 0;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 0;
 				} else {
-					posOne.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posOne);
+		pieces.add(board[0][0]);
 
 		// Create button posTwo and add to pieces
-		final JButton posTwo = new JButton(bluePiece);
-		posTwo.setBounds(posOne.getX() + 264, posOne.getY(), 50, 50);
-		posTwo.setVisible(true);
-		posTwo.setOpaque(false);
-		posTwo.setContentAreaFilled(false);
-		posTwo.setBorderPainted(false);
-		posTwo.addMouseListener(new MouseAdapter() {
+		board[0][1] = new JButton();
+		board[0][1].setBounds(board[0][0].getX() + 264, board[0][0].getY(), 50,
+				50);
+		board[0][1].setVisible(true);
+		board[0][1].setOpaque(false);
+		board[0][1].setContentAreaFilled(false);
+		board[0][1].setBorderPainted(false);
+		board[0][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwo.getIcon().equals(bluePiece)) {
-					posTwo.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 1;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 1;
 				} else {
-					posTwo.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwo);
+		pieces.add(board[0][1]);
 
 		// Create button posThree and add to pieces
-		final JButton posThree = new JButton(bluePiece);
-		posThree.setBounds(posTwo.getX() + 264, posOne.getY(), 50, 50);
-		posThree.setVisible(true);
-		posThree.setOpaque(false);
-		posThree.setContentAreaFilled(false);
-		posThree.setBorderPainted(false);
-		posThree.addMouseListener(new MouseAdapter() {
+		board[0][2] = new JButton();
+		board[0][2].setBounds(board[0][1].getX() + 264, board[0][0].getY(), 50,
+				50);
+		board[0][2].setVisible(true);
+		board[0][2].setOpaque(false);
+		board[0][2].setContentAreaFilled(false);
+		board[0][2].setBorderPainted(false);
+		board[0][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posThree.getIcon().equals(bluePiece)) {
-					posThree.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 2;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 2;
 				} else {
-					posThree.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posThree);
+		pieces.add(board[0][2]);
 
 		// Create button posFour and add to pieces
-		final JButton posFour = new JButton(bluePiece);
-		posFour.setBounds(posOne.getX() + 70, posOne.getY() + 70, 50, 50);
-		posFour.setVisible(true);
-		posFour.setOpaque(false);
-		posFour.setContentAreaFilled(false);
-		posFour.setBorderPainted(false);
-		posFour.addMouseListener(new MouseAdapter() {
+		board[1][0] = new JButton();
+		board[1][0].setBounds(board[0][0].getX() + 70, board[0][0].getY() + 70,
+				50, 50);
+		board[1][0].setVisible(true);
+		board[1][0].setOpaque(false);
+		board[1][0].setContentAreaFilled(false);
+		board[1][0].setBorderPainted(false);
+		board[1][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posFour.getIcon().equals(bluePiece)) {
-					posFour.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 0;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 0;
 				} else {
-					posFour.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posFour);
+		pieces.add(board[1][0]);
 
 		// Create button posFive and add to pieces
-		final JButton posFive = new JButton(bluePiece);
-		posFive.setBounds(posTwo.getX(), posFour.getY(), 50, 50);
-		posFive.setVisible(true);
-		posFive.setOpaque(false);
-		posFive.setContentAreaFilled(false);
-		posFive.setBorderPainted(false);
-		posFive.addMouseListener(new MouseAdapter() {
+		board[1][1] = new JButton();
+		board[1][1].setBounds(board[0][1].getX(), board[0][1].getY(), 50, 50);
+		board[1][1].setVisible(true);
+		board[1][1].setOpaque(false);
+		board[1][1].setContentAreaFilled(false);
+		board[1][1].setBorderPainted(false);
+		board[1][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posFive.getIcon().equals(bluePiece)) {
-					posFive.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 1;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 1;
 				} else {
-					posFive.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posFive);
+		pieces.add(board[1][1]);
 
 		// Create button posSix and add to pieces
-		final JButton posSix = new JButton(bluePiece);
-		posSix.setBounds(posThree.getX() - 70, posFour.getY(), 50, 50);
-		posSix.setVisible(true);
-		posSix.setOpaque(false);
-		posSix.setContentAreaFilled(false);
-		posSix.setBorderPainted(false);
-		posSix.addMouseListener(new MouseAdapter() {
+		board[1][2] = new JButton();
+		board[1][2].setBounds(board[0][2].getX() - 70, board[0][2].getY(), 50,
+				50);
+		board[1][2].setVisible(true);
+		board[1][2].setOpaque(false);
+		board[1][2].setContentAreaFilled(false);
+		board[1][2].setBorderPainted(false);
+		board[1][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posSix.getIcon().equals(bluePiece)) {
-					posSix.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 2;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 2;
 				} else {
-					posSix.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posSix);
+		pieces.add(board[1][2]);
 
 		// Create button posSeven and add to pieces
-		final JButton posSeven = new JButton(bluePiece);
-		posSeven.setBounds(posFour.getX() + 70, posFour.getY() + 70, 50, 50);
-		posSeven.setVisible(true);
-		posSeven.setOpaque(false);
-		posSeven.setContentAreaFilled(false);
-		posSeven.setBorderPainted(false);
-		posSeven.addMouseListener(new MouseAdapter() {
+		board[2][0] = new JButton();
+		board[2][0].setBounds(board[1][0].getX() + 70, board[1][0].getY() + 70,
+				50, 50);
+		board[2][0].setVisible(true);
+		board[2][0].setOpaque(false);
+		board[2][0].setContentAreaFilled(false);
+		board[2][0].setBorderPainted(false);
+		board[2][0].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posSeven.getIcon().equals(bluePiece)) {
-					posSeven.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 0;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 0;
 				} else {
-					posSeven.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posSeven);
+		pieces.add(board[2][0]);
 
 		// Create button posEight and add to pieces
-		final JButton posEight = new JButton(bluePiece);
-		posEight.setBounds(posFive.getX(), posSeven.getY(), 50, 50);
-		posEight.setVisible(true);
-		posEight.setOpaque(false);
-		posEight.setContentAreaFilled(false);
-		posEight.setBorderPainted(false);
-		posEight.addMouseListener(new MouseAdapter() {
+		board[2][1] = new JButton();
+		board[2][1].setBounds(board[1][1].getX(), board[2][0].getY(), 50, 50);
+		board[2][1].setVisible(true);
+		board[2][1].setOpaque(false);
+		board[2][1].setContentAreaFilled(false);
+		board[2][1].setBorderPainted(false);
+		board[2][1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posEight.getIcon().equals(bluePiece)) {
-					posEight.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 1;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 1;
 				} else {
-					posEight.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posEight);
+		pieces.add(board[2][1]);
 
 		// Create button posNine and add to pieces
-		final JButton posNine = new JButton(bluePiece);
-		posNine.setBounds(posSix.getX() - 70, posEight.getY(), 50, 50);
-		posNine.setVisible(true);
-		posNine.setOpaque(false);
-		posNine.setContentAreaFilled(false);
-		posNine.setBorderPainted(false);
-		posNine.addMouseListener(new MouseAdapter() {
+		board[2][2] = new JButton();
+		board[2][2].setBounds(board[1][2].getX() - 70, board[2][1].getY(), 50,
+				50);
+		board[2][2].setVisible(true);
+		board[2][2].setOpaque(false);
+		board[2][2].setContentAreaFilled(false);
+		board[2][2].setBorderPainted(false);
+		board[2][2].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posNine.getIcon().equals(bluePiece)) {
-					posNine.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 2;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 2;
 				} else {
-					posNine.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posNine);
+		pieces.add(board[2][2]);
 
 		// Create button posTen and add to pieces
-		final JButton posTen = new JButton(bluePiece);
-		posTen.setBounds(posOne.getX(), posOne.getY() + 265, 50, 50);
-		posTen.setVisible(true);
-		posTen.setOpaque(false);
-		posTen.setContentAreaFilled(false);
-		posTen.setBorderPainted(false);
-		posTen.addMouseListener(new MouseAdapter() {
+		board[0][7] = new JButton();
+		board[0][7].setBounds(board[0][0].getX(), board[0][0].getY() + 265, 50,
+				50);
+		board[0][7].setVisible(true);
+		board[0][7].setOpaque(false);
+		board[0][7].setContentAreaFilled(false);
+		board[0][7].setBorderPainted(false);
+		board[0][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTen.getIcon().equals(bluePiece)) {
-					posTen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 7;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 7;
 				} else {
-					posTen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTen);
+		pieces.add(board[0][7]);
 
 		// Create button posEleven and add to pieces
-		final JButton posEleven = new JButton(bluePiece);
-		posEleven.setBounds(posFour.getX(), posTen.getY(), 50, 50);
-		posEleven.setVisible(true);
-		posEleven.setOpaque(false);
-		posEleven.setContentAreaFilled(false);
-		posEleven.setBorderPainted(false);
-		posEleven.addMouseListener(new MouseAdapter() {
+		board[1][7] = new JButton();
+		board[1][7].setBounds(board[1][0].getX(), board[0][7].getY(), 50, 50);
+		board[1][7].setVisible(true);
+		board[1][7].setOpaque(false);
+		board[1][7].setContentAreaFilled(false);
+		board[1][7].setBorderPainted(false);
+		board[1][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posEleven.getIcon().equals(bluePiece)) {
-					posEleven.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 7;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 7;
 				} else {
-					posEleven.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posEleven);
+		pieces.add(board[1][7]);
 
 		// Create button posTwelve and add to pieces
-		final JButton posTwelve = new JButton(bluePiece);
-		posTwelve.setBounds(posSeven.getX(), posEleven.getY(), 50, 50);
-		posTwelve.setVisible(true);
-		posTwelve.setOpaque(false);
-		posTwelve.setContentAreaFilled(false);
-		posTwelve.setBorderPainted(false);
-		posTwelve.addMouseListener(new MouseAdapter() {
+		board[2][7] = new JButton();
+		board[2][7].setBounds(board[2][0].getX(), board[1][7].getY(), 50, 50);
+		board[2][7].setVisible(true);
+		board[2][7].setOpaque(false);
+		board[2][7].setContentAreaFilled(false);
+		board[2][7].setBorderPainted(false);
+		board[2][7].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwelve.getIcon().equals(bluePiece)) {
-					posTwelve.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 7;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 7;
 				} else {
-					posTwelve.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwelve);
+		pieces.add(board[2][7]);
 
 		// Create button posThirteen and add to pieces
-		final JButton posThirteen = new JButton(bluePiece);
-		posThirteen.setBounds(posNine.getX(), posTwelve.getY(), 50, 50);
-		posThirteen.setVisible(true);
-		posThirteen.setOpaque(false);
-		posThirteen.setContentAreaFilled(false);
-		posThirteen.setBorderPainted(false);
-		posThirteen.addMouseListener(new MouseAdapter() {
+		board[2][3] = new JButton();
+		board[2][3].setBounds(board[2][2].getX(), board[2][7].getY(), 50, 50);
+		board[2][3].setVisible(true);
+		board[2][3].setOpaque(false);
+		board[2][3].setContentAreaFilled(false);
+		board[2][3].setBorderPainted(false);
+		board[2][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posThirteen.getIcon().equals(bluePiece)) {
-					posThirteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 3;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 3;
 				} else {
-					posThirteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posThirteen);
+		pieces.add(board[2][3]);
 
 		// Create button posFourteen and add to pieces
-		final JButton posFourteen = new JButton(bluePiece);
-		posFourteen.setBounds(posSix.getX(), posThirteen.getY(), 50, 50);
-		posFourteen.setVisible(true);
-		posFourteen.setOpaque(false);
-		posFourteen.setContentAreaFilled(false);
-		posFourteen.setBorderPainted(false);
-		posFourteen.addMouseListener(new MouseAdapter() {
+		board[1][3] = new JButton();
+		board[1][3].setBounds(board[1][2].getX(), board[2][3].getY(), 50, 50);
+		board[1][3].setVisible(true);
+		board[1][3].setOpaque(false);
+		board[1][3].setContentAreaFilled(false);
+		board[1][3].setBorderPainted(false);
+		board[1][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posFourteen.getIcon().equals(bluePiece)) {
-					posFourteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 3;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 3;
 				} else {
-					posFourteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posFourteen);
+		pieces.add(board[1][3]);
 
 		// Create button posFifteen and add to pieces
-		final JButton posFifteen = new JButton(bluePiece);
-		posFifteen.setBounds(posThree.getX(), posFourteen.getY(), 50, 50);
-		posFifteen.setVisible(true);
-		posFifteen.setOpaque(false);
-		posFifteen.setContentAreaFilled(false);
-		posFifteen.setBorderPainted(false);
-		posFifteen.addMouseListener(new MouseAdapter() {
+		board[0][3] = new JButton();
+		board[0][3].setBounds(board[0][2].getX(), board[1][3].getY(), 50, 50);
+		board[0][3].setVisible(true);
+		board[0][3].setOpaque(false);
+		board[0][3].setContentAreaFilled(false);
+		board[0][3].setBorderPainted(false);
+		board[0][3].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posFifteen.getIcon().equals(bluePiece)) {
-					posFifteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 3;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 3;
 				} else {
-					posFifteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posFifteen);
+		pieces.add(board[0][3]);
 
 		// Create button posSixteen and add to pieces
-		final JButton posSixteen = new JButton(bluePiece);
-		posSixteen
-				.setBounds(
-						posTwelve.getX(),
-						posTwelve.getY() + (posTwelve.getY() - posSeven.getY()),
-						50, 50);
-		posSixteen.setVisible(true);
-		posSixteen.setOpaque(false);
-		posSixteen.setContentAreaFilled(false);
-		posSixteen.setBorderPainted(false);
-		posSixteen.addMouseListener(new MouseAdapter() {
+		board[2][6] = new JButton();
+		board[2][6].setBounds(board[2][7].getX(), board[2][7].getY()
+				+ (board[2][7].getY() - board[2][0].getY()), 50, 50);
+		board[2][6].setVisible(true);
+		board[2][6].setOpaque(false);
+		board[2][6].setContentAreaFilled(false);
+		board[2][6].setBorderPainted(false);
+		board[2][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posSixteen.getIcon().equals(bluePiece)) {
-					posSixteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 6;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 6;
 				} else {
-					posSixteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posSixteen);
+		pieces.add(board[2][6]);
 
 		// Create button posSeventeen and add to pieces
-		final JButton posSeventeen = new JButton(bluePiece);
-		posSeventeen.setBounds(posEight.getX(), posSixteen.getY(), 50, 50);
-		posSeventeen.setVisible(true);
-		posSeventeen.setOpaque(false);
-		posSeventeen.setContentAreaFilled(false);
-		posSeventeen.setBorderPainted(false);
-		posSeventeen.addMouseListener(new MouseAdapter() {
+		board[2][5] = new JButton();
+		board[2][5].setBounds(board[2][1].getX(), board[2][6].getY(), 50, 50);
+		board[2][5].setVisible(true);
+		board[2][5].setOpaque(false);
+		board[2][5].setContentAreaFilled(false);
+		board[2][5].setBorderPainted(false);
+		board[2][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posSeventeen.getIcon().equals(bluePiece)) {
-					posSeventeen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 5;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 5;
 				} else {
-					posSeventeen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posSeventeen);
+		pieces.add(board[2][5]);
 
 		// Create button posEighteen and add to pieces
-		final JButton posEighteen = new JButton(bluePiece);
-		posEighteen.setBounds(posThirteen.getX(), posSeventeen.getY(), 50, 50);
-		posEighteen.setVisible(true);
-		posEighteen.setOpaque(false);
-		posEighteen.setContentAreaFilled(false);
-		posEighteen.setBorderPainted(false);
-		posEighteen.addMouseListener(new MouseAdapter() {
+		board[2][4] = new JButton();
+		board[2][4].setBounds(board[2][3].getX(), board[2][5].getY(), 50, 50);
+		board[2][4].setVisible(true);
+		board[2][4].setOpaque(false);
+		board[2][4].setContentAreaFilled(false);
+		board[2][4].setBorderPainted(false);
+		board[2][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posEighteen.getIcon().equals(bluePiece)) {
-					posEighteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 2;
+					pieceSelectedPos[1] = 4;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 2;
+					selectedPos[1] = 4;
 				} else {
-					posEighteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posEighteen);
+		pieces.add(board[2][4]);
 
 		// Create button posNineteen and add to pieces
-		final JButton posNineteen = new JButton(bluePiece);
-		posNineteen.setBounds(posEleven.getX(), posSixteen.getY() + 70, 50, 50);
-		posNineteen.setVisible(true);
-		posNineteen.setOpaque(false);
-		posNineteen.setContentAreaFilled(false);
-		posNineteen.setBorderPainted(false);
-		posNineteen.addMouseListener(new MouseAdapter() {
+		board[1][6] = new JButton();
+		board[1][6].setBounds(board[1][7].getX(), board[2][6].getY() + 70, 50,
+				50);
+		board[1][6].setVisible(true);
+		board[1][6].setOpaque(false);
+		board[1][6].setContentAreaFilled(false);
+		board[1][6].setBorderPainted(false);
+		board[1][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posNineteen.getIcon().equals(bluePiece)) {
-					posNineteen.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 6;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 6;
 				} else {
-					posNineteen.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posNineteen);
+		pieces.add(board[1][6]);
 
 		// Create button posTwenty and add to pieces
-		final JButton posTwenty = new JButton(bluePiece);
-		posTwenty.setBounds(posSeventeen.getX(), posNineteen.getY(), 50, 50);
-		posTwenty.setVisible(true);
-		posTwenty.setOpaque(false);
-		posTwenty.setContentAreaFilled(false);
-		posTwenty.setBorderPainted(false);
-		posTwenty.addMouseListener(new MouseAdapter() {
+		board[1][5] = new JButton();
+		board[1][5].setBounds(board[2][5].getX(), board[1][6].getY(), 50, 50);
+		board[1][5].setVisible(true);
+		board[1][5].setOpaque(false);
+		board[1][5].setContentAreaFilled(false);
+		board[1][5].setBorderPainted(false);
+		board[1][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwenty.getIcon().equals(bluePiece)) {
-					posTwenty.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 5;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 5;
 				} else {
-					posTwenty.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwenty);
+		pieces.add(board[1][5]);
 
 		// Create button posTwentyOne and add to pieces
-		final JButton posTwentyOne = new JButton(bluePiece);
-		posTwentyOne.setBounds(posFourteen.getX(), posTwenty.getY(), 50, 50);
-		posTwentyOne.setVisible(true);
-		posTwentyOne.setOpaque(false);
-		posTwentyOne.setContentAreaFilled(false);
-		posTwentyOne.setBorderPainted(false);
-		posTwentyOne.addMouseListener(new MouseAdapter() {
+		board[1][4] = new JButton();
+		board[1][4].setBounds(board[1][3].getX(), board[1][5].getY(), 50, 50);
+		board[1][4].setVisible(true);
+		board[1][4].setOpaque(false);
+		board[1][4].setContentAreaFilled(false);
+		board[1][4].setBorderPainted(false);
+		board[1][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwentyOne.getIcon().equals(bluePiece)) {
-					posTwentyOne.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 1;
+					pieceSelectedPos[1] = 4;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 1;
+					selectedPos[1] = 4;
 				} else {
-					posTwentyOne.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwentyOne);
+		pieces.add(board[1][4]);
 
 		// Create button posTwentyTwo and add to pieces
-		final JButton posTwentyTwo = new JButton(bluePiece);
-		posTwentyTwo.setBounds(posTen.getX(), posNineteen.getY() + 70, 50, 50);
-		posTwentyTwo.setVisible(true);
-		posTwentyTwo.setOpaque(false);
-		posTwentyTwo.setContentAreaFilled(false);
-		posTwentyTwo.setBorderPainted(false);
-		posTwentyTwo.addMouseListener(new MouseAdapter() {
+		board[0][6] = new JButton();
+		board[0][6].setBounds(board[0][7].getX(), board[1][6].getY() + 70, 50,
+				50);
+		board[0][6].setVisible(true);
+		board[0][6].setOpaque(false);
+		board[0][6].setContentAreaFilled(false);
+		board[0][6].setBorderPainted(false);
+		board[0][6].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwentyTwo.getIcon().equals(bluePiece)) {
-					posTwentyTwo.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 6;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 6;
 				} else {
-					posTwentyTwo.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwentyTwo);
+		pieces.add(board[0][6]);
 
 		// Create button posTwentyThree and add to pieces
-		final JButton posTwentyThree = new JButton(bluePiece);
-		posTwentyThree.setBounds(posTwenty.getX(), posTwentyTwo.getY(), 50, 50);
-		posTwentyThree.setVisible(true);
-		posTwentyThree.setOpaque(false);
-		posTwentyThree.setContentAreaFilled(false);
-		posTwentyThree.setBorderPainted(false);
-		posTwentyThree.addMouseListener(new MouseAdapter() {
+		board[0][5] = new JButton();
+		board[0][5].setBounds(board[1][5].getX(), board[0][6].getY(), 50, 50);
+		board[0][5].setVisible(true);
+		board[0][5].setOpaque(false);
+		board[0][5].setContentAreaFilled(false);
+		board[0][5].setBorderPainted(false);
+		board[0][5].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwentyThree.getIcon().equals(bluePiece)) {
-					posTwentyThree.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 5;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 5;
 				} else {
-					posTwentyThree.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwentyThree);
+		pieces.add(board[0][5]);
 
 		// Create button posTwentyFour and add to pieces
-		final JButton posTwentyFour = new JButton(bluePiece);
-		posTwentyFour.setBounds(posFifteen.getX(), posTwentyThree.getY(), 50,
-				50);
-		posTwentyFour.setVisible(true);
-		posTwentyFour.setOpaque(false);
-		posTwentyFour.setContentAreaFilled(false);
-		posTwentyFour.setBorderPainted(false);
-		posTwentyFour.addMouseListener(new MouseAdapter() {
+		board[0][4] = new JButton();
+		board[0][4].setBounds(board[0][3].getX(), board[0][5].getY(), 50, 50);
+		board[0][4].setVisible(true);
+		board[0][4].setOpaque(false);
+		board[0][4].setContentAreaFilled(false);
+		board[0][4].setBorderPainted(false);
+		board[0][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (posTwentyFour.getIcon().equals(bluePiece)) {
-					posTwentyFour.setIcon(redPiece);
+				if (!isPieceSelected && !isPlacement) {
+					isPieceSelected = true;
+					pieceSelectedPos[0] = 0;
+					pieceSelectedPos[1] = 4;
+				} else if (!isPositionSelected) {
+					isPositionSelected = true;
+					selectedPos[0] = 0;
+					selectedPos[1] = 4;
 				} else {
-					posTwentyFour.setIcon(bluePiece);
+					// Do Nothing
 				}
 			}
 		});
-		pieces.add(posTwentyFour);
+		pieces.add(board[0][4]);
 
 	}
 
@@ -1384,15 +1542,44 @@ public class GameGUI implements GameInterface {
 	}
 
 	public int[][] pieceSelect() {
-		throw new UnsupportedOperationException();
+		return new int[pieceSelectedPos[0]][pieceSelectedPos[1]];
 	}
 
 	public int[][] positionSelect() {
-		throw new UnsupportedOperationException();
+		return new int[selectedPos[0]][selectedPos[1]];
+	}
+	
+	public boolean isPlacement() {
+		return isPlacement;
 	}
 
 	public boolean isGameQuit() {
 		return isGameQuit;
+	}
+
+	@Override
+	public void setBoard(Piece[][] board) {
+		// Clear The selected Positions on setBoard
+		for (int i = 0; i < pieceSelectedPos.length; i++) {
+			pieceSelectedPos[i] = (Integer) null;
+			selectedPos[i] = (Integer) null;
+		}
+		
+		// Set Pieces
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (board[i][j].getOwner().equals(players[0])) {
+					this.board[i][j].setIcon(bluePiece);
+				} else if (board[i][j].getOwner().equals(players[1])) {
+					this.board[i][j].setIcon(redPiece);
+				} else {
+					// Do nothing
+				}
+			}
+		}
+
+		// Refresh the board
+		contentPane.getContentPane().repaint();
 	}
 
 }

@@ -34,7 +34,7 @@ public class GameInstance {
 		// Initialize Variables
 		isPlacement = true;
 		int numHumans;
-		
+
 		// create the players
 		myOptions = options;
 		players = new Player[2];
@@ -49,13 +49,15 @@ public class GameInstance {
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
-		boardInterface = new GameGUI(contentPane, numHumans);
+		boardInterface = new GameGUI(contentPane, numHumans, players);
 
 		// Start Placement Phase
 		while (!isGameOver()) {
-			if (isPlacement) {
+			if (boardInterface.isPlacement()) {
+				// PlacementPhase
 				placementPhase();
 			} else {
+				// MovementPhase
 				movementPhase();
 			}
 		}
@@ -64,9 +66,9 @@ public class GameInstance {
 		contentPane.getContentPane().removeAll();
 
 	}
-
+	
 	public void placementPhase() {
-
+		
 	}
 
 	public void movementPhase() {
