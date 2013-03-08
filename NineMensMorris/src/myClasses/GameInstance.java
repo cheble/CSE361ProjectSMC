@@ -70,18 +70,17 @@ public class GameInstance {
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
 		while(myBoard.piecesOnSide((currentPlayer+1) % 2) > 0){
-			playerTurnPlace(startingPlayer);
-			playerTurnPlace((startingPlayer+1) % 2);
+			playerTurnPlace(currentPlayer);
+			playerTurnPlace(currentPlayer);
 		}
 	}
 
 	public void movementPhase() {
-		startingPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
 		while(!isGameOver()){
-			playerTurnPlace(startingPlayer);
+			playerTurnPlace(currentPlayer);
 			if(!isGameOver()){
-				playerTurnPlace((startingPlayer+1) % 2);
+				playerTurnPlace(currentPlayer);
 			}
 		}
 	}
@@ -120,7 +119,8 @@ public class GameInstance {
 	 * 
 	 * @param player
 	 */
-	public void playerTurnMove(Player player) {
+	public void playerTurnMove(int playerID) {
+		int position[][] = players[playerID].movePiece();
 		// TODO Might have to get rid of function call and implement here
 		// using condition for human or computer
 
@@ -130,20 +130,18 @@ public class GameInstance {
 		// TODO Check if move is valid to game rules
 
 		// TODO Set to board and check if move is valid to board
-		while (myBoard.addPiece(playerID, position) == -1) {
+		while (myBoard.movePiece(position[0], position[1]) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
-			position = players[playerID].placePiece();
+			position = players[playerID].movePiece();
 		}
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
 		//Change current player
 		currentPlayer = (currentPlayer+1) % 2;
 		// pass the board to the gui
-		passBoard();
-		
-		throw new UnsupportedOperationException();
+		passBoard();		
 	}
 
 	public boolean isTurnValid() {
