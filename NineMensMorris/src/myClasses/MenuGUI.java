@@ -18,7 +18,11 @@ import javax.swing.SwingConstants;
 import mpigsley.gui.JPanelWithBackground;
 
 public class MenuGUI implements MenuInterface {
-
+	
+	//TODO There is a bug in the how to play, where it shows title for last seen slide, but acts like its the first.
+	//  example, if you leave the How to play on flymode, and then open how to play again, it says fly mode on top,
+	//		but you can not press previous, and next brings you to slide 2 (with correct title)
+	
 	private Options myOptions;
 	private JFrame contentPane;
 	private boolean isGameReady;
