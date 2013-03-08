@@ -100,7 +100,7 @@ public class GameInstance {
 		// TODO put some conditions in here
 		// TODO Check if move is valid to game rules
 
-		// TODO Set to board and check if move is valid to board
+		//Set to board and check if move is valid to board
 		while (myBoard.addPiece(playerID, position) == -1) {
 			// invalid move
 			// tell player or computer
@@ -129,7 +129,7 @@ public class GameInstance {
 		// TODO put some conditions in here
 		// TODO Check if move is valid to game rules
 
-		// TODO Set to board and check if move is valid to board
+		//Set to board and check if move is valid to board
 		while (myBoard.movePiece(position[0], position[1]) == -1) {
 			// invalid move
 			// tell player or computer
