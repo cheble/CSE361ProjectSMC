@@ -121,12 +121,14 @@ public class GameInstance {
 	 */
 	public void playerTurnMove(int playerID) {
 		int position[][] = players[playerID].movePiece();
+		
+		
+		
 		// TODO Might have to get rid of function call and implement here
 		// using condition for human or computer
 
 		// TODO implement skip/undo somehow
 
-		// TODO put some conditions in here
 		// TODO Check if move is valid to game rules
 
 		//Set to board and check if move is valid to board
@@ -143,15 +145,56 @@ public class GameInstance {
 		// pass the board to the gui
 		passBoard();		
 	}
-
-	public boolean isTurnValid() {
-		//
-
-		//
-
-		//
-		throw new UnsupportedOperationException();
+	
+	public boolean isMoveValid(int[] position1, int[] position2) {
+		//if fly mode is on
+		if(myOptions.getFlyRule() != 3){
+			//check if fly mode has started for the player
+		}
+		
+		//check if piece is owned by the current player
+		if(myBoard.getPiece(position1).getOwner() != players[currentPlayer]){
+			return false;
+		}
+		//check that its one step away on a path
+		//if a corner piece is selected
+		if(position1[0] % 2 == 0){
+			//piece cannot move to different square
+			//this would change for a advance game board type
+			if(position1[0] != position2[0]){
+				return false;
+			}
+			//piece must move only 1 space away
+			if( (position1[1]+1) % 8 != position2[1] ||
+				(position1[1]-1) % 8 != position2[1])
+			{
+				return false;
+			}
+			
+		}
+		//a middle piece is selected
+		else{
+			//if piece changes squares
+			if(position1[0] != position2[0]){
+				//square must be plus or minus on square
+				if( position1[0]+1 != position2[0] ||
+					position1[0]-1 != position2[0])
+				{
+					return false;
+				}
+			}
+			//piece stays on same square
+			//piece must move only 1 space away
+			else if( (position1[1]+1) % 8 != position2[1] ||
+					 (position1[1]-1) % 8 != position2[1])
+			{
+				
+			}
+		}
+		
+		return true;
 	}
+
 
 	public boolean isGameOver() {
 		// If game is quit inside of interface.
