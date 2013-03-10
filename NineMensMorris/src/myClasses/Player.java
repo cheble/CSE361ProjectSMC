@@ -53,15 +53,14 @@ public class Player {
 	}
 	
 	public int[] placePiece() {
-		
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public int[][] movePiece() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public int[] takePiece() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 }

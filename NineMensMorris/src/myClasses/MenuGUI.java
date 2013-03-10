@@ -17,21 +17,18 @@ import javax.swing.SwingConstants;
 import mpigsley.gui.JPanelWithBackground;
 
 public class MenuGUI implements MenuInterface {
-	
-	//TODO There is a bug in the how to play, where it shows title for last seen slide, but acts like its the first.
-	//  example, if you leave the How to play on flymode, and then open how to play again, it says fly mode on top,
-	//		but you can not press previous, and next brings you to slide 2 (with correct title)
-	
 	private Options myOptions;
 	private JFrame contentPane;
 	private boolean isGameReady;
-
 	private int slideNum;
 	private int flyMode;
 	private boolean timer;
 	private boolean resolution;
 
-	//private String backL = "src/images/backgroundLarge.jpg";
+	// How To Slides
+	private JPanel[] slides;
+
+	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "src/images/backgroundSmall.jpg";
 	private ImageIcon off = new ImageIcon("src/images/off.png");
 	private ImageIcon on = new ImageIcon("src/images/on.png");
@@ -49,7 +46,7 @@ public class MenuGUI implements MenuInterface {
 		// Draw Main Menu
 		drawMenu();
 	}
-	
+
 	public MenuGUI(JFrame contentPane, Options lastOptions) {
 		// Initialize variables
 		this.contentPane = contentPane;
@@ -561,6 +558,9 @@ public class MenuGUI implements MenuInterface {
 	}
 
 	public void drawHowTo(final JPanel panel) {
+		// Reset to Slide 1
+		slideNum = 1;
+
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
@@ -661,61 +661,42 @@ public class MenuGUI implements MenuInterface {
 		layeredPane.add(cardPanel);
 		layeredPane.setLayer(cardPanel, 3);
 
-		// Create Basics Slide (Slide 1)
-		JPanel basics = new JPanel();
-		basics.setVisible(true);
-		basics.setOpaque(false);
-		basics.setBounds(25, 25, cardPanel.getWidth() - 50,
-				cardPanel.getHeight() - 50);
+		for (int i = 0; i < slides.length; i++) {
+			slides[i] = new JPanel();
+			slides[i].setVisible(true);
+			slides[i].setOpaque(false);
+			slides[i].setBounds(25, 25, cardPanel.getWidth() - 50,
+					cardPanel.getHeight() - 50);
+			cardPanel.add(slides[i], "" + (i + 1));
+		}
+
 		JLabel basicsText = new JLabel("Basics:\n");
 		basicsText.setHorizontalAlignment(SwingConstants.LEFT);
 		basicsText.setFont(new Font("Coalition", Font.PLAIN, 30));
-		basicsText.setBounds(0, 0, basics.getWidth(), basics.getHeight());
+		basicsText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		basicsText.setForeground(Color.WHITE);
-		basics.add(basicsText);
-		cardPanel.add(basics, "1");
+		slides[0].add(basicsText);
 
-		// Create Placement Mode Slide (Slide 2)
-		JPanel place = new JPanel();
-		place.setVisible(true);
-		place.setOpaque(false);
-		place.setBounds(25, 25, cardPanel.getWidth() - 50,
-				cardPanel.getHeight() - 50);
 		JLabel placeText = new JLabel("Placement Mode:\n");
 		placeText.setHorizontalAlignment(SwingConstants.LEFT);
-		placeText.setBounds(0, 0, place.getWidth(), place.getHeight());
+		placeText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		placeText.setFont(new Font("Coalition", Font.PLAIN, 30));
 		placeText.setForeground(Color.WHITE);
-		place.add(placeText);
-		cardPanel.add(place, "2");
+		slides[1].add(placeText);
 
-		// Create Movement Mode Slide (Slide 3)
-		JPanel move = new JPanel();
-		move.setVisible(true);
-		move.setOpaque(false);
-		move.setBounds(25, 25, cardPanel.getWidth() - 50,
-				cardPanel.getHeight() - 50);
 		JLabel moveText = new JLabel("Movement Mode:\n");
 		moveText.setHorizontalAlignment(SwingConstants.LEFT);
-		moveText.setBounds(0, 0, move.getWidth(), move.getHeight());
+		moveText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		moveText.setFont(new Font("Coalition", Font.PLAIN, 30));
 		moveText.setForeground(Color.WHITE);
-		move.add(moveText);
-		cardPanel.add(move, "3");
+		slides[2].add(moveText);
 
-		// Create Fly Mode Slide (Slide 4)
-		JPanel fly = new JPanel();
-		fly.setVisible(true);
-		fly.setOpaque(false);
-		fly.setBounds(25, 25, cardPanel.getWidth() - 50,
-				cardPanel.getHeight() - 50);
 		JLabel flyText = new JLabel("Fly Mode:\n");
 		flyText.setHorizontalAlignment(SwingConstants.LEFT);
-		flyText.setBounds(0, 0, fly.getWidth(), fly.getHeight());
+		flyText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		flyText.setFont(new Font("Coalition", Font.PLAIN, 30));
 		flyText.setForeground(Color.WHITE);
-		fly.add(flyText);
-		cardPanel.add(fly, "4");
+		slides[3].add(flyText);
 
 		// Show first slide on start
 		cl.show(cardPanel, "" + slideNum);

@@ -7,15 +7,15 @@ public class Computer extends Player {
 	 * creates placement move
 	 */
 	public int[] placePiece() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public int[][] movePiece() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public int[] takePiece() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 }
