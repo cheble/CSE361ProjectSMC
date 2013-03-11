@@ -5,13 +5,25 @@ import javax.swing.JPanel;
 public class GameTest implements GameInterface {
 
 	@Override
+	public int[] pieceSelect() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] positionSelect() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void drawGameMenu(JPanel panel) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void drawWinnerMenu(JPanel panel) {
+	public void drawWinnerMenu(int winnerID) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -32,18 +44,6 @@ public class GameTest implements GameInterface {
 	public void setBoard(GameBoard gm) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public int[] pieceSelect() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int[] positionSelect() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public interface GameInterface {
 
 	void drawGameMenu(final JPanel panel);
 
-	void drawWinnerMenu(final JPanel panel);
+	void drawWinnerMenu(int winnerID);
 	
 	void drawBoard();
 	
