@@ -248,6 +248,9 @@ public class GameBoard {
 	 * @param position
 	 */
 	public boolean isPositionValid(int[] position) {
+		if(position == null){
+			return false;
+		}
 		if(position[0] < 0 && position[0] > 2){
 			return false;
 		}
