@@ -192,51 +192,24 @@ public class GameBoard {
 	 * 
 	 * @param player
 	 */
-	public boolean isMill(Player player) {
-		//check outer square mills
-		if( isMill(new int[]{0,0}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
+	public boolean hasNonMillPieces(Player player) {
+		//Go through each piece on board
+		for(int i=0; i<=2; i++){
+			for(int j=0; j<=7; j++){
+				//check if piece is at position
+				if(board[i][j] == null){
+					//go to the next position
+				}
+				//check if piece is owned by player
+				else if(board[i][j].getOwner() == player){
+					//check if piece is in a mill
+					if(!isMill(new int[]{i,j})){
+						return true;
+					}
+				}
+			}
 		}
-		if( isMill(new int[]{0,4}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		//check inner square mills
-		if( isMill(new int[]{2,0}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		if( isMill(new int[]{2,4}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		//check middle square and across square mills
-		if( isMill(new int[]{1,1}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		if( isMill(new int[]{1,3}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		if( isMill(new int[]{1,5}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		if( isMill(new int[]{1,7}) &&
-			board[0][0].getOwner() == player)
-		{
-			return true;
-		}
-		//No mill owned by player on board
+		
 		return false;
 	}
 
