@@ -3,8 +3,10 @@ package myClasses;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -31,6 +33,7 @@ public class GameGUI implements GameInterface {
 	private int[] pieceSelectedPos;
 	private int[] selectedPos;
 	private Player[] players;
+	private Font coalition;
 
 	// Side Images
 	private JPanel[] bSide;
@@ -74,6 +77,18 @@ public class GameGUI implements GameInterface {
 		info = new JLabel[2];
 		this.players = players;
 
+		// Setup Custom Font
+		File fontLoc = new File("src/font/Coalition_v2.ttf");
+		try {
+			coalition = Font.createFont(Font.PLAIN, fontLoc);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+			System.out.println("Font Format not Accepted");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File not loaded");
+		}
+		
 		// Ask for Player Names
 		playerNames(numHumans);
 
@@ -110,18 +125,18 @@ public class GameGUI implements GameInterface {
 		layeredPane.add(info);
 		layeredPane.setLayer(info, 2);
 
-		JLabel titleOne = new JLabel("<html><center>Player 1<br>Name</center>");
+		JLabel titleOne = new JLabel("<html><center>PLAYER 1<br>NAME</center>");
 		titleOne.setHorizontalAlignment(SwingConstants.CENTER);
 		titleOne.setVisible(true);
 		titleOne.setBounds(0, 100, info.getWidth() / numHumans, 200);
-		titleOne.setFont(new Font("Coalition", Font.PLAIN, 50));
+		titleOne.setFont(coalition.deriveFont((float)50));
 		titleOne.setForeground(Color.white);
 		info.add(titleOne);
 
 		final JTextField nameOne = new JTextField();
 		nameOne.setBounds(100, titleOne.getY() + 250,
 				(info.getWidth() / numHumans) - 200, 50);
-		nameOne.setFont(new Font("Coalition", Font.PLAIN, 30));
+		nameOne.setFont(coalition.deriveFont((float)30));
 		nameOne.setVisible(true);
 		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
 		info.add(nameOne);
@@ -129,12 +144,12 @@ public class GameGUI implements GameInterface {
 		final JTextField nameTwo;
 		if (numHumans == 2) {
 			JLabel titleTwo = new JLabel(
-					"<html><center>Player 2<br>Name</center>");
+					"<html><center>PLAYER 2<br>NAME</center>");
 			titleTwo.setHorizontalAlignment(SwingConstants.CENTER);
 			titleTwo.setVisible(true);
 			titleTwo.setBounds((info.getWidth() / 2), 100,
 					(info.getWidth() / numHumans), 200);
-			titleTwo.setFont(new Font("Coalition", Font.PLAIN, 50));
+			titleTwo.setFont(coalition.deriveFont((float)50));
 			titleTwo.setForeground(Color.white);
 			info.add(titleTwo);
 
@@ -142,7 +157,7 @@ public class GameGUI implements GameInterface {
 			nameTwo.setBounds((info.getWidth() / 2) + 100,
 					titleTwo.getY() + 250, (info.getWidth() / numHumans) - 200,
 					50);
-			nameTwo.setFont(new Font("Coalition", Font.PLAIN, 30));
+			nameTwo.setFont(coalition.deriveFont((float)30));
 			nameTwo.setVisible(true);
 			nameTwo.setHorizontalAlignment(SwingConstants.CENTER);
 			info.add(nameTwo);
@@ -155,7 +170,7 @@ public class GameGUI implements GameInterface {
 		ready.setBorderPainted(false);
 		ready.setVisible(true);
 		ready.setBounds(0, info.getHeight() - 150, info.getWidth(), 50);
-		ready.setFont(new Font("Coalition", Font.PLAIN, 40));
+		ready.setFont(coalition.deriveFont((float)40));
 		ready.setForeground(Color.white);
 		ready.setOpaque(false);
 		info.add(ready);
@@ -263,7 +278,7 @@ public class GameGUI implements GameInterface {
 
 			}
 		});
-		undo.setFont(new Font("Coalition", Font.PLAIN, 40));
+		undo.setFont(coalition.deriveFont((float)40));
 		undo.setForeground(Color.WHITE);
 		undo.setBounds(20, contentPane.getHeight() - 100, 200, 65);
 		undo.setOpaque(false);
@@ -290,7 +305,7 @@ public class GameGUI implements GameInterface {
 
 			}
 		});
-		skip.setFont(new Font("Coalition", Font.PLAIN, 40));
+		skip.setFont(coalition.deriveFont((float)40));
 		skip.setForeground(Color.WHITE);
 		skip.setBounds((contentPane.getWidth() / 2) - 100,
 				contentPane.getHeight() - 100, 200, 65);
@@ -322,7 +337,7 @@ public class GameGUI implements GameInterface {
 				contentPane.repaint();
 			}
 		});
-		gameMenu.setFont(new Font("Coalition", Font.PLAIN, 40));
+		gameMenu.setFont(coalition.deriveFont((float)40));
 		gameMenu.setForeground(Color.WHITE);
 		gameMenu.setBounds(contentPane.getWidth() - 220,
 				contentPane.getHeight() - 100, 200, 65);
@@ -335,7 +350,7 @@ public class GameGUI implements GameInterface {
 		JLabel pOne = new JLabel(names[0].toUpperCase());
 		pOne.setForeground(Color.LIGHT_GRAY);
 		pOne.setHorizontalAlignment(SwingConstants.CENTER);
-		pOne.setFont(new Font("Coalition", Font.PLAIN, 25));
+		pOne.setFont(coalition.deriveFont((float)25));
 		pOne.setBounds(39, 233, 218, 51);
 		buttons.add(pOne);
 
@@ -348,7 +363,7 @@ public class GameGUI implements GameInterface {
 		}
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		pTwo.setFont(new Font("Coalition", Font.PLAIN, 25));
+		pTwo.setFont(coalition.deriveFont((float)25));
 		pTwo.setBounds(871, 233, 218, 51);
 		buttons.add(pTwo);
 
@@ -367,7 +382,7 @@ public class GameGUI implements GameInterface {
 			info[i].setOpaque(false);
 			info[i].setVisible(true);
 			info[i].setForeground(Color.CYAN);
-			info[i].setFont(new Font("Coalition", Font.PLAIN, 18));
+			info[i].setFont(coalition.deriveFont((float)18));
 			pieces.add(info[i]);
 		}
 		
@@ -998,13 +1013,13 @@ public class GameGUI implements GameInterface {
 		JLabel title = new JLabel("HOW TO PLAY");
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Coalition", Font.BOLD, 70));
+		title.setFont(coalition.deriveFont((float)70));
 		title.setBounds(0, 60, contentPane.getWidth(), 125);
 		buttons.add(title);
 
 		// Add previous button to JPanel
 		final JButton previous = new JButton("PREVIOUS");
-		previous.setFont(new Font("Coalition", Font.PLAIN, 40));
+		previous.setFont(coalition.deriveFont((float)40));
 		previous.setForeground(Color.WHITE);
 		previous.setBounds(20, contentPane.getHeight() - 100, 325, 65);
 		previous.setOpaque(false);
@@ -1031,7 +1046,7 @@ public class GameGUI implements GameInterface {
 				panel.setVisible(false);
 			}
 		});
-		back.setFont(new Font("Coalition", Font.PLAIN, 40));
+		back.setFont(coalition.deriveFont((float)40));
 		back.setForeground(Color.WHITE);
 		back.setBounds((contentPane.getWidth() / 2) - 100,
 				contentPane.getHeight() - 100, 200, 65);
@@ -1042,7 +1057,7 @@ public class GameGUI implements GameInterface {
 
 		// Add next button to JPanel
 		final JButton next = new JButton("NEXT");
-		next.setFont(new Font("Coalition", Font.PLAIN, 40));
+		next.setFont(coalition.deriveFont((float)40));
 		next.setForeground(Color.WHITE);
 		next.setBounds(contentPane.getWidth() - 220,
 				contentPane.getHeight() - 100, 200, 65);
@@ -1071,7 +1086,7 @@ public class GameGUI implements GameInterface {
 		
 		JLabel basicsText = new JLabel("Basics:\n");
 		basicsText.setHorizontalAlignment(SwingConstants.LEFT);
-		basicsText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		basicsText.setFont(coalition.deriveFont((float)30));
 		basicsText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		basicsText.setForeground(Color.WHITE);
 		slides[0].add(basicsText);
@@ -1079,21 +1094,21 @@ public class GameGUI implements GameInterface {
 		JLabel placeText = new JLabel("Placement Mode:\n");
 		placeText.setHorizontalAlignment(SwingConstants.LEFT);
 		placeText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		placeText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		placeText.setFont(coalition.deriveFont((float)30));
 		placeText.setForeground(Color.WHITE);
 		slides[1].add(placeText);
 
 		JLabel moveText = new JLabel("Movement Mode:\n");
 		moveText.setHorizontalAlignment(SwingConstants.LEFT);
 		moveText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		moveText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		moveText.setFont(coalition.deriveFont((float)30));
 		moveText.setForeground(Color.WHITE);
 		slides[2].add(moveText);
 
 		JLabel flyText = new JLabel("Fly Mode:\n");
 		flyText.setHorizontalAlignment(SwingConstants.LEFT);
 		flyText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		flyText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		flyText.setFont(coalition.deriveFont((float)30));
 		flyText.setForeground(Color.WHITE);
 		slides[3].add(flyText);
 
@@ -1184,15 +1199,15 @@ public class GameGUI implements GameInterface {
 		layeredPane.setLayer(howToPanel, 3);
 
 		// Create Menu Title and add to Menu
-		JLabel menuTitle = new JLabel("Menu");
+		JLabel menuTitle = new JLabel("MENU");
 		menuTitle.setForeground(Color.BLACK);
 		menuTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		menuTitle.setFont(new Font("Coalition", Font.BOLD, 70));
+		menuTitle.setFont(coalition.deriveFont((float)70));
 		menuTitle.setBounds(0, 75, menu.getWidth(), 75);
 		menu.add(menuTitle);
 
 		// How To Play Button add to Menu
-		final JButton howTo = new JButton("How To Play");
+		final JButton howTo = new JButton("HOW TO PLAY");
 		howTo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -1212,7 +1227,7 @@ public class GameGUI implements GameInterface {
 
 			}
 		});
-		howTo.setFont(new Font("Coalition", Font.PLAIN, 40));
+		howTo.setFont(coalition.deriveFont((float)40));
 		howTo.setForeground(Color.BLACK);
 		howTo.setBounds(0, menuTitle.getY() + 150, menu.getWidth(), 65);
 		howTo.setOpaque(false);
@@ -1221,7 +1236,7 @@ public class GameGUI implements GameInterface {
 		menu.add(howTo);
 
 		// Restart Button add to Menu
-		final JButton restart = new JButton("Restart");
+		final JButton restart = new JButton("RESTART");
 		restart.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -1238,7 +1253,7 @@ public class GameGUI implements GameInterface {
 				// DO SOMETHING
 			}
 		});
-		restart.setFont(new Font("Coalition", Font.PLAIN, 40));
+		restart.setFont(coalition.deriveFont((float)40));
 		restart.setForeground(Color.BLACK);
 		restart.setBounds(0, howTo.getY() + 80, menu.getWidth(), 65);
 		restart.setOpaque(false);
@@ -1247,7 +1262,7 @@ public class GameGUI implements GameInterface {
 		menu.add(restart);
 
 		// Main Menu Button add to Menu
-		final JButton main = new JButton("Main Menu");
+		final JButton main = new JButton("MAIN MENU");
 		main.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -1269,7 +1284,7 @@ public class GameGUI implements GameInterface {
 				panel.setVisible(false);
 			}
 		});
-		main.setFont(new Font("Coalition", Font.PLAIN, 40));
+		main.setFont(coalition.deriveFont((float)40));
 		main.setForeground(Color.BLACK);
 		main.setBounds(0, restart.getY() + 80, menu.getWidth(), 65);
 		main.setOpaque(false);
@@ -1278,7 +1293,7 @@ public class GameGUI implements GameInterface {
 		menu.add(main);
 
 		// Close Button add to Menu
-		final JButton close = new JButton("Close");
+		final JButton close = new JButton("CLOSE");
 		close.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -1296,7 +1311,7 @@ public class GameGUI implements GameInterface {
 				panel.setVisible(false);
 			}
 		});
-		close.setFont(new Font("Coalition", Font.PLAIN, 40));
+		close.setFont(coalition.deriveFont((float)40));
 		close.setForeground(Color.BLACK);
 		close.setBounds(0, main.getY() + 80, menu.getWidth(), 65);
 		close.setOpaque(false);

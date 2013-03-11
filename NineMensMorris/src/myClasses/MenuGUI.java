@@ -3,8 +3,10 @@ package myClasses;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,6 +29,9 @@ public class MenuGUI implements MenuInterface {
 
 	// How To Slides
 	private JPanel[] slides;
+	
+	// Custom Font
+	private Font coalition;
 
 	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "src/images/backgroundSmall.jpg";
@@ -42,7 +47,20 @@ public class MenuGUI implements MenuInterface {
 		flyMode = 1;
 		timer = false;
 		resolution = false;
+		slides = new JPanel[4];
 
+		// Setup Custom Font
+		File fontLoc = new File("src/font/Coalition_v2.ttf");
+		try {
+			coalition = Font.createFont(Font.PLAIN, fontLoc);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+			System.out.println("Font Format not Accepted");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File not loaded");
+		}
+		
 		// Draw Main Menu
 		drawMenu();
 	}
@@ -57,6 +75,18 @@ public class MenuGUI implements MenuInterface {
 		timer = lastOptions.getTimer();
 		resolution = lastOptions.getGameRes();
 
+		// Setup Custom Font
+		File fontLoc = new File("src/font/Coalition_v2.ttf");
+		try {
+			coalition = Font.createFont(Font.PLAIN, fontLoc);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+			System.out.println("Font Format not Accepted");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File not loaded");
+		}
+		
 		// Draw Main Menu
 		drawMenu();
 	}
@@ -96,7 +126,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel title = new JLabel("NINE MEN'S MORRIS");
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Coalition", Font.PLAIN, 70));
+		title.setFont(coalition.deriveFont((float)70));
 		title.setBounds(0, 86, contentPane.getWidth(), 127);
 		buttons.add(title);
 
@@ -125,7 +155,7 @@ public class MenuGUI implements MenuInterface {
 				isGameReady = true;
 			}
 		});
-		hvc.setFont(new Font("Coalition", Font.PLAIN, 40));
+		hvc.setFont(coalition.deriveFont((float)40));
 		hvc.setForeground(Color.WHITE);
 		hvc.setBounds(0, title.getY() + 145, contentPane.getWidth(), 65);
 		hvc.setOpaque(false);
@@ -158,7 +188,7 @@ public class MenuGUI implements MenuInterface {
 				isGameReady = true;
 			}
 		});
-		hvh.setFont(new Font("Coalition", Font.PLAIN, 40));
+		hvh.setFont(coalition.deriveFont((float)40));
 		hvh.setForeground(Color.WHITE);
 		hvh.setBounds(0, hvc.getY() + 70, contentPane.getWidth(), 65);
 		hvh.setOpaque(false);
@@ -183,7 +213,7 @@ public class MenuGUI implements MenuInterface {
 			public void mouseClicked(MouseEvent arg0) {
 			}
 		});
-		lb.setFont(new Font("Coalition", Font.PLAIN, 40));
+		lb.setFont(coalition.deriveFont((float)40));
 		lb.setForeground(Color.WHITE);
 		lb.setBounds(0, hvh.getY() + 70, contentPane.getWidth(), 65);
 		lb.setOpaque(false);
@@ -213,7 +243,7 @@ public class MenuGUI implements MenuInterface {
 				drawOptions();
 			}
 		});
-		options.setFont(new Font("Coalition", Font.PLAIN, 40));
+		options.setFont(coalition.deriveFont((float)40));
 		options.setForeground(Color.WHITE);
 		options.setBounds(0, lb.getY() + 70, contentPane.getWidth(), 65);
 		options.setOpaque(false);
@@ -240,7 +270,7 @@ public class MenuGUI implements MenuInterface {
 				System.exit(contentPane.ABORT);
 			}
 		});
-		exit.setFont(new Font("Coalition", Font.PLAIN, 40));
+		exit.setFont(coalition.deriveFont((float)40));
 		exit.setForeground(Color.WHITE);
 		exit.setBounds(0, options.getY() + 70, contentPane.getWidth(), 65);
 		exit.setOpaque(false);
@@ -292,7 +322,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel title = new JLabel("OPTIONS");
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Coalition", Font.BOLD, 70));
+		title.setFont(coalition.deriveFont((float)70));
 		title.setBounds(0, 86, contentPane.getWidth(), 127);
 		buttons.add(title);
 
@@ -315,7 +345,7 @@ public class MenuGUI implements MenuInterface {
 				drawHowTo(howToPanel);
 			}
 		});
-		howTo.setFont(new Font("Coalition", Font.PLAIN, 40));
+		howTo.setFont(coalition.deriveFont((float)40));
 		howTo.setForeground(Color.WHITE);
 		howTo.setBounds(0, title.getY() + 145, contentPane.getWidth(), 65);
 		howTo.setOpaque(false);
@@ -327,7 +357,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel fly = new JLabel("FLY MODE:      3      4      OFF");
 		fly.setForeground(Color.WHITE);
 		fly.setHorizontalAlignment(SwingConstants.CENTER);
-		fly.setFont(new Font("Coalition", Font.BOLD, 40));
+		fly.setFont(coalition.deriveFont((float)40));
 		fly.setBounds(0, howTo.getY() + 70, contentPane.getWidth(), 65);
 		buttons.add(fly);
 
@@ -405,7 +435,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel timerTitle = new JLabel("TIMER:      ON      OFF");
 		timerTitle.setForeground(Color.WHITE);
 		timerTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		timerTitle.setFont(new Font("Coalition", Font.BOLD, 40));
+		timerTitle.setFont(coalition.deriveFont((float)40));
 		timerTitle.setBounds(0, fly.getY() + 70, contentPane.getWidth(), 65);
 		buttons.add(timerTitle);
 
@@ -458,7 +488,7 @@ public class MenuGUI implements MenuInterface {
 		JLabel res = new JLabel("GAME RESOLUTION:      HIGH      LOW");
 		res.setForeground(Color.WHITE);
 		res.setHorizontalAlignment(SwingConstants.CENTER);
-		res.setFont(new Font("Coalition", Font.BOLD, 40));
+		res.setFont(coalition.deriveFont((float)40));
 		res.setBounds(0, timerTitle.getY() + 70, contentPane.getWidth(), 65);
 		buttons.add(res);
 
@@ -529,7 +559,7 @@ public class MenuGUI implements MenuInterface {
 				drawMenu();
 			}
 		});
-		main.setFont(new Font("Coalition", Font.PLAIN, 40));
+		main.setFont(coalition.deriveFont((float)40));
 		main.setForeground(Color.WHITE);
 		main.setBounds(0, res.getY() + 70, contentPane.getWidth(), 65);
 		main.setOpaque(false);
@@ -599,13 +629,13 @@ public class MenuGUI implements MenuInterface {
 		JLabel title = new JLabel("HOW TO PLAY");
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setFont(new Font("Coalition", Font.BOLD, 70));
+		title.setFont(coalition.deriveFont((float)70));
 		title.setBounds(0, 60, contentPane.getWidth(), 125);
 		buttons.add(title);
 
 		// Add previous button to JPanel
 		final JButton previous = new JButton("PREVIOUS");
-		previous.setFont(new Font("Coalition", Font.PLAIN, 40));
+		previous.setFont(coalition.deriveFont((float)40));
 		previous.setForeground(Color.WHITE);
 		previous.setBounds(20, contentPane.getHeight() - 100, 325, 65);
 		previous.setOpaque(false);
@@ -632,7 +662,7 @@ public class MenuGUI implements MenuInterface {
 				panel.setVisible(false);
 			}
 		});
-		back.setFont(new Font("Coalition", Font.PLAIN, 40));
+		back.setFont(coalition.deriveFont((float)40));
 		back.setForeground(Color.WHITE);
 		back.setBounds((contentPane.getWidth() / 2) - 100,
 				contentPane.getHeight() - 100, 200, 65);
@@ -643,7 +673,7 @@ public class MenuGUI implements MenuInterface {
 
 		// Add next button to JPanel
 		final JButton next = new JButton("NEXT");
-		next.setFont(new Font("Coalition", Font.PLAIN, 40));
+		next.setFont(coalition.deriveFont((float)40));
 		next.setForeground(Color.WHITE);
 		next.setBounds(contentPane.getWidth() - 220,
 				contentPane.getHeight() - 100, 200, 65);
@@ -672,7 +702,7 @@ public class MenuGUI implements MenuInterface {
 
 		JLabel basicsText = new JLabel("Basics:\n");
 		basicsText.setHorizontalAlignment(SwingConstants.LEFT);
-		basicsText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		basicsText.setFont(coalition.deriveFont((float)30));
 		basicsText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		basicsText.setForeground(Color.WHITE);
 		slides[0].add(basicsText);
@@ -680,21 +710,21 @@ public class MenuGUI implements MenuInterface {
 		JLabel placeText = new JLabel("Placement Mode:\n");
 		placeText.setHorizontalAlignment(SwingConstants.LEFT);
 		placeText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		placeText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		placeText.setFont(coalition.deriveFont((float)30));
 		placeText.setForeground(Color.WHITE);
 		slides[1].add(placeText);
 
 		JLabel moveText = new JLabel("Movement Mode:\n");
 		moveText.setHorizontalAlignment(SwingConstants.LEFT);
 		moveText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		moveText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		moveText.setFont(coalition.deriveFont((float)30));
 		moveText.setForeground(Color.WHITE);
 		slides[2].add(moveText);
 
 		JLabel flyText = new JLabel("Fly Mode:\n");
 		flyText.setHorizontalAlignment(SwingConstants.LEFT);
 		flyText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		flyText.setFont(new Font("Coalition", Font.PLAIN, 30));
+		flyText.setFont(coalition.deriveFont((float)30));
 		flyText.setForeground(Color.WHITE);
 		slides[3].add(flyText);
 
