@@ -41,6 +41,9 @@ public class GameGUI implements GameInterface {
 
 	// How To Slides
 	private JPanel[] slides;
+	
+	// Turn Based Information
+	private JLabel[] info;
 
 	// Image Locations, etc.
 	// private String backL = "src/images/backgroundLarge.jpg";
@@ -68,6 +71,7 @@ public class GameGUI implements GameInterface {
 		rSide = new JPanel[9];
 		board = new JButton[3][8];
 		slides = new JPanel[4];
+		info = new JLabel[2];
 		this.players = players;
 
 		// Ask for Player Names
@@ -357,6 +361,20 @@ public class GameGUI implements GameInterface {
 		layeredPane.add(pieces);
 		layeredPane.setLayer(pieces, 3);
 
+		// Create Player Turn info JLabels
+		for (int i = 0; i < info.length; i++) {
+			info[i] = new JLabel();
+			info[i].setOpaque(false);
+			info[i].setVisible(true);
+			info[i].setForeground(Color.CYAN);
+			info[i].setFont(new Font("Coalition", Font.PLAIN, 18));
+			pieces.add(info[i]);
+		}
+		
+		// Set individual bounds, etc.
+		info[0].setBounds(pOne.getX(), pOne.getY() - 100, pOne.getWidth(), 75);
+		info[1].setBounds(pTwo.getX(), pTwo.getY() - 100, pTwo.getWidth(), 75);
+		
 		// Create Blue Side Pieces
 		for (int i = 0; i < 9; i++) {
 			try {
@@ -1351,6 +1369,12 @@ public class GameGUI implements GameInterface {
 				}
 			}
 		}
+	}
+
+	
+	@Override
+	public void setTurnInfo(int playerID, String message) {
+		info[playerID].setText("<html><center>" + message + "</center></html>");
 	}
 
 }

@@ -17,5 +17,7 @@ public interface GameInterface {
 	boolean isGameQuit();
 	
 	void setBoard(GameBoard gm);
+	
+	void setTurnInfo(int playerID, String message);
 
 }

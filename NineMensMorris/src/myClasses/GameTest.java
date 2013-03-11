@@ -46,4 +46,10 @@ public class GameTest implements GameInterface {
 		return null;
 	}
 
+	@Override
+	public void setTurnInfo(int playerID, String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
