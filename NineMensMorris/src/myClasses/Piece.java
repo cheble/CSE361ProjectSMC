@@ -5,7 +5,7 @@ public class Piece {
 	private Player owner;
 	
 	public Piece(Player player) {
-		player = owner;
+		owner = player;
 	}
 
 	public Player getOwner() {

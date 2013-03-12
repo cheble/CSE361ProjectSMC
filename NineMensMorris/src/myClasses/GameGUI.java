@@ -27,6 +27,7 @@ public class GameGUI implements GameInterface {
 	private JFrame contentPane;
 	private int slideNum;
 	private boolean isGameQuit;
+	private boolean isGameBegan;
 	private String names[];
 	private boolean isPieceSelected;
 	private boolean isPositionSelected;
@@ -60,22 +61,33 @@ public class GameGUI implements GameInterface {
 	private ImageIcon redPiece = new ImageIcon(red);
 	private ImageIcon blankPiece = new ImageIcon(blank);
 
-	public GameGUI(JFrame contentPane, int numHumans, Player players[]) {
+	public GameGUI(JFrame contentPane, Player players[]) {
 		// Initiate Variables
 		this.contentPane = contentPane;
 		isGameQuit = false;
+		isGameBegan = false;
 		slideNum = 1;
-		names = new String[numHumans];
 		isPieceSelected = false;
 		isPositionSelected = false;
 		pieceSelectedPos = new int[2];
+		pieceSelectedPos[0] = -1;
 		selectedPos = new int[2];
+		selectedPos[0] = -1;
 		bSide = new JPanel[9];
 		rSide = new JPanel[9];
 		board = new JButton[3][8];
 		slides = new JPanel[4];
 		info = new JLabel[2];
 		this.players = players;
+
+		// Get number of Humans
+		int numHumans = 0;
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].getIsHuman() == true) {
+				numHumans++;
+			}
+		}
+		names = new String[numHumans];
 
 		// Setup Custom Font
 		File fontLoc = new File("src/font/Coalition_v2.ttf");
@@ -195,6 +207,9 @@ public class GameGUI implements GameInterface {
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
 
+						// Set is Game Began
+						isGameBegan = true;
+
 						// Draw Game With Updated Name
 						drawBoard();
 					}
@@ -207,6 +222,9 @@ public class GameGUI implements GameInterface {
 
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
+
+						// Set is Game Began
+						isGameBegan = true;
 
 						// Draw Game With Updated Names
 						drawBoard();
@@ -824,9 +842,8 @@ public class GameGUI implements GameInterface {
 		board[2][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected
-						|| board[pieceSelectedPos[0]][pieceSelectedPos[1]]
-								.getIcon().equals(board[2][4].getIcon())) {
+				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]]
+						.getIcon().equals(board[2][4].getIcon())) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 4;
@@ -968,7 +985,7 @@ public class GameGUI implements GameInterface {
 				}
 			}
 		});
-
+		
 	}
 
 	public void drawHowTo(final JPanel panel) {
@@ -1471,19 +1488,22 @@ public class GameGUI implements GameInterface {
 	public void setBoard(GameBoard gm) {
 		// Clear The selected Positions on setBoard
 		for (int i = 0; i < pieceSelectedPos.length; i++) {
-			pieceSelectedPos[i] = (Integer) null;
-			selectedPos[i] = (Integer) null;
+			pieceSelectedPos[i] = -1;
+			selectedPos[i] = -1;
 		}
+
+		isPieceSelected = false;
+		isPositionSelected = false;
 
 		// Set Pieces On Board
 		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (gm.getBoard()[i][j].getOwner().equals(players[0])) {
-					board[i][j].setIcon(bluePiece);
-				} else if (gm.getBoard()[i][j].getOwner().equals(players[1])) {
-					board[i][j].setIcon(redPiece);
-				} else {
+			for (int j = 0; j < 8; j++) {
+				if (gm.getBoard()[i][j] == null) {
 					board[i][j].setIcon(blankPiece);
+				} else if (gm.getBoard()[i][j].getOwner().equals(players[0])) {
+					board[i][j].setIcon(bluePiece);
+				} else {
+					board[i][j].setIcon(redPiece);
 				}
 			}
 		}
@@ -1492,26 +1512,19 @@ public class GameGUI implements GameInterface {
 		setSideState(0, gm.piecesOnSide(0));
 		setSideState(1, gm.piecesOnSide(1));
 
+		System.out.println("Pieces on Side 1: " + gm.piecesOnSide(0));
+		System.out.println("Pieces of Side 2: " + gm.piecesOnSide(1));
+		
 		// Refresh the board
 		contentPane.getContentPane().repaint();
 	}
 
 	private void setSideState(int playerID, int numPieces) {
-		for (int i = 0; i < numPieces; i++) {
+		for (int i = numPieces; i < 9; i++) {
 			if (playerID == 0) {
-				try {
-					bSide[i] = new JPanelWithBackground(blue);
-				} catch (IOException e) {
-					e.printStackTrace();
-					bSide[i] = null;
-				}
+				bSide[i].setVisible(false);
 			} else {
-				try {
-					rSide[i] = new JPanelWithBackground(red);
-				} catch (IOException e) {
-					e.printStackTrace();
-					rSide[i] = null;
-				}
+				rSide[i].setVisible(false);
 			}
 		}
 	}
@@ -1519,6 +1532,11 @@ public class GameGUI implements GameInterface {
 	@Override
 	public void setTurnInfo(int playerID, String message) {
 		info[playerID].setText("<html><center>" + message + "</center></html>");
+	}
+
+	@Override
+	public boolean isGameBegan() {
+		return isGameBegan;
 	}
 
 }

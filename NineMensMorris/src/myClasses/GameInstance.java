@@ -30,7 +30,6 @@ public class GameInstance {
 	public GameInstance(Options options, JFrame contentPane) {
 		// Initialize Variables
 		isPlacement = true;
-		int numHumans;
 
 		// create the players
 		myOptions = options;
@@ -40,16 +39,24 @@ public class GameInstance {
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
 			players[1].setIsHuman(false);
-			numHumans = 1;
 		} else {
 			players[1] = new Player();
 			players[1].setIsHuman(true);
-			numHumans = 2;
 		}
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
-		boardInterface = new GameGUI(contentPane, numHumans, players);
+		boardInterface = new GameGUI(contentPane, players);
+		
+		// Wait Until Game Start
+		while (true) {
+			System.out.print("");
+			if(boardInterface.isGameBegan()) {
+				break;
+			}
+		}
+		
+		System.out.println("Game Started");
 		
 		// Start Placement Phase
 		while (isGameOver() < 0) {
@@ -99,7 +106,7 @@ public class GameInstance {
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
-				if(position != null){
+				if(position[0] != -1){
 					break;
 				}
 			}
@@ -114,7 +121,7 @@ public class GameInstance {
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();
-					if(position != null){
+					if(position[0] != -1){
 						break;
 					}
 				}
@@ -143,13 +150,13 @@ public class GameInstance {
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position[0] = boardInterface.pieceSelect();
-				if(position[0] != null){
+				if(position[0][0] != -1){
 					break;
 				}
 			}
 			while(isGameOver() < 0){
 				position[1] = boardInterface.positionSelect();
-				if(position[1] != null){
+				if(position[1][0] != -1){
 					break;
 				}
 			}
@@ -168,13 +175,13 @@ public class GameInstance {
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position[0] = boardInterface.pieceSelect();
-					if(position[0] != null){
+					if(position[0][0] != -1){
 						break;
 					}
 				}
 				while(isGameOver() < 0){
 					position[1] = boardInterface.positionSelect();
-					if(position[1] != null){
+					if(position[1][0] != -1){
 						break;
 					}
 				}
@@ -249,7 +256,7 @@ public class GameInstance {
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
-				if(position != null){
+				if(position[0] != -1){
 					break;
 				}
 			}
@@ -267,7 +274,7 @@ public class GameInstance {
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();
-					if(position != null){
+					if(position[0] != -1){
 						break;
 					}
 				}
@@ -292,7 +299,7 @@ public class GameInstance {
 		if(myBoard.isMill(position)){
 			//false if piece is in one of multiple mills
 			//get pieces from board owned by player and check if any are not in mills
-			if(myBoard.hasNonMillPieces(players[(currentPlayer+1)%2])){
+			if(myBoard.hasNonMillPieces(players[(currentPlayer+1)%2])) {
 				return false;
 			}
 		}

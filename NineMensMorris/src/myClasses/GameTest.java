@@ -52,4 +52,10 @@ public class GameTest implements GameInterface {
 		
 	}
 
+	@Override
+	public boolean isGameBegan() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
