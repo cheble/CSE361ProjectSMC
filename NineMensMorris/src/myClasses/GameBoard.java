@@ -219,12 +219,15 @@ public class GameBoard {
 	 * @param player
 	 */
 	public int piecesOnSide(int playerID) {
-		int i = 8;
-		while (side[playerID][i] == null && i >= 0) {
+		int i = 9;
+		while (side[playerID][i - 1] == null && i > 0) {
 			i--;
+			if (i == 0) {
+				break;
+			}
 		}
 		// change from index to count
-		return i + 1;
+		return i;
 	}
 
 	/**
