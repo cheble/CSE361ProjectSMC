@@ -1,7 +1,5 @@
 package myClasses;
 
-import java.awt.Component;
-
 import javax.swing.JFrame;
 
 /**
