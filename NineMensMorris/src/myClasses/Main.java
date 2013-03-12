@@ -51,7 +51,7 @@ public class Main {
 		while (true) {
 			// Cause it doesn't work with out print statement? wtf...
 			System.out.print("");
-			if (game.isGameOver() == true) {
+			if (game.isGameOver() >= 0) {
 				break;
 			}
 		}

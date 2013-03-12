@@ -13,10 +13,8 @@ import javax.swing.JFrame;
  */
 public class GameInstance {
 
-	// TODO Should we have the playerID (array index) as a Player attribute?
-	// This will get rid of a parameter in a number of functions.
-	// TODO Also, should we do use playerID instead of players[] index? We could
-	// then call the players player1 and player2.
+	// TODO Should we move human input to the player class and pass the gameInterface
+	// TODO We need to give feedback to player for incorrect moves, instructions, etc...
 
 	private GameInterface boardInterface;
 	private Player[] players;
@@ -38,20 +36,23 @@ public class GameInstance {
 		myOptions = options;
 		players = new Player[2];
 		players[0] = new Player();
+		players[0].setIsHuman(true);
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
+			players[1].setIsHuman(false);
 			numHumans = 1;
 		} else {
 			players[1] = new Player();
+			players[1].setIsHuman(true);
 			numHumans = 2;
 		}
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
 		boardInterface = new GameGUI(contentPane, numHumans, players);
-
+		
 		// Start Placement Phase
-		while (!isGameOver()) {
+		while (isGameOver() < 0) {
 			if (isPlacement) {
 				// PlacementPhase
 				placementPhase();
@@ -63,23 +64,26 @@ public class GameInstance {
 
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
-
 	}
 	
 	public void placementPhase() {
+		System.out.println("placement Phase started");
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
 		while(myBoard.piecesOnSide((currentPlayer+1) % 2) > 0){
+			System.out.println("begin player 1 turn");
 			playerTurnPlace(currentPlayer);
+			System.out.println("begin player 2 turn");
 			playerTurnPlace(currentPlayer);
 		}
+		isPlacement = false;
 	}
 
 	public void movementPhase() {
 		//while non-starting player has pieces
-		while(!isGameOver()){
+		while(isGameOver() < 0){
 			playerTurnMove(currentPlayer);
-			if(!isGameOver()){
+			if(isGameOver() < 0){
 				playerTurnMove(currentPlayer);
 			}
 		}
@@ -91,40 +95,41 @@ public class GameInstance {
 	}
 
 	public void playerTurnPlace(int playerID) {
-		int[] selectedPosition = null;
+		int[] position = null;
 		if(players[playerID].getIsHuman()){
-			while(true){
-				selectedPosition = boardInterface.pieceSelect();
-				if(selectedPosition != null){
+			while(isGameOver() < 0){
+				position = boardInterface.pieceSelect();
+				if(position != null){
 					break;
 				}
 			}
 		} else {
-			//TODO do something about the computer AI to set selectedPosition
+			//Computer AI
+			position = players[playerID].placePiece();
 		}
 		// TODO implement skip/undo somehow
-
-		// TODO put some conditions in here
-
-		// TODO Set to board and check if move is valid to board
-		while (myBoard.addPiece(playerID, selectedPosition) == -1) {
-			// TODO if invalid move tell player or computer, and get new move
+		// Set to board and check if move is valid to board
+		while (myBoard.addPiece(playerID, position) == -1) {
+			//if invalid move tell player or computer, and get new move
 			if(players[playerID].getIsHuman()){
-				while(true){
-					selectedPosition = boardInterface.pieceSelect();
-					if(selectedPosition != null){
+				while(isGameOver() < 0){
+					position = boardInterface.pieceSelect();
+					if(position != null){
 						break;
 					}
 				}
 			} else {
-				//TODO do something about the computer AI to set selectedPosition
+				//Computer AI
+				position = players[playerID].placePiece();
 			}
 		}
+		System.out.printf("%d, %d\n",position[0], position[1]);
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
 		//Change current player
 		currentPlayer = (currentPlayer+1) % 2;
 		// pass the board to the gui
+		passBoard();
 	}
 
 	/**
@@ -136,60 +141,58 @@ public class GameInstance {
 		position[0] = null;		//piece selected
 		position[1] = null;		//position selected
 		if(players[playerID].getIsHuman()){
-			while(true){
+			while(isGameOver() < 0){
 				position[0] = boardInterface.pieceSelect();
 				if(position[0] != null){
 					break;
 				}
 			}
-			while(true){
+			while(isGameOver() < 0){
 				position[1] = boardInterface.positionSelect();
 				if(position[1] != null){
 					break;
 				}
 			}
 		} else {
-			//TODO do something about the computer AI to set selectedPiece and selectedPosition
+			//Computer AI
 			position = players[playerID].movePiece();
 		}
 		
-		
-		// TODO Check if move is valid to game rules
+
 		// TODO implement skip/undo somehow
-		if(isMoveValid(position[0], position[1])){
-			while (myBoard.movePiece(position[0], position[1]) == -1) {
-				// invalid move
-				// tell player or computer
-				// get new move
-				if(players[playerID].getIsHuman()){
-					while(true){
-						position[0] = boardInterface.pieceSelect();
-						if(position[0] != null){
-							break;
-						}
+		while ( !isMoveValid(position[0], position[1]) || 
+				myBoard.movePiece(position[0], position[1]) == -1) {
+			// invalid move
+			// tell player or computer
+			// get new move
+			if(players[playerID].getIsHuman()){
+				while(isGameOver() < 0){
+					position[0] = boardInterface.pieceSelect();
+					if(position[0] != null){
+						break;
 					}
-					while(true){
-						position[1] = boardInterface.positionSelect();
-						if(position[1] != null){
-							break;
-						}
-					}
-				} else {
-					//TODO do something about the computer AI to set selectedPiece and selectedPosition
-					position = players[playerID].movePiece();
 				}
-			}
-			//Increment number of moves for player
-			players[playerID].incrementNumMoves();
-			//Change current player
-			currentPlayer = (currentPlayer+1) % 2;
-			// pass the board to the gui
-			//check if move created a mill
-			if(myBoard.isMill(position[1])){
-				playerTake(playerID);
+				while(isGameOver() < 0){
+					position[1] = boardInterface.positionSelect();
+					if(position[1] != null){
+						break;
+					}
+				}
+			} else {
+				//Computer AI
+				position = players[playerID].movePiece();
 			}
 		}
-						
+		//Increment number of moves for player
+		players[playerID].incrementNumMoves();
+		//Change current player
+		currentPlayer = (currentPlayer+1) % 2;
+		// pass the board to the gui
+		passBoard();
+		//check if move created a mill
+		if(myBoard.isMill(position[1])){
+			playerTake(playerID);
+		}
 	}
 	
 	public boolean isMoveValid(int[] position1, int[] position2) {
@@ -244,39 +247,36 @@ public class GameInstance {
 	public void playerTake(int playerID){
 		int position[] = null;	//piece selected
 		if(players[playerID].getIsHuman()){
-			while(true){
+			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
 				if(position != null){
 					break;
 				}
 			}
 		} else {
-			//TODO do something about the computer AI to set selectedPiece and selectedPosition
+			//computer AI
 			position = players[playerID].takePiece();
 		}
 		
-		// TODO Check if move is valid to game rules
 		// TODO implement skip/undo somehow
-		if(isTakeValid(position)){
-			while (myBoard.takePiece(playerID, position) == -1) {
-				// invalid move
-				// tell player or computer
-				// get new move
-				if(players[playerID].getIsHuman()){
-					while(true){
-						position = boardInterface.pieceSelect();
-						if(position != null){
-							break;
-						}
+		while (!isTakeValid(position) &&
+				myBoard.takePiece(playerID, position) == -1) {
+			// invalid move
+			// tell player or computer
+			// get new move
+			if(players[playerID].getIsHuman()){
+				while(isGameOver() < 0){
+					position = boardInterface.pieceSelect();
+					if(position != null){
+						break;
 					}
-				} else {
-					//TODO do something about the computer AI to set selectedPiece and selectedPosition
-					position = players[playerID].takePiece();
 				}
+			} else {
+				//Computer AI
+				position = players[playerID].takePiece();
 			}
-			
 		}
-
+		passBoard();
 	}
 	
 	public boolean isTakeValid(int[] position){
@@ -299,21 +299,22 @@ public class GameInstance {
 		return true;
 	}
 
-	public boolean isGameOver() {
+	public int isGameOver() {
 		// If game is quit inside of interface.
 		if (boardInterface.isGameQuit()) {
 			System.out.print("");
-			return true;
+			//quit game here
+			return 1;
 		}
 
 		// If a player has more than 6 of his nine pieces taken
 		if (!isPlacement) {
 			if (myBoard.piecesOnSide(0) > 6 || myBoard.piecesOnSide(1) > 6) {
-				return true; // Game is over
+				return 0; // Game is over
 			}
 		}
 
-		return false;
+		return -1;
 	}
 
 	public Player getWinner() {
@@ -334,4 +335,9 @@ public class GameInstance {
 		throw new UnsupportedOperationException();
 	}
 
+	public void passBoard(){
+		boardInterface.setBoard(myBoard);
+	}
+	
+	
 }
