@@ -1527,6 +1527,11 @@ public class GameGUI implements GameInterface {
 	@Override
 	public void setTurnInfo(int playerID, String message) {
 		info[playerID].setText("<html><center>" + message + "</center></html>");
+		if (playerID == 0) {
+			info[1].setText("");
+		} else {
+			info[0].setText("");
+		}
 	}
 
 	@Override
