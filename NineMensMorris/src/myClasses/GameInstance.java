@@ -11,7 +11,11 @@ import javax.swing.JFrame;
  * @version 0.1
  * @author Mitchel Pigsley, Chase Heble, Sam Troxel
  */
-public class GameInstance implements Runnable{
+/**
+ * @author theMaster
+ *
+ */
+public class GameInstance{
 
 	// TODO Should we move human input to the player class and pass the gameInterface
 	// TODO We need to give feedback to player for incorrect moves, instructions, etc...
@@ -67,7 +71,7 @@ public class GameInstance implements Runnable{
 		}
 		System.out.println("Game Ended");
 		if(isGameOver() == 0){
-			boardInterface.drawWinnerMenu(getWinner());
+			boardInterface.drawWinnerMenu(getWinnerIndex());
 		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
@@ -109,10 +113,14 @@ public class GameInstance implements Runnable{
 		int[] position = null;
 		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
-			while(isGameOver() < 0){
-				position = boardInterface.pieceSelect();
-				if(position[0] != -1){
-					break;
+			while(true){
+				if(isGameOver() < 0){
+					position = boardInterface.pieceSelect();
+					if(position[0] != -1){
+						break;
+					}
+				} else {
+					return;
 				}
 			}
 		} else {
@@ -121,7 +129,7 @@ public class GameInstance implements Runnable{
 		}
 		// TODO implement skip/undo somehow
 		// Set to board and check if move is valid to board
-		while (myBoard.addPiece(playerID, position) == -1) {
+		while ((isGameOver() < 0) && (myBoard.addPiece(playerID, position) == -1)) {
 			//if invalid move tell player or computer, and get new move
 			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
@@ -155,17 +163,25 @@ public class GameInstance implements Runnable{
 		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
 			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-			while(isGameOver() < 0){
-				position[0] = boardInterface.pieceSelect();
-				if(boardInterface.pieceSelect()[0] != -1){
-					break;
+			while(true){
+				if(isGameOver() < 0){
+					position[0] = boardInterface.pieceSelect();
+					if(boardInterface.pieceSelect()[0] != -1){
+						break;
+					}
+				} else {
+					return;
 				}
 			}
 			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-			while(isGameOver() < 0){
-				position[1] = boardInterface.positionSelect();
-				if(position[1][0] != -1){
-					break;
+			while(true){
+				if(isGameOver() < 0){
+					position[1] = boardInterface.positionSelect();
+					if(position[1][0] != -1){
+						break;
+					}
+				} else {
+					return;
 				}
 			}
 
@@ -173,15 +189,17 @@ public class GameInstance implements Runnable{
 			//Computer AI
 			position = players[playerID].movePiece();
 		}
-		System.out.println("Move recieved");
-		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
-		// TODO implement skip/undo somehow
-		System.out.print("isMoveValid:  ");
-		System.out.println(isMoveValid(position[0], position[1]));
-		System.out.print("movePiece:	");
-		//System.out.println(myBoard.movePiece(position[0], position[1]));
-		while ( !isMoveValid(position[0], position[1]) || 
-				myBoard.movePiece(position[0], position[1]) == -1) {
+		if(isGameOver() < 0){
+			System.out.println("Move recieved");
+			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
+			// TODO implement skip/undo somehow
+			System.out.print("isMoveValid:  ");
+			System.out.println(isMoveValid(position[0], position[1]));
+			System.out.print("movePiece:	");
+			//System.out.println(myBoard.movePiece(position[0], position[1]));
+		}
+		while ((isGameOver() < 0) && ( !isMoveValid(position[0], position[1]) || 
+				myBoard.movePiece(position[0], position[1]) == -1)) {
 			// invalid move
 			// tell player or computer
 			// get new move
@@ -214,7 +232,7 @@ public class GameInstance implements Runnable{
 		//check if move created a mill
 		System.out.println("is Mill?");
 
-		if(myBoard.isMill(position[1])){
+		if((isGameOver() < 0) && myBoard.isMill(position[1])){
 			System.out.println("it is");
 			passBoard();
 			System.out.println("board passed");
@@ -358,7 +376,7 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
-	public int getWinner() {
+	public int getWinnerIndex() {
 		if(isPlacement){
 			return -1;
 		}
@@ -371,6 +389,19 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
+public Player getWinner() {
+		if(isPlacement){
+			return null;
+		}
+		if (myBoard.piecesOnSide(0) > 6) {
+			return players[1]; // players[1] wins
+		}
+		if (myBoard.piecesOnSide(1) > 6) {
+			return players[0]; // players[0] wins
+		}
+		return null;
+	}
+
 	public void undo() {
 		throw new UnsupportedOperationException();
 	}
@@ -381,13 +412,5 @@ public class GameInstance implements Runnable{
 
 	public void passBoard(){
 		boardInterface.setBoard(myBoard);
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+	}	
 }
