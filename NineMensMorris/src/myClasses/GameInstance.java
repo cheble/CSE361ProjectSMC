@@ -35,6 +35,8 @@ public class GameInstance implements Runnable{
 		myOptions = options;
 		players = new Player[2];
 		players[0] = new Player();
+		//TODO should we get name here? Or should we delete attribute from class?
+		players[0].setName(boardInterface.getName(0));
 		players[0].setIsHuman(true);
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
@@ -43,6 +45,8 @@ public class GameInstance implements Runnable{
 			players[1] = new Player();
 			players[1].setIsHuman(true);
 		}
+		players[0].setName(boardInterface.getName(0));
+		players[1].setName(boardInterface.getName(1));
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
@@ -109,6 +113,7 @@ public class GameInstance implements Runnable{
 		int[] position = null;
 		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
+			//boardInterface.setTurnInfo(0, "YOUR TURN<br>Place A PIECE");
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
 				if(position[0] != -1){
@@ -125,6 +130,7 @@ public class GameInstance implements Runnable{
 			//if invalid move tell player or computer, and get new move
 			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>Place A PIECE");
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();
 					if(position[0] != -1){
@@ -186,7 +192,6 @@ public class GameInstance implements Runnable{
 			// tell player or computer
 			// get new move
 			boardInterface.clearSelections();
-			System.out.println("invalid");
 			if(players[playerID].getIsHuman()){
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
 				while(isGameOver() < 0){
@@ -208,6 +213,7 @@ public class GameInstance implements Runnable{
 				position = players[playerID].movePiece();
 			}
 		}
+		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
@@ -242,11 +248,9 @@ public class GameInstance implements Runnable{
 		//check that its one step away on a path
 		//if a corner piece is selected
 		if(position1[1] % 2 == 0){
-			System.out.println("corner piece");
 			//piece cannot move to different square
 			//this would change for a advance game board type
 			if(position1[0] != position2[0]){
-				System.out.println("move accecpted");
 				return false;
 			}
 			//piece must move only 1 space away
@@ -259,14 +263,12 @@ public class GameInstance implements Runnable{
 		}
 		//a middle piece is selected
 		else{
-			System.out.println("middle piece");
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
 				if( (position1[0]+1) % 3 != position2[0] &&
 					(position1[0]+2) % 3 != position2[0])
 				{
-					System.out.println("piece changed squares not following line");
 					return false;
 				}
 			}
@@ -286,7 +288,8 @@ public class GameInstance implements Runnable{
 	public void playerTake(int playerID){
 		System.out.println("Take a piece");
 		boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
-		int position[] = null;	//piece selected
+		int position[] = new int[] {-1, -1};	//piece selected
+		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
@@ -300,11 +303,12 @@ public class GameInstance implements Runnable{
 		}
 		
 		// TODO implement skip/undo somehow
-		while (!isTakeValid(position) &&
+		while (!isTakeValid(position) ||
 				myBoard.takePiece(playerID, position) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
+			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();

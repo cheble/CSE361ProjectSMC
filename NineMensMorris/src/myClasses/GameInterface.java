@@ -23,5 +23,7 @@ public interface GameInterface {
 	void setBoard(GameBoard gm);
 	
 	void setTurnInfo(int playerID, String message);
+	
+	public String getName(int playerID);
 
 }

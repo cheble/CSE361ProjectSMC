@@ -1592,5 +1592,9 @@ public class GameGUI implements GameInterface {
 		isPositionSelected = false;
 
 	}
+	
+	public String getName(int playerID){
+		return names[playerID];
+	}
 
 }
