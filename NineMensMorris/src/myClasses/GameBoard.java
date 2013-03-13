@@ -108,9 +108,9 @@ public class GameBoard {
 		}
 		//--------Conditions END
 
-		int index = piecesOnSide(playerID);
+		int index = piecesOnSide((playerID+1) % 2);
 		// add piece to side
-		side[playerID][index] = board[position[0]][position[1]];
+		side[(playerID+1) % 2][index] = board[position[0]][position[1]];
 		// remove piece from position on board
 		board[position[0]][position[1]] = null;
 		return 0;
