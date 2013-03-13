@@ -241,7 +241,7 @@ public class GameInstance {
 			}
 			//piece must move only 1 space away
 			if( (position1[1]+1) % 8 != position2[1] &&
-				(position1[1]-1) % 8 != position2[1])
+				(position1[1]+7) % 8 != position2[1])
 			{
 				return false;
 			}
@@ -252,8 +252,8 @@ public class GameInstance {
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
-				if( position1[0]+1 != position2[0] &&
-					position1[0]-1 != position2[0])
+				if( (position1[0]+1) % 3 != position2[0] &&
+					(position1[0]+2) % 3 != position2[0])
 				{
 					return false;
 				}
@@ -261,7 +261,7 @@ public class GameInstance {
 			//piece stays on same square
 			//piece must move only 1 space away
 			else if( (position1[1]+1) % 8 != position2[1] &&
-					 (position1[1]-1) % 8 != position2[1])
+					 (position1[1]+7) % 8 != position2[1])
 			{
 				
 				return false;
