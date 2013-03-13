@@ -254,10 +254,10 @@ public class GameBoard {
 		if(position == null){
 			return false;
 		}
-		if(position[0] < 0 && position[0] > 2){
+		if(position[0] < 0 || position[0] > 2){
 			return false;
 		}
-		if(position[1] < 0 && position[1] > 7){
+		if(position[1] < 0 || position[1] > 7){
 			return false;
 		}
 		return true;

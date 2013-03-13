@@ -1216,7 +1216,16 @@ public class GameGUI implements GameInterface {
 	}
 
 	public int[] positionSelect() {
-		return selectedPos;
+		clearSelections();
+		int[] passedPos = new int[2];
+		while(true){
+			passedPos[1] = selectedPos[1];
+			passedPos[0] = selectedPos[0];
+			if(passedPos[0] != -1 && passedPos[1] != -1){
+				break;
+			}
+		}
+		return passedPos;
 	}
 
 	public boolean isGameQuit() {

@@ -36,7 +36,6 @@ public class GameInstance implements Runnable{
 		players = new Player[2];
 		players[0] = new Player();
 		//TODO should we get name here? Or should we delete attribute from class?
-		players[0].setName(boardInterface.getName(0));
 		players[0].setIsHuman(true);
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
@@ -45,8 +44,7 @@ public class GameInstance implements Runnable{
 			players[1] = new Player();
 			players[1].setIsHuman(true);
 		}
-		players[0].setName(boardInterface.getName(0));
-		players[1].setName(boardInterface.getName(1));
+		
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
@@ -59,6 +57,9 @@ public class GameInstance implements Runnable{
 				break;
 			}
 		}
+		
+		players[0].setName(boardInterface.getName(0));
+		players[1].setName(boardInterface.getName(1));
 		
 		System.out.println("Game Started");
 		if(isGameOver() < 0){
@@ -110,32 +111,35 @@ public class GameInstance implements Runnable{
 	}
 
 	public void playerTurnPlace(int playerID) {
-		int[] position = null;
-		boardInterface.clearSelections();
-		if(players[playerID].getIsHuman()){
-			//boardInterface.setTurnInfo(0, "YOUR TURN<br>Place A PIECE");
-			while(isGameOver() < 0){
-				position = boardInterface.pieceSelect();
-				if(position[0] != -1){
-					break;
-				}
-			}
-		} else {
-			//Computer AI
-			position = players[playerID].placePiece();
-		}
+		int position[] = {-1, -1};
+//		int[] position = null;
+//		boardInterface.clearSelections();
+//		if(players[playerID].getIsHuman()){
+//			//boardInterface.setTurnInfo(0, "YOUR TURN<br>Place A PIECE");
+//			while(isGameOver() < 0){
+//				position = boardInterface.positionSelect();
+//				if(position[0] != -1){
+//					break;
+//				}
+//			}
+//		} else {
+//			//Computer AI
+//			position = players[playerID].placePiece();
+//		}
+		
 		// TODO implement skip/undo somehow
 		// Set to board and check if move is valid to board
-		while (myBoard.addPiece(playerID, position) == -1) {
+		while ( position[0] == -1 ||
+				myBoard.addPiece(playerID, position) == -1) {
 			//if invalid move tell player or computer, and get new move
-			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>Place A PIECE");
-				while(isGameOver() < 0){
-					position = boardInterface.pieceSelect();
-					if(position[0] != -1){
-						break;
-					}
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>PLACE A PIECE");
+				while(isGameOver() < 0 && 
+						(position[0] == -1 || 
+						myBoard.getPiece(position) != null
+						))
+				{
+					position = boardInterface.positionSelect();
 				}
 			} else {
 				//Computer AI
@@ -155,48 +159,29 @@ public class GameInstance implements Runnable{
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
-		int position[][] = {{-1, -1},{-1, -1}};
-		boardInterface.clearSelections();
-//		if(players[playerID].getIsHuman()){
-//			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-//			while(isGameOver() < 0){
-//				position[0] = boardInterface.pieceSelect();
-//				if(boardInterface.pieceSelect()[0] != -1){
-//					break;
-//				}
-//			}
-//			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-//			while(isGameOver() < 0){
-//				position[1] = boardInterface.positionSelect();
-//				if(position[1][0] != -1){
-//					break;
-//				}
-//			}
-//
-//		} else {
-//			//Computer AI
-//			position = players[playerID].movePiece();
-//		}
-		
+		int position[][] = {{-1, -1},{-1, -1}};		
 		// TODO implement skip/undo somehow
-		while ( position.equals(new int[][]{{-1, -1},{-1, -1}}) ||
+		while ( position[0][0] == -1 || 
+				position[1][0] == -1 ||
 				!isMoveValid(position[0], position[1]) || 
 				myBoard.movePiece(position[0], position[1]) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
-			boardInterface.clearSelections();
 			System.out.println("invalid");
 			if(players[playerID].getIsHuman()){
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-				while(isGameOver() < 0 && myBoard.getPiece(position[0]).getOwner().equals(players[playerID])){
-					position[0] = boardInterface.pieceSelect();
-					if(boardInterface.pieceSelect()[0] != -1){
-						break;
-					}
+				while(isGameOver() < 0 && 
+						(position[0][0] == -1 || 
+						myBoard.getPiece(position[0]) == null ||
+						!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
+				{
+					position[0] = boardInterface.positionSelect();
 				}
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-				while(isGameOver() < 0){
+				while(isGameOver() < 0 && 
+						(position[1][0] == -1 ||
+						myBoard.getPiece(position[0]) != null)){
 					position[1] = boardInterface.positionSelect();
 					if(position[1][0] != -1){
 						break;
@@ -207,8 +192,8 @@ public class GameInstance implements Runnable{
 				//Computer AI
 				position = players[playerID].movePiece();
 			}
+			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		}
-		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
@@ -232,6 +217,10 @@ public class GameInstance implements Runnable{
 		//if fly mode is on
 		if(myOptions.getFlyRule() != 3){
 			//check if fly mode has started for the player
+		}
+		
+		if(myBoard.getPiece(position1) == null){
+			return false;
 		}
 		
 		//check if piece is owned by the current player
@@ -282,19 +271,24 @@ public class GameInstance implements Runnable{
 
 	public void playerTake(int playerID){
 		System.out.println("Take a piece");
-		boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
-		int position[] = new int[] {-1, -1};	//piece selected
-		boardInterface.clearSelections();
-		if(players[playerID].getIsHuman()){
-			while(isGameOver() < 0){
-				position = boardInterface.pieceSelect();
-				if(position[0] != -1){
-					break;
+		int position[] = new int[] {-1, -1};
+		while ( position[0] == -1 ||
+				!isTakeValid(position) ||
+				myBoard.takePiece(playerID, position) == -1) {
+			//if invalid move tell player or computer, and get new move
+			if(players[playerID].getIsHuman()){
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
+				while(isGameOver() < 0 && 
+						(position[0] == -1 || 
+						myBoard.getPiece(position) != null
+						))
+				{
+					position = boardInterface.positionSelect();
 				}
+			} else {
+				//Computer AI
+				position = players[playerID].placePiece();
 			}
-		} else {
-			//computer AI
-			position = players[playerID].takePiece();
 		}
 		
 		// TODO implement skip/undo somehow
@@ -306,7 +300,7 @@ public class GameInstance implements Runnable{
 			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
-					position = boardInterface.pieceSelect();
+					position = boardInterface.positionSelect();
 					if(position[0] != -1){
 						break;
 					}
