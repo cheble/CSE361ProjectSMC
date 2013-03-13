@@ -5,12 +5,6 @@ import javax.swing.JPanel;
 public class GameTest implements GameInterface {
 
 	@Override
-	public int[] pieceSelect() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int[] positionSelect() {
 		// TODO Auto-generated method stub
 		return null;
@@ -62,6 +56,12 @@ public class GameTest implements GameInterface {
 	public void clearSelections() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getName(int playerID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

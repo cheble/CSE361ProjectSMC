@@ -4,8 +4,6 @@ import javax.swing.JPanel;
 
 public interface GameInterface {
 
-	int[] pieceSelect();
-
 	int[] positionSelect();
 
 	void drawGameMenu(final JPanel panel);
