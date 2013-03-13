@@ -266,10 +266,10 @@ public class GameInstance{
 				myBoard.takePiece(playerID, position) == -1)) {
 			//if invalid move tell player or computer, and get new move
 			if(players[playerID].getIsHuman()){
-				if (isGameOver() < 0){ 
-					boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
+				
 					position = boardInterface.positionSelect();
-				}
+					
 			} else {
 				//Computer AI
 				position = players[playerID].placePiece();
