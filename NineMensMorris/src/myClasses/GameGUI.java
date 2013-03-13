@@ -1507,9 +1507,6 @@ public class GameGUI implements GameInterface {
 		setSideState(0, gm.piecesOnSide(0));
 		setSideState(1, gm.piecesOnSide(1));
 
-		System.out.println("Pieces on Side 1: " + gm.piecesOnSide(0));
-		System.out.println("Pieces of Side 2: " + gm.piecesOnSide(1));
-
 		// Refresh the board
 		contentPane.getContentPane().repaint();
 	}
