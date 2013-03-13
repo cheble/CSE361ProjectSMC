@@ -284,11 +284,8 @@ public class GameInstance implements Runnable{
 	}
 
 	public void playerTake(int playerID){
-<<<<<<< HEAD
-=======
 		System.out.println("Take a piece");
 		boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
->>>>>>> refs/remotes/origin/master
 		int position[] = null;	//piece selected
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
@@ -361,27 +358,15 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
-<<<<<<< HEAD
 	public int getWinner() {
-=======
-	public Player getWinner() {
 		if(isPlacement){
-			return null;
+			return -1;
 		}
->>>>>>> refs/remotes/origin/master
 		if (myBoard.piecesOnSide(0) > 6) {
-<<<<<<< HEAD
 			return 1; // players[1] wins
-=======
-			return players[1]; // players[1] wins
->>>>>>> refs/remotes/origin/master
 		}
 		if (myBoard.piecesOnSide(1) > 6) {
-<<<<<<< HEAD
 			return 0; // players[0] wins
-=======
-			return players[0]; // players[0] wins
->>>>>>> refs/remotes/origin/master
 		}
 		return -1;
 	}
