@@ -23,6 +23,21 @@ import mpigsley.gui.JPanelWithBackground;
 
 public class GameGUI implements GameInterface {
 
+	// Static
+	private static final String basics = "<html><center>BASICS</center><br>"
+			+ "<center>The Nine Men's Morris board contains 24 intersections arranged"
+			+ " in three consecutive squares. Each player takes turns trying to get"
+			+ " their pieces into a line of three (or Mill). When a mill has been"
+			+ " formed, the player can take an opponents piece from the board. A"
+			+ " player wins by reducing the number of opponents pieces to two.<br>"
+			+ "Nine Men's Morris can be split into three sections<br>"
+			+ "<ul><li>PLACEMENT PHASE</li><li>MOEVEMENT PHASE</li><li>FLYING "
+			+ "MODE</li></ul><br>EACH SECTION WILL BE INTRODUCED IN THE NEXT FEW"
+			+ "SLIDES<br></center>";
+	private static final String placement = "<html><center>PLACEMENT PHASE</center><br>";
+	private static final String movement = "<html><center>MOVEMENT PHASE</center><br>";
+	private static final String flying = "<html><center>FLYING MODE</center><br>";
+
 	// Variables
 	private JFrame contentPane;
 	private int slideNum;
@@ -1102,31 +1117,31 @@ public class GameGUI implements GameInterface {
 			cardPanel.add(slides[i], "" + (i + 1));
 		}
 
-		JLabel basicsText = new JLabel("Basics:\n");
+		JLabel basicsText = new JLabel(basics);
 		basicsText.setHorizontalAlignment(SwingConstants.LEFT);
-		basicsText.setFont(coalition.deriveFont((float) 30));
+		basicsText.setFont(coalition.deriveFont((float) 15));
 		basicsText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		basicsText.setForeground(Color.WHITE);
 		slides[0].add(basicsText);
 
-		JLabel placeText = new JLabel("Placement Mode:\n");
+		JLabel placeText = new JLabel(placement);
 		placeText.setHorizontalAlignment(SwingConstants.LEFT);
 		placeText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		placeText.setFont(coalition.deriveFont((float) 30));
+		placeText.setFont(coalition.deriveFont((float) 15));
 		placeText.setForeground(Color.WHITE);
 		slides[1].add(placeText);
 
-		JLabel moveText = new JLabel("Movement Mode:\n");
+		JLabel moveText = new JLabel(movement);
 		moveText.setHorizontalAlignment(SwingConstants.LEFT);
 		moveText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		moveText.setFont(coalition.deriveFont((float) 30));
+		moveText.setFont(coalition.deriveFont((float) 15));
 		moveText.setForeground(Color.WHITE);
 		slides[2].add(moveText);
 
-		JLabel flyText = new JLabel("Fly Mode:\n");
+		JLabel flyText = new JLabel(flying);
 		flyText.setHorizontalAlignment(SwingConstants.LEFT);
 		flyText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		flyText.setFont(coalition.deriveFont((float) 30));
+		flyText.setFont(coalition.deriveFont((float) 15));
 		flyText.setForeground(Color.WHITE);
 		slides[3].add(flyText);
 
@@ -1457,6 +1472,7 @@ public class GameGUI implements GameInterface {
 				exit.setForeground(Color.BLACK);
 			}
 
+			@SuppressWarnings("static-access")
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Quit Game
@@ -1489,7 +1505,7 @@ public class GameGUI implements GameInterface {
 	public void setBoard(GameBoard gm) {
 		// Clear
 		clearSelections();
-		
+
 		// Set Pieces On Board
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -1512,6 +1528,13 @@ public class GameGUI implements GameInterface {
 	}
 
 	private void setSideState(int playerID, int numPieces) {
+		for (int i = 0; i < numPieces; i++) {
+			if (playerID == 0) {
+				bSide[i].setVisible(true);
+			} else {
+				rSide[i].setVisible(true);
+			}
+		}
 		for (int i = numPieces; i < 9; i++) {
 			if (playerID == 0) {
 				bSide[i].setVisible(false);

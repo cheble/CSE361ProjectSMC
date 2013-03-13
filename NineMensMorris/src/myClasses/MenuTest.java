@@ -2,8 +2,6 @@ package myClasses;
 
 public class MenuTest implements MenuInterface {
 
-	private Options myOptions;
-
 	@Override
 	public Options getOptions() {
 		// TODO Auto-generated method stub
