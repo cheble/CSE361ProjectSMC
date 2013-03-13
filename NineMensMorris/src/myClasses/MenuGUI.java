@@ -22,19 +22,38 @@ public class MenuGUI implements MenuInterface {
 
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
-			+ "The Nine Men's Morris board contains 24 intersections<br>"
-			+ "arranged in three consecutive squares. Each player takes<br>"
-			+ "turns trying to get their pieces into a line of three (or<br>"
-			+ " Mill). When a mill has been formed, the player can take<br>"
-			+ "an opponents piece from the board. A player wins by<br>"
-			+ " reducing the number of opponents pieces to two.<br><br>"
-			+ "Nine Men's Morris can be split into three sections<br>"
+			+ "THE NINE MEN'S MORRIS BOARD CONTAINS 24 INTERSECTIONS<br>"
+			+ "ARRANGED IN THREE CONSECUTIVE SQUARES. EACH PLAYER TAKES<br>"
+			+ "TURNS TRYING TO GET THEIR PIECES INTO A LINE OF THREE (OR<br>"
+			+ " MILL). WHEN A MILL HAS BEEN FORMED, THE PLAYER CAN TAKE<br>"
+			+ "AN OPPONENT'S PIECE FROM THE BOARD. A PLAYER WINS BY<br>"
+			+ "REDUCING THE NUMBER OF OPPONENT'S PIECES TO TWO.<br><br>"
+			+ "NINE MEN'S MORRIS CAN BE SPLIT INTO THREE PHASES<br>"
 			+ "<ul><li>PLACEMENT PHASE</li><li>MOEVEMENT PHASE</li><li>FLYING "
 			+ "MODE</li></ul><br>EACH SECTION WILL BE INTRODUCED IN THE NEXT FEW"
 			+ "SLIDES<br>";
-	private static final String placement = "<html><center>PLACEMENT PHASE</center><br>";
-	private static final String movement = "<html><center>MOVEMENT PHASE</center><br>";
-	private static final String flying = "<html><center>FLYING MODE</center><br>";
+	private static final String placement = "<html><center>PLACEMENT PHASE</center><br>"
+			+ "THE GAME BEGINS WITH AN EMPTY BOARD AND A RANDOM FIRST<br>"
+			+ "PLAYER IS CHOSEN. PLAYERS TAKE TURNS PLACING THEIR PIECES<br>"
+			+ "ON THE BOARD UNTIL THEY HAVE NO MORE. MILLS CAN NOT BE<br>"
+			+ "TAKEN DURING THE PLACEMENT PHASE. MILLS CAN BE FORMED<br>"
+			+ "ONLY ONCE THE NEXT PHASE HAS STARTED.";
+	private static final String movement = "<html><center>MOVEMENT PHASE</center><br>"
+			+ "THE MOVEMENT PHASE BEGINS ONCE BOTH PLAYER HAVE ALL<br>"
+			+ "THEIR PIECES PLACED ON THE BOARD. PLAYERS TAKE TURNS<br>"
+			+ "MOVING THEIR PIECES AROND ON THE BOARD AND THE OBJECT<br>"
+			+ "OF THIS PHASE IS TO CREATE MILLS AND REMOVE THE<br>"
+			+ "OPPONENT'S PIECES. ONCE A MILL HAS BEEN FORMED, THE<br>"
+			+ "PLAYER CAN REMOVE ANY OF THE OPPOSING PLAYER'S PIECES<br>"
+			+ "EXCEPT ONE THAT IS IN A MILL.";
+	private static final String flying = "<html><center>FLYING MODE</center><br>"
+			+ "THE FLYING MODE BEGINS AT EITHER 3 OR 4 (SPECIFIED<br>"
+			+ "IN THE MENU WHERE IT CAN BE TURNED OFF AS WELL).<br>"
+			+ "SINCE THE PLAYER THAT IS IN FLYING MODE HAS ONLY<br>"
+			+ "A FEW PIECES LEFT, THEY ARE ABLE TO MOVE THEIR PIECES<br>"
+			+ "TO ANY OPEN SPOT ON THE BOARD. THE POINT OF THIS IS<br>"
+			+ "SO THE LOSING PLAYER HAS A CHANCE TO GET BACK INTO<br>"
+			+ "THE GAME.";
 
 	// Variables
 	private Options myOptions;
@@ -365,6 +384,9 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				// Reset to Slide 1
+				slideNum = 1;
+
 				// Open How To Play
 				drawHowTo(howToPanel);
 			}
@@ -612,9 +634,6 @@ public class MenuGUI implements MenuInterface {
 	}
 
 	public void drawHowTo(final JPanel panel) {
-		// Reset to Slide 1
-		slideNum = 1;
-
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
