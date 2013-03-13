@@ -152,32 +152,32 @@ public class GameBoard {
 				}
 			}
 			//check same square mill
-			if( board[(position[0])][(position[1]-1)] != null &&
-				board[(position[0])][(position[1]+1)] != null)
+			if( board[(position[0])][(position[1]-1) % 8] != null &&
+				board[(position[0])][(position[1]+1) % 8] != null)
 			{
-				if( board[position[0]][(position[1]-1)].getOwner() == player &&
-					board[position[0]][(position[1]+1)].getOwner() == player)
+				if( board[position[0]][(position[1]-1) % 8].getOwner() == player &&
+					board[position[0]][(position[1]+1) % 8].getOwner() == player)
 				{
 					return true;
 				}
 			}
 		}else{	//it is a corner piece
 			//check clockwise mill
-			if( board[(position[0])][position[1]+1] != null &&
-				board[(position[0])][position[1]+2] != null)
+			if( board[(position[0])][position[1]+1 % 8] != null &&
+				board[(position[0])][position[1]+2 % 8] != null)
 			{
-				if( board[position[0]][(position[1]+1)].getOwner() == player &&
-					board[position[0]][(position[1]+2)].getOwner() == player)
+				if( board[position[0]][(position[1]+1) % 8].getOwner() == player &&
+					board[position[0]][(position[1]+2) % 8].getOwner() == player)
 				{
 					return true;
 				}
 			}
 			//check counter-clockwise mill
-			if( board[(position[0])][position[1]-1] != null &&
-				board[(position[0])][position[1]-2] != null)
+			if( board[(position[0])][(position[1]-1) % 8] != null &&
+				board[(position[0])][(position[1]-2) % 8] != null)
 			{
-				if( board[position[0]][(position[1]-1)].getOwner() == player &&
-					board[position[0]][(position[1]-2)].getOwner() == player)
+				if( board[position[0]][(position[1]-1) % 8].getOwner() == player &&
+					board[position[0]][(position[1]-2) % 8].getOwner() == player)
 				{
 					return true;
 				}

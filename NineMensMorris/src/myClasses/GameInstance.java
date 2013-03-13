@@ -188,12 +188,18 @@ public class GameInstance {
 		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
-		// pass the board to the gui
-		passBoard();
 		//check if move created a mill
+		System.out.println("is Mill?");
+
 		if(myBoard.isMill(position[1])){
+			System.out.println("it is");
+			passBoard();
+			System.out.println("board passed");
 			playerTake(playerID);
 		}
+		// pass the board to the gui
+		passBoard();
+		
 		//Change current player
 		currentPlayer = (currentPlayer+1) % 2;
 	}
