@@ -58,4 +58,10 @@ public class GameTest implements GameInterface {
 		return false;
 	}
 
+	@Override
+	public void clearSelections() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

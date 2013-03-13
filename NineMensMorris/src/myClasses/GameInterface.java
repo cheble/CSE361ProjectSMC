@@ -18,6 +18,8 @@ public interface GameInterface {
 	
 	boolean isGameBegan();
 	
+	void clearSelections();
+	
 	void setBoard(GameBoard gm);
 	
 	void setTurnInfo(int playerID, String message);

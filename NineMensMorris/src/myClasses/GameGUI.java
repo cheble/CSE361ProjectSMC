@@ -842,8 +842,9 @@ public class GameGUI implements GameInterface {
 		board[2][4].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (!isPieceSelected || board[pieceSelectedPos[0]][pieceSelectedPos[1]]
-						.getIcon().equals(board[2][4].getIcon())) {
+				if (!isPieceSelected
+						|| board[pieceSelectedPos[0]][pieceSelectedPos[1]]
+								.getIcon().equals(board[2][4].getIcon())) {
 					isPieceSelected = true;
 					pieceSelectedPos[0] = 2;
 					pieceSelectedPos[1] = 4;
@@ -985,7 +986,7 @@ public class GameGUI implements GameInterface {
 				}
 			}
 		});
-		
+
 	}
 
 	public void drawHowTo(final JPanel panel) {
@@ -1486,15 +1487,9 @@ public class GameGUI implements GameInterface {
 
 	@Override
 	public void setBoard(GameBoard gm) {
-		// Clear The selected Positions on setBoard
-		for (int i = 0; i < pieceSelectedPos.length; i++) {
-			pieceSelectedPos[i] = -1;
-			selectedPos[i] = -1;
-		}
-
-		isPieceSelected = false;
-		isPositionSelected = false;
-
+		// Clear
+		clearSelections();
+		
 		// Set Pieces On Board
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -1514,7 +1509,7 @@ public class GameGUI implements GameInterface {
 
 		System.out.println("Pieces on Side 1: " + gm.piecesOnSide(0));
 		System.out.println("Pieces of Side 2: " + gm.piecesOnSide(1));
-		
+
 		// Refresh the board
 		contentPane.getContentPane().repaint();
 	}
@@ -1537,6 +1532,19 @@ public class GameGUI implements GameInterface {
 	@Override
 	public boolean isGameBegan() {
 		return isGameBegan;
+	}
+
+	@Override
+	public void clearSelections() {
+		// Clear The selected Positions on setBoard
+		for (int i = 0; i < pieceSelectedPos.length; i++) {
+			pieceSelectedPos[i] = -1;
+			selectedPos[i] = -1;
+		}
+
+		isPieceSelected = false;
+		isPositionSelected = false;
+
 	}
 
 }
