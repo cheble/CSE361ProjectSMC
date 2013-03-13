@@ -22,6 +22,7 @@ public class GameInstance{
 	private GameBoard myBoard;
 	private boolean isPlacement;
 	private int currentPlayer;
+	private int gameStatus;
 
 	/**
 	 * @param options
@@ -30,7 +31,7 @@ public class GameInstance{
 	public GameInstance(Options options, JFrame contentPane) {
 		// Initialize Variables
 		isPlacement = true;
-
+		gameStatus = -1;
 		// create the players
 		myOptions = options;
 		players = new Player[2];
@@ -72,7 +73,15 @@ public class GameInstance{
 		}
 		System.out.println("Game Ended");
 		if(isGameOver() == 0){
+			gameStatus = 0;
 			boardInterface.drawWinnerMenu(getWinnerIndex());
+			while (true){
+				if (isGameOver() == 1){
+					break;
+				}
+			}	
+		} else {
+			gameStatus = 1;
 		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
@@ -299,7 +308,9 @@ public class GameInstance{
 		}
 		return true;
 	}
-
+	public int getGameStatus(){
+		return gameStatus ;
+	}
 	public int isGameOver() {
 		// If game is quit inside of interface.
 		if (boardInterface.isGameQuit()) {

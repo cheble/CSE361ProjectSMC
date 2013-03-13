@@ -67,7 +67,7 @@ public class Main {
 		do {
 			// Cause it doesn't work with out print statement? wtf...
 			System.out.print("");
-			gameStatus = game.isGameOver();
+			gameStatus = game.getGameStatus();
 		}while (gameStatus == -1);
 		// Determine how game ended
 		if(gameStatus == 0){
