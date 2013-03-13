@@ -107,6 +107,7 @@ public class GameInstance implements Runnable{
 
 	public void playerTurnPlace(int playerID) {
 		int[] position = null;
+		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
@@ -122,6 +123,7 @@ public class GameInstance implements Runnable{
 		// Set to board and check if move is valid to board
 		while (myBoard.addPiece(playerID, position) == -1) {
 			//if invalid move tell player or computer, and get new move
+			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();
@@ -147,21 +149,26 @@ public class GameInstance implements Runnable{
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
-		System.out.printf("Player %d turn", playerID);
 		int position[][] = new int[2][2];
 		position[0] = null;		//piece selected
 		position[1] = null;		//position selected
+		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
-			System.out.println("Player is human");
-			//get position first
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
+			while(isGameOver() < 0){
+				position[0] = boardInterface.pieceSelect();
+				if(boardInterface.pieceSelect()[0] != -1){
+					break;
+				}
+			}
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
 			while(isGameOver() < 0){
 				position[1] = boardInterface.positionSelect();
-				
 				if(position[1][0] != -1){
 					break;
 				}
 			}
-			position[0] = boardInterface.pieceSelect();
+
 		} else {
 			//Computer AI
 			position = players[playerID].movePiece();
@@ -178,16 +185,24 @@ public class GameInstance implements Runnable{
 			// invalid move
 			// tell player or computer
 			// get new move
+			boardInterface.clearSelections();
 			System.out.println("invalid");
 			if(players[playerID].getIsHuman()){
-				//get position first
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
+				while(isGameOver() < 0){
+					position[0] = boardInterface.pieceSelect();
+					if(boardInterface.pieceSelect()[0] != -1){
+						break;
+					}
+				}
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
 				while(isGameOver() < 0){
 					position[1] = boardInterface.positionSelect();
 					if(position[1][0] != -1){
 						break;
 					}
 				}
-				position[0] = boardInterface.pieceSelect();
+
 			} else {
 				//Computer AI
 				position = players[playerID].movePiece();
@@ -269,6 +284,11 @@ public class GameInstance implements Runnable{
 	}
 
 	public void playerTake(int playerID){
+<<<<<<< HEAD
+=======
+		System.out.println("Take a piece");
+		boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
+>>>>>>> refs/remotes/origin/master
 		int position[] = null;	//piece selected
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
@@ -341,12 +361,27 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
+<<<<<<< HEAD
 	public int getWinner() {
+=======
+	public Player getWinner() {
+		if(isPlacement){
+			return null;
+		}
+>>>>>>> refs/remotes/origin/master
 		if (myBoard.piecesOnSide(0) > 6) {
+<<<<<<< HEAD
 			return 1; // players[1] wins
+=======
+			return players[1]; // players[1] wins
+>>>>>>> refs/remotes/origin/master
 		}
 		if (myBoard.piecesOnSide(1) > 6) {
+<<<<<<< HEAD
 			return 0; // players[0] wins
+=======
+			return players[0]; // players[0] wins
+>>>>>>> refs/remotes/origin/master
 		}
 		return -1;
 	}

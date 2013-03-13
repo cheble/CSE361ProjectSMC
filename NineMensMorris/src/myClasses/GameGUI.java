@@ -25,18 +25,38 @@ public class GameGUI implements GameInterface {
 
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
-			+ "<center>The Nine Men's Morris board contains 24 intersections arranged"
-			+ " in three consecutive squares. Each player takes turns trying to get"
-			+ " their pieces into a line of three (or Mill). When a mill has been"
-			+ " formed, the player can take an opponents piece from the board. A"
-			+ " player wins by reducing the number of opponents pieces to two.<br>"
-			+ "Nine Men's Morris can be split into three sections<br>"
+			+ "THE NINE MEN'S MORRIS BOARD CONTAINS 24 INTERSECTIONS<br>"
+			+ "ARRANGED IN THREE CONSECUTIVE SQUARES. EACH PLAYER TAKES<br>"
+			+ "TURNS TRYING TO GET THEIR PIECES INTO A LINE OF THREE (OR<br>"
+			+ " MILL). WHEN A MILL HAS BEEN FORMED, THE PLAYER CAN TAKE<br>"
+			+ "AN OPPONENT'S PIECE FROM THE BOARD. A PLAYER WINS BY<br>"
+			+ "REDUCING THE NUMBER OF OPPONENT'S PIECES TO TWO.<br><br>"
+			+ "NINE MEN'S MORRIS CAN BE SPLIT INTO THREE PHASES<br>"
 			+ "<ul><li>PLACEMENT PHASE</li><li>MOEVEMENT PHASE</li><li>FLYING "
 			+ "MODE</li></ul><br>EACH SECTION WILL BE INTRODUCED IN THE NEXT FEW"
-			+ "SLIDES<br></center>";
-	private static final String placement = "<html><center>PLACEMENT PHASE</center><br>";
-	private static final String movement = "<html><center>MOVEMENT PHASE</center><br>";
-	private static final String flying = "<html><center>FLYING MODE</center><br>";
+			+ "SLIDES<br>";
+	private static final String placement = "<html><center>PLACEMENT PHASE</center><br>"
+			+ "THE GAME BEGINS WITH AN EMPTY BOARD AND A RANDOM FIRST<br>"
+			+ "PLAYER IS CHOSEN. PLAYERS TAKE TURNS PLACING THEIR PIECES<br>"
+			+ "ON THE BOARD UNTIL THEY HAVE NO MORE. MILLS CAN NOT BE<br>"
+			+ "TAKEN DURING THE PLACEMENT PHASE. MILLS CAN BE FORMED<br>"
+			+ "ONLY ONCE THE NEXT PHASE HAS STARTED.";
+	private static final String movement = "<html><center>MOVEMENT PHASE</center><br>"
+			+ "THE MOVEMENT PHASE BEGINS ONCE BOTH PLAYER HAVE ALL<br>"
+			+ "THEIR PIECES PLACED ON THE BOARD. PLAYERS TAKE TURNS<br>"
+			+ "MOVING THEIR PIECES AROND ON THE BOARD AND THE OBJECT<br>"
+			+ "OF THIS PHASE IS TO CREATE MILLS AND REMOVE THE<br>"
+			+ "OPPONENT'S PIECES. ONCE A MILL HAS BEEN FORMED, THE<br>"
+			+ "PLAYER CAN REMOVE ANY OF THE OPPOSING PLAYER'S PIECES<br>"
+			+ "EXCEPT ONE THAT IS IN A MILL.";
+	private static final String flying = "<html><center>FLYING MODE</center><br>"
+			+ "THE FLYING MODE BEGINS AT EITHER 3 OR 4 (SPECIFIED<br>"
+			+ "IN THE MENU WHERE IT CAN BE TURNED OFF AS WELL).<br>"
+			+ "SINCE THE PLAYER THAT IS IN FLYING MODE HAS ONLY<br>"
+			+ "A FEW PIECES LEFT, THEY ARE ABLE TO MOVE THEIR PIECES<br>"
+			+ "TO ANY OPEN SPOT ON THE BOARD. THE POINT OF THIS IS<br>"
+			+ "SO THE LOSING PLAYER HAS A CHANCE TO GET BACK INTO<br>"
+			+ "THE GAME.";
 
 	// Variables
 	private JFrame contentPane;
@@ -1102,7 +1122,7 @@ public class GameGUI implements GameInterface {
 		final JPanel cardPanel = new JPanel();
 		cardPanel.setVisible(true);
 		cardPanel.setOpaque(false);
-		cardPanel.setBounds(210, 200, 700, 375);
+		cardPanel.setBounds(60, 200, 1000, 375);
 		final CardLayout cl = new CardLayout(10, 10);
 		cardPanel.setLayout(cl);
 		layeredPane.add(cardPanel);
@@ -1119,7 +1139,7 @@ public class GameGUI implements GameInterface {
 
 		JLabel basicsText = new JLabel(basics);
 		basicsText.setHorizontalAlignment(SwingConstants.LEFT);
-		basicsText.setFont(coalition.deriveFont((float) 15));
+		basicsText.setFont(coalition.deriveFont((float) 19));
 		basicsText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
 		basicsText.setForeground(Color.WHITE);
 		slides[0].add(basicsText);
@@ -1127,21 +1147,21 @@ public class GameGUI implements GameInterface {
 		JLabel placeText = new JLabel(placement);
 		placeText.setHorizontalAlignment(SwingConstants.LEFT);
 		placeText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		placeText.setFont(coalition.deriveFont((float) 15));
+		placeText.setFont(coalition.deriveFont((float) 19));
 		placeText.setForeground(Color.WHITE);
 		slides[1].add(placeText);
 
 		JLabel moveText = new JLabel(movement);
 		moveText.setHorizontalAlignment(SwingConstants.LEFT);
 		moveText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		moveText.setFont(coalition.deriveFont((float) 15));
+		moveText.setFont(coalition.deriveFont((float) 19));
 		moveText.setForeground(Color.WHITE);
 		slides[2].add(moveText);
 
 		JLabel flyText = new JLabel(flying);
 		flyText.setHorizontalAlignment(SwingConstants.LEFT);
 		flyText.setBounds(0, 0, slides[0].getWidth(), slides[0].getHeight());
-		flyText.setFont(coalition.deriveFont((float) 15));
+		flyText.setFont(coalition.deriveFont((float) 19));
 		flyText.setForeground(Color.WHITE);
 		slides[3].add(flyText);
 
