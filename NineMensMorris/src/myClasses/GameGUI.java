@@ -236,9 +236,6 @@ public class GameGUI implements GameInterface {
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
 
-						// Set is Game Began
-						isGameBegan = true;
-
 						// Draw Game With Updated Name
 						drawBoard();
 					}
@@ -251,9 +248,6 @@ public class GameGUI implements GameInterface {
 
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
-
-						// Set is Game Began
-						isGameBegan = true;
 
 						// Draw Game With Updated Names
 						drawBoard();
@@ -394,24 +388,24 @@ public class GameGUI implements GameInterface {
 		buttons.add(gameMenu);
 
 		// Add Player One Name JLabel and add to JPanel
-		JLabel pOne = new JLabel(names[0].toUpperCase());
+		JLabel pOne = new JLabel("<html><center>" + names[0].toUpperCase() + "<br>BLUE");
 		pOne.setForeground(Color.LIGHT_GRAY);
 		pOne.setHorizontalAlignment(SwingConstants.CENTER);
 		pOne.setFont(coalition.deriveFont((float) 25));
-		pOne.setBounds(39, 233, 218, 51);
+		pOne.setBounds(39, 233, 218, 100);
 		buttons.add(pOne);
 
 		// Add Player Two Name JLabel and add to JPanel
 		JLabel pTwo = new JLabel();
 		if (names.length == 2) {
-			pTwo.setText(names[1].toUpperCase());
+			pTwo.setText("<html><center>" + names[1].toUpperCase() + "<br>RED");
 		} else {
-			pTwo.setText("COMPUTER");
+			pTwo.setText("<html><center>COMPUTER<br>RED");
 		}
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		pTwo.setFont(coalition.deriveFont((float) 25));
-		pTwo.setBounds(871, 233, 218, 51);
+		pTwo.setBounds(871, 233, 218, 100);
 		buttons.add(pTwo);
 
 		// Create Pieces JPanel & Add to LayerdPane on Layer 3
@@ -728,6 +722,8 @@ public class GameGUI implements GameInterface {
 			}
 		});
 
+		// Board is now drawn
+		isGameBegan = true;
 	}
 
 	public void drawHowTo(final JPanel panel) {

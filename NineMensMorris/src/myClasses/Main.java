@@ -73,7 +73,7 @@ public class Main {
 		if(gameStatus == 0){
 			// Game ended normally.
 			// Get Winner
-			//winner = game.getWinner();
+			winner = game.getWinner();
 
 			// Update Leaderboard
 			updateLeaderboard(winner);

@@ -11,7 +11,7 @@ import javax.swing.JFrame;
  * @version 0.1
  * @author Mitchel Pigsley, Chase Heble, Sam Troxel
  */
-public class GameInstance implements Runnable{
+public class GameInstance{
 
 	// TODO Should we move human input to the player class and pass the gameInterface
 	// TODO We need to give feedback to player for incorrect moves, instructions, etc...
@@ -72,7 +72,7 @@ public class GameInstance implements Runnable{
 		}
 		System.out.println("Game Ended");
 		if(isGameOver() == 0){
-			boardInterface.drawWinnerMenu(getWinner());
+			boardInterface.drawWinnerMenu(getWinnerIndex());
 		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
@@ -112,25 +112,12 @@ public class GameInstance implements Runnable{
 
 	public void playerTurnPlace(int playerID) {
 		int position[] = {-1, -1};
-//		int[] position = null;
-//		boardInterface.clearSelections();
-//		if(players[playerID].getIsHuman()){
-//			//boardInterface.setTurnInfo(0, "YOUR TURN<br>Place A PIECE");
-//			while(isGameOver() < 0){
-//				position = boardInterface.positionSelect();
-//				if(position[0] != -1){
-//					break;
-//				}
-//			}
-//		} else {
-//			//Computer AI
-//			position = players[playerID].placePiece();
-//		}
-		
+
 		// TODO implement skip/undo somehow
 		// Set to board and check if move is valid to board
-		while ( position[0] == -1 ||
-				myBoard.addPiece(playerID, position) == -1) {
+		while ( isGameOver() < 0 && 
+				(position[0] == -1 ||
+				myBoard.addPiece(playerID, position) == -1)) {
 			//if invalid move tell player or computer, and get new move
 			if(players[playerID].getIsHuman()){
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>PLACE A PIECE");
@@ -200,7 +187,7 @@ public class GameInstance implements Runnable{
 		//check if move created a mill
 		System.out.println("is Mill?");
 
-		if(myBoard.isMill(position[1])){
+		if((isGameOver() < 0) && myBoard.isMill(position[1])){
 			System.out.println("it is");
 			passBoard();
 			System.out.println("board passed");
@@ -351,7 +338,7 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
-	public int getWinner() {
+	public int getWinnerIndex() {
 		if(isPlacement){
 			return -1;
 		}
@@ -364,6 +351,19 @@ public class GameInstance implements Runnable{
 		return -1;
 	}
 
+public Player getWinner() {
+		if(isPlacement){
+			return null;
+		}
+		if (myBoard.piecesOnSide(0) > 6) {
+			return players[1]; // players[1] wins
+		}
+		if (myBoard.piecesOnSide(1) > 6) {
+			return players[0]; // players[0] wins
+		}
+		return null;
+	}
+
 	public void undo() {
 		throw new UnsupportedOperationException();
 	}
@@ -374,13 +374,5 @@ public class GameInstance implements Runnable{
 
 	public void passBoard(){
 		boardInterface.setBoard(myBoard);
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+	}	
 }
