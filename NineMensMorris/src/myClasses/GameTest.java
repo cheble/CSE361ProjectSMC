@@ -64,4 +64,10 @@ public class GameTest implements GameInterface {
 		
 	}
 
+	@Override
+	public String getName(int playerID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
