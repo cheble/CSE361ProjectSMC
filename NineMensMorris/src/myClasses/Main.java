@@ -9,6 +9,7 @@ public class Main {
 	private static JFrame contentPane;
 	private static MenuInterface menu;
 	private static Player winner;
+	private static Options options;
 
 	public static void main(String[] args) {
 		// Instantiate new GUI
@@ -32,35 +33,52 @@ public class Main {
 				// Cause it doesn't work with out print statement? wtf...
 				System.out.print("");
 				if (menu.isGameReady() == true) {
+					options = menu.getOptions();
 					break;
 				}
 			}
 			
-			// Play Game
-			playGame();
+			while (true) {
+				// Play Game
+				playGame();
+				// Game over so open Menu.
+				menu = new MenuGUI(contentPane, options);
+				// Wait Until Game Ready
+				while (true) {
+					// Cause it doesn't work with out print statement? wtf...
+					System.out.print("");
+					if (menu.isGameReady() == true) {
+						options = menu.getOptions();
+						break;
+					}
+				}
+			}
 			
 			
 		}
 	}
 
-	public static void playGame() {
+	public static int playGame() {
 		// Initiate Game
-		game = new GameInstance(menu.getOptions(), contentPane);
+		int gameStatus = -1;
+		game = new GameInstance(options, contentPane);
 
 		// Wait until game done
-		while (true) {
+		do {
 			// Cause it doesn't work with out print statement? wtf...
 			System.out.print("");
-			if (game.isGameOver() >= 0) {
-				break;
-			}
-		}
+			gameStatus = game.isGameOver();
+		}while (gameStatus == -1);
+		// Determine how game ended
+		if(gameStatus == 0){
+			// Game ended normally.
+			// Get Winner
+			//winner = game.getWinner();
 
-		// Get Winner
-		winner = game.getWinner();
-
-		// Update Leaderboard
-		updateLeaderboard(winner);
+			// Update Leaderboard
+			updateLeaderboard(winner);
+		} //else Player quit game.		}
+		return gameStatus;
 
 	}
 

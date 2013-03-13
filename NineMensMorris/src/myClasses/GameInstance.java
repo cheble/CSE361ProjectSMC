@@ -11,7 +11,7 @@ import javax.swing.JFrame;
  * @version 0.1
  * @author Mitchel Pigsley, Chase Heble, Sam Troxel
  */
-public class GameInstance {
+public class GameInstance implements Runnable{
 
 	// TODO Should we move human input to the player class and pass the gameInterface
 	// TODO We need to give feedback to player for incorrect moves, instructions, etc...
@@ -57,16 +57,18 @@ public class GameInstance {
 		}
 		
 		System.out.println("Game Started");
-		
-		// Start Placement Phase
-		while (isGameOver() < 0) {
+		if(isGameOver() < 0){
 			// PlacementPhase
 			placementPhase();
-			// MovementPhase
+		}
+		if(isGameOver() < 0){
+			// MovementPhaser
 			movementPhase();
 		}
 		System.out.println("Game Ended");
-
+		if(isGameOver() == 0){
+			boardInterface.drawWinnerMenu(getWinner());
+		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
 	}
@@ -75,7 +77,11 @@ public class GameInstance {
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
 		while(myBoard.piecesOnSide(currentPlayer) > 0){
-			playerTurnPlace(currentPlayer);
+			if(isGameOver() < 0){
+				playerTurnPlace(currentPlayer);
+			} else { 
+				break;
+			}
 		}
 		System.out.println("END PLACEMENT PHASE");
 		isPlacement = false;
@@ -84,10 +90,12 @@ public class GameInstance {
 	public void movementPhase() {
 		System.out.println("Movement Phase started");
 		//while non-starting player has pieces
-		while(isGameOver() < 0){
-			playerTurnMove(currentPlayer);
+		while(true){
+			//playerTurnMove(currentPlayer);
 			if(isGameOver() < 0){
 				playerTurnMove(currentPlayer);
+			} else { 
+				break;
 			}
 		}
 	}
@@ -219,9 +227,11 @@ public class GameInstance {
 		//check that its one step away on a path
 		//if a corner piece is selected
 		if(position1[1] % 2 == 0){
+			System.out.println("corner piece");
 			//piece cannot move to different square
 			//this would change for a advance game board type
 			if(position1[0] != position2[0]){
+				System.out.println("move accecpted");
 				return false;
 			}
 			//piece must move only 1 space away
@@ -234,12 +244,14 @@ public class GameInstance {
 		}
 		//a middle piece is selected
 		else{
+			System.out.println("middle piece");
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
 				if( position1[0]+1 != position2[0] &&
 					position1[0]-1 != position2[0])
 				{
+					System.out.println("piece changed squares not following line");
 					return false;
 				}
 			}
@@ -257,7 +269,6 @@ public class GameInstance {
 	}
 
 	public void playerTake(int playerID){
-		System.out.println("Take a piece");
 		int position[] = null;	//piece selected
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
@@ -271,11 +282,8 @@ public class GameInstance {
 			position = players[playerID].takePiece();
 		}
 		
-		System.out.printf("[%d, %d] \n",position[0], position[1]);
-
-		
 		// TODO implement skip/undo somehow
-		while (!isTakeValid(position) ||
+		while (!isTakeValid(position) &&
 				myBoard.takePiece(playerID, position) == -1) {
 			// invalid move
 			// tell player or computer
@@ -292,6 +300,7 @@ public class GameInstance {
 				position = players[playerID].takePiece();
 			}
 		}
+		passBoard();
 	}
 	
 	public boolean isTakeValid(int[] position){
@@ -332,14 +341,14 @@ public class GameInstance {
 		return -1;
 	}
 
-	public Player getWinner() {
+	public int getWinner() {
 		if (myBoard.piecesOnSide(0) > 6) {
-			return players[0]; // players[0] wins
+			return 1; // players[1] wins
 		}
 		if (myBoard.piecesOnSide(1) > 6) {
-			return players[1]; // players[1] wins
+			return 0; // players[0] wins
 		}
-		return null;
+		return -1;
 	}
 
 	public void undo() {
@@ -352,6 +361,12 @@ public class GameInstance {
 
 	public void passBoard(){
 		boardInterface.setBoard(myBoard);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
