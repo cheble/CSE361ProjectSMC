@@ -219,11 +219,9 @@ public class GameInstance {
 		//check that its one step away on a path
 		//if a corner piece is selected
 		if(position1[1] % 2 == 0){
-			System.out.println("corner piece");
 			//piece cannot move to different square
 			//this would change for a advance game board type
 			if(position1[0] != position2[0]){
-				System.out.println("move accecpted");
 				return false;
 			}
 			//piece must move only 1 space away
@@ -236,14 +234,12 @@ public class GameInstance {
 		}
 		//a middle piece is selected
 		else{
-			System.out.println("middle piece");
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
 				if( position1[0]+1 != position2[0] &&
 					position1[0]-1 != position2[0])
 				{
-					System.out.println("piece changed squares not following line");
 					return false;
 				}
 			}
@@ -261,6 +257,7 @@ public class GameInstance {
 	}
 
 	public void playerTake(int playerID){
+		System.out.println("Take a piece");
 		int position[] = null;	//piece selected
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
@@ -274,8 +271,11 @@ public class GameInstance {
 			position = players[playerID].takePiece();
 		}
 		
+		System.out.printf("[%d, %d] \n",position[0], position[1]);
+
+		
 		// TODO implement skip/undo somehow
-		while (!isTakeValid(position) &&
+		while (!isTakeValid(position) ||
 				myBoard.takePiece(playerID, position) == -1) {
 			// invalid move
 			// tell player or computer
@@ -292,7 +292,6 @@ public class GameInstance {
 				position = players[playerID].takePiece();
 			}
 		}
-		passBoard();
 	}
 	
 	public boolean isTakeValid(int[] position){
@@ -301,7 +300,7 @@ public class GameInstance {
 			return false;
 		}
 		//check if piece is owned by the other player
-		if(myBoard.getPiece(position).getOwner() == players[currentPlayer]){
+		if(myBoard.getPiece(position).getOwner().equals(players[currentPlayer])){
 			return false;
 		}
 		//check if piece is in a mill

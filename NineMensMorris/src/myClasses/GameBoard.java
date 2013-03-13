@@ -131,7 +131,6 @@ public class GameBoard {
 		}
 		//--------Conditions BEGIN
 		//check if a piece is at position on board
-		System.out.printf("pos.  [%d %d]\n",position[0], position[1]);
 		if(board[position[0]][position[1]] == null){
 			return false;
 		}
@@ -152,10 +151,10 @@ public class GameBoard {
 				}
 			}
 			//check same square mill
-			if( board[(position[0])][(position[1]-1) % 8] != null &&
+			if( board[(position[0])][(position[1]+7) % 8] != null &&
 				board[(position[0])][(position[1]+1) % 8] != null)
 			{
-				if( board[position[0]][(position[1]-1) % 8].getOwner() == player &&
+				if( board[position[0]][(position[1]+7) % 8].getOwner() == player &&
 					board[position[0]][(position[1]+1) % 8].getOwner() == player)
 				{
 					return true;
@@ -163,8 +162,8 @@ public class GameBoard {
 			}
 		}else{	//it is a corner piece
 			//check clockwise mill
-			if( board[(position[0])][position[1]+1 % 8] != null &&
-				board[(position[0])][position[1]+2 % 8] != null)
+			if( board[(position[0])][(position[1]+1) % 8] != null &&
+				board[(position[0])][(position[1]+2) % 8] != null)
 			{
 				if( board[position[0]][(position[1]+1) % 8].getOwner() == player &&
 					board[position[0]][(position[1]+2) % 8].getOwner() == player)
@@ -173,11 +172,11 @@ public class GameBoard {
 				}
 			}
 			//check counter-clockwise mill
-			if( board[(position[0])][(position[1]-1) % 8] != null &&
-				board[(position[0])][(position[1]-2) % 8] != null)
+			if( board[(position[0])][(position[1]+7) % 8] != null &&
+				board[(position[0])][(position[1]+6) % 8] != null)
 			{
-				if( board[position[0]][(position[1]-1) % 8].getOwner() == player &&
-					board[position[0]][(position[1]-2) % 8].getOwner() == player)
+				if( board[position[0]][(position[1]+7) % 8].getOwner() == player &&
+					board[position[0]][(position[1]+6) % 8].getOwner() == player)
 				{
 					return true;
 				}

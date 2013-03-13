@@ -1490,6 +1490,7 @@ public class GameGUI implements GameInterface {
 	}
 
 	public int[] pieceSelect() {
+		
 		return pieceSelectedPos;
 	}
 
