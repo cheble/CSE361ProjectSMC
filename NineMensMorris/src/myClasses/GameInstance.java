@@ -11,10 +11,6 @@ import javax.swing.JFrame;
  * @version 0.1
  * @author Mitchel Pigsley, Chase Heble, Sam Troxel
  */
-/**
- * @author theMaster
- *
- */
 public class GameInstance{
 
 	// TODO Should we move human input to the player class and pass the gameInterface
@@ -39,6 +35,8 @@ public class GameInstance{
 		myOptions = options;
 		players = new Player[2];
 		players[0] = new Player();
+		//TODO should we get name here? Or should we delete attribute from class?
+		players[0].setName(boardInterface.getName(0));
 		players[0].setIsHuman(true);
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
@@ -47,6 +45,8 @@ public class GameInstance{
 			players[1] = new Player();
 			players[1].setIsHuman(true);
 		}
+		players[0].setName(boardInterface.getName(0));
+		players[1].setName(boardInterface.getName(1));
 
 		// create the gameboard and draw the Board gui
 		myBoard = new GameBoard(players);
@@ -112,6 +112,7 @@ public class GameInstance{
 	public void playerTurnPlace(int playerID) {
 		int[] position = null;
 		boardInterface.clearSelections();
+		//boardInterface.setTurnInfo(0, "YOUR TURN<br>Place A PIECE");
 		if(players[playerID].getIsHuman()){
 			while(true){
 				if(isGameOver() < 0){
@@ -133,6 +134,7 @@ public class GameInstance{
 			//if invalid move tell player or computer, and get new move
 			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>Place A PIECE");
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();
 					if(position[0] != -1){
@@ -157,49 +159,33 @@ public class GameInstance{
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
-		int position[][] = new int[2][2];
-		position[0] = null;		//piece selected
-		position[1] = null;		//position selected
+		int position[][] = {{-1, -1},{-1, -1}};
 		boardInterface.clearSelections();
-		if(players[playerID].getIsHuman()){
-			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-			while(true){
-				if(isGameOver() < 0){
-					position[0] = boardInterface.pieceSelect();
-					if(boardInterface.pieceSelect()[0] != -1){
-						break;
-					}
-				} else {
-					return;
-				}
-			}
-			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-			while(true){
-				if(isGameOver() < 0){
-					position[1] = boardInterface.positionSelect();
-					if(position[1][0] != -1){
-						break;
-					}
-				} else {
-					return;
-				}
-			}
-
-		} else {
-			//Computer AI
-			position = players[playerID].movePiece();
-		}
-		if(isGameOver() < 0){
-			System.out.println("Move recieved");
-			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
-			// TODO implement skip/undo somehow
-			System.out.print("isMoveValid:  ");
-			System.out.println(isMoveValid(position[0], position[1]));
-			System.out.print("movePiece:	");
-			//System.out.println(myBoard.movePiece(position[0], position[1]));
-		}
-		while ((isGameOver() < 0) && ( !isMoveValid(position[0], position[1]) || 
-				myBoard.movePiece(position[0], position[1]) == -1)) {
+//		if(players[playerID].getIsHuman()){
+//			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
+//			while(isGameOver() < 0){
+//				position[0] = boardInterface.pieceSelect();
+//				if(boardInterface.pieceSelect()[0] != -1){
+//					break;
+//				}
+//			}
+//			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
+//			while(isGameOver() < 0){
+//				position[1] = boardInterface.positionSelect();
+//				if(position[1][0] != -1){
+//					break;
+//				}
+//			}
+//
+//		} else {
+//			//Computer AI
+//			position = players[playerID].movePiece();
+//		}
+		
+		// TODO implement skip/undo somehow
+		while ( position.equals(new int[][]{{-1, -1},{-1, -1}}) ||
+				!isMoveValid(position[0], position[1]) || 
+				myBoard.movePiece(position[0], position[1]) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
@@ -207,7 +193,7 @@ public class GameInstance{
 			System.out.println("invalid");
 			if(players[playerID].getIsHuman()){
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-				while(isGameOver() < 0){
+				while(isGameOver() < 0 && myBoard.getPiece(position[0]).getOwner().equals(players[playerID])){
 					position[0] = boardInterface.pieceSelect();
 					if(boardInterface.pieceSelect()[0] != -1){
 						break;
@@ -226,6 +212,7 @@ public class GameInstance{
 				position = players[playerID].movePiece();
 			}
 		}
+		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
@@ -260,16 +247,14 @@ public class GameInstance{
 		//check that its one step away on a path
 		//if a corner piece is selected
 		if(position1[1] % 2 == 0){
-			System.out.println("corner piece");
 			//piece cannot move to different square
 			//this would change for a advance game board type
 			if(position1[0] != position2[0]){
-				System.out.println("move accecpted");
 				return false;
 			}
 			//piece must move only 1 space away
 			if( (position1[1]+1) % 8 != position2[1] &&
-				(position1[1]-1) % 8 != position2[1])
+				(position1[1]+7) % 8 != position2[1])
 			{
 				return false;
 			}
@@ -277,21 +262,19 @@ public class GameInstance{
 		}
 		//a middle piece is selected
 		else{
-			System.out.println("middle piece");
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
-				if( position1[0]+1 != position2[0] &&
-					position1[0]-1 != position2[0])
+				if( (position1[0]+1) % 3 != position2[0] &&
+					(position1[0]+2) % 3 != position2[0])
 				{
-					System.out.println("piece changed squares not following line");
 					return false;
 				}
 			}
 			//piece stays on same square
 			//piece must move only 1 space away
 			else if( (position1[1]+1) % 8 != position2[1] &&
-					 (position1[1]-1) % 8 != position2[1])
+					 (position1[1]+7) % 8 != position2[1])
 			{
 				
 				return false;
@@ -304,7 +287,8 @@ public class GameInstance{
 	public void playerTake(int playerID){
 		System.out.println("Take a piece");
 		boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
-		int position[] = null;	//piece selected
+		int position[] = new int[] {-1, -1};	//piece selected
+		boardInterface.clearSelections();
 		if(players[playerID].getIsHuman()){
 			while(isGameOver() < 0){
 				position = boardInterface.pieceSelect();
@@ -318,11 +302,12 @@ public class GameInstance{
 		}
 		
 		// TODO implement skip/undo somehow
-		while (!isTakeValid(position) &&
+		while (!isTakeValid(position) ||
 				myBoard.takePiece(playerID, position) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
+			boardInterface.clearSelections();
 			if(players[playerID].getIsHuman()){
 				while(isGameOver() < 0){
 					position = boardInterface.pieceSelect();

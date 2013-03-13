@@ -4,8 +4,6 @@ import javax.swing.JPanel;
 
 public interface GameInterface {
 
-	int[] pieceSelect();
-
 	int[] positionSelect();
 
 	void drawGameMenu(final JPanel panel);
@@ -23,5 +21,7 @@ public interface GameInterface {
 	void setBoard(GameBoard gm);
 	
 	void setTurnInfo(int playerID, String message);
+	
+	public String getName(int playerID);
 
 }
