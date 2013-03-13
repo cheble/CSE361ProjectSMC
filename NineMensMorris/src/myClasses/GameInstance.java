@@ -148,10 +148,10 @@ public class GameInstance{
 	public void playerTurnMove(int playerID) {
 		int position[][] = {{-1, -1},{-1, -1}};		
 		// TODO implement skip/undo somehow
-		while ( position[0][0] == -1 || 
+		while (isGameOver() < 0 && ( position[0][0] == -1 || 
 				position[1][0] == -1 ||
 				!isMoveValid(position[0], position[1]) || 
-				myBoard.movePiece(position[0], position[1]) == -1) {
+				myBoard.movePiece(position[0], position[1]) == -1)) {
 			// invalid move
 			// tell player or computer
 			// get new move
@@ -258,18 +258,16 @@ public class GameInstance{
 
 	public void playerTake(int playerID){
 		System.out.println("Take a piece");
-		int position[] = new int[] {-1, -1};
-		while ( position[0] == -1 ||
+		int position[] = new int[] {-1, -1};		
+		
+		while ( isGameOver() < 0 && 
+				(position[0] == -1 ||
 				!isTakeValid(position) ||
-				myBoard.takePiece(playerID, position) == -1) {
+				myBoard.takePiece(playerID, position) == -1)) {
 			//if invalid move tell player or computer, and get new move
 			if(players[playerID].getIsHuman()){
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
-				while(isGameOver() < 0 && 
-						(position[0] == -1 || 
-						myBoard.getPiece(position) != null
-						))
-				{
+				if (isGameOver() < 0){ 
+					boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
 					position = boardInterface.positionSelect();
 				}
 			} else {
@@ -279,24 +277,6 @@ public class GameInstance{
 		}
 		
 		// TODO implement skip/undo somehow
-		while (!isTakeValid(position) ||
-				myBoard.takePiece(playerID, position) == -1) {
-			// invalid move
-			// tell player or computer
-			// get new move
-			boardInterface.clearSelections();
-			if(players[playerID].getIsHuman()){
-				while(isGameOver() < 0){
-					position = boardInterface.positionSelect();
-					if(position[0] != -1){
-						break;
-					}
-				}
-			} else {
-				//Computer AI
-				position = players[playerID].takePiece();
-			}
-		}
 		passBoard();
 	}
 	

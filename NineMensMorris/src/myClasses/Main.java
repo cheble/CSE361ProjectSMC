@@ -74,7 +74,6 @@ public class Main {
 			// Game ended normally.
 			// Get Winner
 			winner = game.getWinner();
-
 			// Update Leaderboard
 			updateLeaderboard(winner);
 		} //else Player quit game.		}
