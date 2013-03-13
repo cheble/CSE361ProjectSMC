@@ -236,9 +236,6 @@ public class GameGUI implements GameInterface {
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
 
-						// Set is Game Began
-						isGameBegan = true;
-
 						// Draw Game With Updated Name
 						drawBoard();
 					}
@@ -251,9 +248,6 @@ public class GameGUI implements GameInterface {
 
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
-
-						// Set is Game Began
-						isGameBegan = true;
 
 						// Draw Game With Updated Names
 						drawBoard();
@@ -728,6 +722,8 @@ public class GameGUI implements GameInterface {
 			}
 		});
 
+		// Board is now drawn
+		isGameBegan = true;
 	}
 
 	public void drawHowTo(final JPanel panel) {
