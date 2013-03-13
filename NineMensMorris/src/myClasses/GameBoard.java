@@ -131,6 +131,7 @@ public class GameBoard {
 		}
 		//--------Conditions BEGIN
 		//check if a piece is at position on board
+		System.out.printf("pos.  [%d %d]\n",position[0], position[1]);
 		if(board[position[0]][position[1]] == null){
 			return false;
 		}

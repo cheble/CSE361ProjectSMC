@@ -60,33 +60,29 @@ public class GameInstance {
 		
 		// Start Placement Phase
 		while (isGameOver() < 0) {
-			if (isPlacement) {
-				// PlacementPhase
-				placementPhase();
-			} else {
-				// MovementPhase
-				movementPhase();
-			}
+			// PlacementPhase
+			placementPhase();
+			// MovementPhase
+			movementPhase();
 		}
+		System.out.println("Game Ended");
 
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
 	}
 	
 	public void placementPhase() {
-		System.out.println("placement Phase started");
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
-		while(myBoard.piecesOnSide((currentPlayer+1) % 2) > 0){
-			System.out.println("begin player 1 turn");
-			playerTurnPlace(currentPlayer);
-			System.out.println("begin player 2 turn");
+		while(myBoard.piecesOnSide(currentPlayer) > 0){
 			playerTurnPlace(currentPlayer);
 		}
+		System.out.println("END PLACEMENT PHASE");
 		isPlacement = false;
 	}
 
 	public void movementPhase() {
+		System.out.println("Movement Phase started");
 		//while non-starting player has pieces
 		while(isGameOver() < 0){
 			playerTurnMove(currentPlayer);
@@ -130,7 +126,6 @@ public class GameInstance {
 				position = players[playerID].placePiece();
 			}
 		}
-		System.out.printf("%d, %d\n",position[0], position[1]);
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
 		//Change current player
@@ -144,62 +139,63 @@ public class GameInstance {
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
+		System.out.printf("Player %d turn", playerID);
 		int position[][] = new int[2][2];
 		position[0] = null;		//piece selected
 		position[1] = null;		//position selected
 		if(players[playerID].getIsHuman()){
-			while(isGameOver() < 0){
-				position[0] = boardInterface.pieceSelect();
-				if(position[0][0] != -1){
-					break;
-				}
-			}
+			System.out.println("Player is human");
+			//get position first
 			while(isGameOver() < 0){
 				position[1] = boardInterface.positionSelect();
+				
 				if(position[1][0] != -1){
 					break;
 				}
 			}
+			position[0] = boardInterface.pieceSelect();
 		} else {
 			//Computer AI
 			position = players[playerID].movePiece();
 		}
-		
-
+		System.out.println("Move recieved");
+		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		// TODO implement skip/undo somehow
+		System.out.print("isMoveValid:  ");
+		System.out.println(isMoveValid(position[0], position[1]));
+		System.out.print("movePiece:	");
+		//System.out.println(myBoard.movePiece(position[0], position[1]));
 		while ( !isMoveValid(position[0], position[1]) || 
 				myBoard.movePiece(position[0], position[1]) == -1) {
 			// invalid move
 			// tell player or computer
 			// get new move
+			System.out.println("invalid");
 			if(players[playerID].getIsHuman()){
-				while(isGameOver() < 0){
-					position[0] = boardInterface.pieceSelect();
-					if(position[0][0] != -1){
-						break;
-					}
-				}
+				//get position first
 				while(isGameOver() < 0){
 					position[1] = boardInterface.positionSelect();
 					if(position[1][0] != -1){
 						break;
 					}
 				}
+				position[0] = boardInterface.pieceSelect();
 			} else {
 				//Computer AI
 				position = players[playerID].movePiece();
 			}
 		}
+		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
-		//Change current player
-		currentPlayer = (currentPlayer+1) % 2;
 		// pass the board to the gui
 		passBoard();
 		//check if move created a mill
 		if(myBoard.isMill(position[1])){
 			playerTake(playerID);
 		}
+		//Change current player
+		currentPlayer = (currentPlayer+1) % 2;
 	}
 	
 	public boolean isMoveValid(int[] position1, int[] position2) {
@@ -209,19 +205,23 @@ public class GameInstance {
 		}
 		
 		//check if piece is owned by the current player
-		if(myBoard.getPiece(position1).getOwner() != players[currentPlayer]){
+		if(!(myBoard.getPiece(position1).getOwner().equals(players[currentPlayer]))){
+			System.out.println("incorrect owner");
+			System.out.printf("---- %d -----", currentPlayer);
 			return false;
 		}
 		//check that its one step away on a path
 		//if a corner piece is selected
-		if(position1[0] % 2 == 0){
+		if(position1[1] % 2 == 0){
+			System.out.println("corner piece");
 			//piece cannot move to different square
 			//this would change for a advance game board type
 			if(position1[0] != position2[0]){
+				System.out.println("move accecpted");
 				return false;
 			}
 			//piece must move only 1 space away
-			if( (position1[1]+1) % 8 != position2[1] ||
+			if( (position1[1]+1) % 8 != position2[1] &&
 				(position1[1]-1) % 8 != position2[1])
 			{
 				return false;
@@ -230,20 +230,23 @@ public class GameInstance {
 		}
 		//a middle piece is selected
 		else{
+			System.out.println("middle piece");
 			//if piece changes squares
 			if(position1[0] != position2[0]){
 				//square must be plus or minus on square
-				if( position1[0]+1 != position2[0] ||
+				if( position1[0]+1 != position2[0] &&
 					position1[0]-1 != position2[0])
 				{
+					System.out.println("piece changed squares not following line");
 					return false;
 				}
 			}
 			//piece stays on same square
 			//piece must move only 1 space away
-			else if( (position1[1]+1) % 8 != position2[1] ||
+			else if( (position1[1]+1) % 8 != position2[1] &&
 					 (position1[1]-1) % 8 != position2[1])
 			{
+				
 				return false;
 			}
 		}
