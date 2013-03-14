@@ -272,16 +272,15 @@ public class GameInstance{
 		while ( isGameOver() < 0 && 
 				(position[0] == -1 ||
 				!isTakeValid(position) ||
-				myBoard.takePiece(playerID, position) == -1)) {
+				myBoard.takePiece((playerID+1)%2, position) == -1)) {
 			//if invalid move tell player or computer, and get new move
 			if(players[playerID].getIsHuman()){
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");
-				
-					position = boardInterface.positionSelect();
+				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>TAKE A PIECE");			
+				position = boardInterface.positionSelect();
 					
 			} else {
 				//Computer AI
-				position = players[playerID].placePiece();
+				position = players[playerID].takePiece();
 			}
 		}
 		
