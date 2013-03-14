@@ -22,7 +22,9 @@ import javax.swing.border.LineBorder;
 import mpigsley.gui.JPanelWithBackground;
 
 public class GameGUI implements GameInterface {
-
+	
+	// Comment here
+	
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
 			+ "THE NINE MEN'S MORRIS BOARD CONTAINS 24 INTERSECTIONS<br>"
