@@ -174,6 +174,9 @@ public class GameInstance{
 						break;
 					}
 				}
+				
+				// TODO if position[0] == position[1], delete positions and go back to beginning of loop.
+				// TODO make a selection visible: use yellow icon or something
 
 			} else {
 				//Computer AI
@@ -236,9 +239,13 @@ public class GameInstance{
 		else{
 			//if piece changes squares
 			if(position1[0] != position2[0]){
+				//piece can not change position on square number
+				if(position1[1] != position2[1]){
+					return false;
+				}
 				//square must be plus or minus on square
-				if( (position1[0]+1) % 3 != position2[0] &&
-					(position1[0]+2) % 3 != position2[0])
+				if( (position1[0]+1) != position2[0] &&
+					(position1[0]-1) != position2[0])
 				{
 					return false;
 				}
@@ -336,9 +343,11 @@ public Player getWinner() {
 			return null;
 		}
 		if (myBoard.piecesOnSide(0) > 6) {
+			System.out.println("Player 2 Won!");
 			return players[1]; // players[1] wins
 		}
 		if (myBoard.piecesOnSide(1) > 6) {
+			System.out.println("Player 1 Won!");
 			return players[0]; // players[0] wins
 		}
 		return null;
