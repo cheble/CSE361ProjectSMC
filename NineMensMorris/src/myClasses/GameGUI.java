@@ -19,12 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import mpigsley.gui.JPanelWithBackground;
-
 public class GameGUI implements GameInterface {
-	
+
 	// Comment here
-	
+
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
 			+ "THE NINE MEN'S MORRIS BOARD CONTAINS 24 INTERSECTIONS<br>"
@@ -88,6 +86,7 @@ public class GameGUI implements GameInterface {
 	private String backS = "src/images/backgroundSmall.jpg";
 	// private String boardL = "src/images/boardLarge.jpg";
 	private String boardS = "src/images/boardSmall.jpg";
+	private String dimBackground = "src/images/dimBackground.png";
 	private String blue = "src/images/blue.png";
 	private String red = "src/images/red.png";
 	private String blank = "src/images/blankPiece.png";
@@ -390,25 +389,41 @@ public class GameGUI implements GameInterface {
 		buttons.add(gameMenu);
 
 		// Add Player One Name JLabel and add to JPanel
-		JLabel pOne = new JLabel("<html><center>" + names[0].toUpperCase() + "<br>BLUE");
+		JLabel pOne = new JLabel("<html><center>" + names[0].toUpperCase());
 		pOne.setForeground(Color.LIGHT_GRAY);
 		pOne.setHorizontalAlignment(SwingConstants.CENTER);
 		pOne.setFont(coalition.deriveFont((float) 25));
-		pOne.setBounds(39, 233, 218, 100);
+		pOne.setBounds(39, 233, 218, 25);
 		buttons.add(pOne);
+
+		JLabel pOneColor = new JLabel("<html><center>BLUE");
+		pOneColor.setForeground(Color.BLUE);
+		pOneColor.setHorizontalAlignment(SwingConstants.CENTER);
+		pOneColor.setFont(coalition.deriveFont((float) 25));
+		pOneColor.setBounds(pOne.getX(), pOne.getY() + pOne.getHeight(),
+				pOne.getWidth(), pOne.getHeight());
+		buttons.add(pOneColor);
 
 		// Add Player Two Name JLabel and add to JPanel
 		JLabel pTwo = new JLabel();
 		if (names.length == 2) {
-			pTwo.setText("<html><center>" + names[1].toUpperCase() + "<br>RED");
+			pTwo.setText("<html><center>" + names[1].toUpperCase());
 		} else {
-			pTwo.setText("<html><center>COMPUTER<br>RED");
+			pTwo.setText("<html><center>COMPUTER");
 		}
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		pTwo.setFont(coalition.deriveFont((float) 25));
-		pTwo.setBounds(871, 233, 218, 100);
+		pTwo.setBounds(862, 233, 218, 25);
 		buttons.add(pTwo);
+
+		JLabel pTwoColor = new JLabel("<html><center>RED");
+		pTwoColor.setForeground(Color.RED);
+		pTwoColor.setHorizontalAlignment(SwingConstants.CENTER);
+		pTwoColor.setFont(coalition.deriveFont((float) 25));
+		pTwoColor.setBounds(pTwo.getX(), pTwo.getY() + pTwo.getHeight(),
+				pTwo.getWidth(), pTwo.getHeight());
+		buttons.add(pTwoColor);
 
 		// Create Pieces JPanel & Add to LayerdPane on Layer 3
 		JPanel pieces = new JPanel();
@@ -929,11 +944,14 @@ public class GameGUI implements GameInterface {
 		panel.add(layeredPane);
 
 		// Create Dim Panel and add as layer 1
-		final JPanel dim = new JPanel();
-		dim.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		// Initialize LayeredPane
+		final JLayeredPane dim = new JLayeredPane();
+		dim.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
+		dim.setLayout(null);
+		dim.setOpaque(false);
 		dim.setVisible(true);
 		dim.setOpaque(false);
-		dim.setLayout(null);
 		layeredPane.add(dim);
 		layeredPane.setLayer(dim, 1);
 
@@ -1216,11 +1234,11 @@ public class GameGUI implements GameInterface {
 	public int[] positionSelect() {
 		clearSelections();
 		int[] passedPos = new int[2];
-		while(true){
-			if(!isGameQuit){
+		while (true) {
+			if (!isGameQuit) {
 				passedPos[1] = selectedPos[1];
 				passedPos[0] = selectedPos[0];
-				if(passedPos[0] != -1 && passedPos[1] != -1){
+				if (passedPos[0] != -1 && passedPos[1] != -1) {
 					break;
 				}
 			} else {
@@ -1279,7 +1297,7 @@ public class GameGUI implements GameInterface {
 
 	@Override
 	public void setTurnInfo(int playerID, String message) {
-		info[playerID].setText("<html><center>" + message + "</center></html>");
+		info[playerID].setText("<html><center>" + message);
 		if (playerID == 0) {
 			info[1].setText("");
 		} else {

@@ -16,8 +16,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import mpigsley.gui.JPanelWithBackground;
-
 public class MenuGUI implements MenuInterface {
 
 	// Static
