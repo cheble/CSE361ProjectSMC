@@ -62,13 +62,14 @@ public class GameInstance{
 		players[0].setName(boardInterface.getName(0));
 		players[1].setName(boardInterface.getName(1));
 		
+		
 		System.out.println("Game Started");
 		if(isGameOver() < 0){
 			// PlacementPhase
 			placementPhase();
 		}
 		if(isGameOver() < 0){
-			// MovementPhaser
+			// MovementPhase
 			movementPhase();
 		}
 		System.out.println("Game Ended");
@@ -142,8 +143,7 @@ public class GameInstance{
 				position = players[playerID].placePiece();
 			}
 		}
-		//Increment number of moves for player
-		players[playerID].incrementNumMoves();
+		//Do not increment number of moves for player
 		//Change current player
 		currentPlayer = (currentPlayer+1) % 2;
 		// pass the board to the gui

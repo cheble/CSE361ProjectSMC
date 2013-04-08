@@ -1138,13 +1138,14 @@ public class GameGUI implements GameInterface {
 		menu.add(menuTitle);
 
 		// Congrats label add to Menu
-		final JLabel congrats = new JLabel("<html><center>CONGRAGULATIONS "
+		final JLabel congrats = new JLabel("<html><center>CONGRAGULATIONS <br>"
 				+ players[winnerID].getName().toUpperCase()
-				+ " YOU HAVE WON!</center></html>");
-		congrats.setFont(coalition.deriveFont((float) 30));
+				+ "<br>YOU HAVE WON IN<br>" + players[winnerID].getNumMoves() + " MOVES</center></html>");
+		congrats.setFont(coalition.deriveFont((float) 25));
 		congrats.setForeground(Color.BLACK);
-		congrats.setBounds(0, menuTitle.getY() + 120, menu.getWidth(), 70);
+		congrats.setBounds(0, menuTitle.getY() + 90, menu.getWidth(), 100);
 		congrats.setOpaque(false);
+		congrats.setHorizontalAlignment(SwingConstants.CENTER);
 		menu.add(congrats);
 
 		// Restart Button add to Menu
@@ -1167,7 +1168,7 @@ public class GameGUI implements GameInterface {
 		});
 		restart.setFont(coalition.deriveFont((float) 40));
 		restart.setForeground(Color.BLACK);
-		restart.setBounds(0, congrats.getY() + 100, menu.getWidth(), 65);
+		restart.setBounds(0, congrats.getY() + 135, menu.getWidth(), 65);
 		restart.setOpaque(false);
 		restart.setContentAreaFilled(false);
 		restart.setBorderPainted(false);
