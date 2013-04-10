@@ -75,9 +75,6 @@ public class GameGUI implements GameInterface {
 	// Button Game Board
 	private JButton[][] board;
 
-	// How To Slides
-	private JPanel[] slides;
-
 	// Turn Based Information
 	private JLabel[] info;
 
@@ -106,7 +103,6 @@ public class GameGUI implements GameInterface {
 		bSide = new JPanel[9];
 		rSide = new JPanel[9];
 		board = new JButton[3][8];
-		slides = new JPanel[4];
 		info = new JLabel[2];
 		this.players = players;
 
@@ -747,6 +743,8 @@ public class GameGUI implements GameInterface {
 		// Reset to Slide 1
 		slideNum = 1;
 
+		JPanel[] slides = new JPanel[4];
+		
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
@@ -966,12 +964,6 @@ public class GameGUI implements GameInterface {
 		layeredPane.add(menu);
 		layeredPane.setLayer(menu, 2);
 
-		// Create howToPanel Panel and add as layer 3
-		final JPanel howToPanel = new JPanel();
-		howToPanel.setOpaque(false);
-		howToPanel.setVisible(true);
-		layeredPane.add(howToPanel);
-		layeredPane.setLayer(howToPanel, 3);
 
 		// Create Menu Title and add to Menu
 		JLabel menuTitle = new JLabel("MENU");
@@ -996,8 +988,14 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Create HowTo
-				slideNum = 1;
+				
+				// Create howToPanel Panel and add as layer 3
+				final JPanel howToPanel = new JPanel();
+				howToPanel.setOpaque(false);
+				howToPanel.setVisible(true);
+				layeredPane.add(howToPanel);
+				layeredPane.setLayer(howToPanel, 3);
+				// Open How To Play
 				drawHowTo(howToPanel);
 
 			}
