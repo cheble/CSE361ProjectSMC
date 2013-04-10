@@ -61,7 +61,7 @@ public class GameGUI implements GameInterface {
 	// Variables
 	private JFrame contentPane;
 	private int slideNum;
-	private boolean isGameQuit;
+	volatile private boolean isGameQuit;
 	private boolean isGameBegan;
 	private String names[];
 	private int[] selectedPos;
@@ -1235,23 +1235,17 @@ public class GameGUI implements GameInterface {
 	public int[] positionSelect() {
 		clearSelections();
 		int[] passedPos = new int[2];
-		System.out.println("Entered positionSelect function");
 		while (true) {
-			System.out.println("1240");
 			if (!isGameQuit) {
-				System.out.println("1242");
 				passedPos[1] = selectedPos[1];
 				passedPos[0] = selectedPos[0];
 				if (passedPos[0] != -1 && passedPos[1] != -1) {
 					break;
 				}
 			} else {
-				System.out.println(isGameQuit);
-				System.out.println("Exiting positionSelect function");
 				return new int[] {-1, -1};
 			}
 		}
-		System.out.println("Exiting positionSelect function");
 		return passedPos;
 	}
 
