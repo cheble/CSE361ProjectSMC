@@ -66,6 +66,7 @@ public class GameGUI implements GameInterface {
 	volatile private boolean isTurnSkip;
 	volatile private boolean isUndoTurn;
 	private boolean isGameBegan;
+	volatile private boolean isGameReset;
 	private String names[];
 	private int[] selectedPos;
 	private Player[] players;
@@ -101,6 +102,7 @@ public class GameGUI implements GameInterface {
 		isTurnSkip = false;
 		isUndoTurn = false;
 		isGameBegan = false;
+		isGameReset = false;
 		slideNum = 1;
 		selectedPos = new int[2];
 		selectedPos[0] = -1;
@@ -1027,7 +1029,7 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// DO SOMETHING
+				isGameReset = true;
 			}
 		});
 		restart.setFont(coalition.deriveFont((float) 40));
@@ -1165,7 +1167,7 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// DO SOMETHING
+				isGameReset = true;
 			}
 		});
 		restart.setFont(coalition.deriveFont((float) 40));
@@ -1254,7 +1256,6 @@ public class GameGUI implements GameInterface {
 	public boolean isGameQuit() {
 		return isGameQuit;
 	}
-
 	
 	public int isTurnSkipUndo(){
 		if(isTurnSkip){
@@ -1337,6 +1338,11 @@ public class GameGUI implements GameInterface {
 
 	public String getName(int playerID) {
 		return names[playerID];
+	}
+
+	@Override
+	public boolean isGameReset() {		
+		return isGameReset;
 	}
 
 }

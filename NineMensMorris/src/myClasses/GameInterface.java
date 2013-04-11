@@ -14,6 +14,8 @@ public interface GameInterface {
 	
 	boolean isGameQuit();
 	
+	boolean isGameReset();
+	
 	int isTurnSkipUndo();
 	
 	boolean isGameBegan();

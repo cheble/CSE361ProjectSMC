@@ -70,4 +70,10 @@ public class GameTest implements GameInterface {
 		return 0;
 	}
 
+	@Override
+	public boolean isGameReset() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

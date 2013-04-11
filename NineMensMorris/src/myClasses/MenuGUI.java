@@ -79,6 +79,7 @@ public class MenuGUI implements MenuInterface {
 		isGameReady = false;
 		slideNum = 1;
 		flyMode = 1;
+		this.myOptions.setFlyRule(flyMode);
 		timer = false;
 		resolution = false;
 		
