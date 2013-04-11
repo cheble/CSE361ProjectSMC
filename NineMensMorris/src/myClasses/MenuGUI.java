@@ -62,6 +62,9 @@ public class MenuGUI implements MenuInterface {
 	private boolean timer;
 	private boolean resolution;
 
+	// How To Slides
+	private JPanel[] slides;
+
 	// Custom Font
 	private Font coalition;
 
@@ -80,8 +83,8 @@ public class MenuGUI implements MenuInterface {
 		flyMode = 1;
 		timer = false;
 		resolution = false;
-		
-		
+		slides = new JPanel[4];
+
 		// Setup Custom Font
 		File fontLoc = new File("src/font/Coalition_v2.ttf");
 		try {
@@ -350,7 +353,11 @@ public class MenuGUI implements MenuInterface {
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
-		
+		// Create howToPanel JPanel & Add to LayerdPane on Layer 3
+		final JPanel howToPanel = new JPanel();
+		howToPanel.setOpaque(false);
+		layeredPane.add(howToPanel);
+		layeredPane.setLayer(howToPanel, 3);
 
 		// Create Title and add to Layer
 		JLabel title = new JLabel("OPTIONS");
@@ -375,12 +382,9 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
-				// Create howToPanel JPanel & Add to LayerdPane on Layer 3
-				final JPanel howToPanel = new JPanel();
-				howToPanel.setOpaque(false);
-				layeredPane.add(howToPanel);
-				layeredPane.setLayer(howToPanel, 3);
+				// Reset to Slide 1
+				slideNum = 1;
+
 				// Open How To Play
 				drawHowTo(howToPanel);
 			}
@@ -628,10 +632,6 @@ public class MenuGUI implements MenuInterface {
 	}
 
 	public void drawHowTo(final JPanel panel) {
-		slideNum = 1;
-		
-		JPanel[] slides = new JPanel[4];
-		
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
@@ -731,7 +731,7 @@ public class MenuGUI implements MenuInterface {
 		cardPanel.setLayout(cl);
 		layeredPane.add(cardPanel);
 		layeredPane.setLayer(cardPanel, 3);
-				
+
 		for (int i = 0; i < slides.length; i++) {
 			slides[i] = new JPanel();
 			slides[i].setVisible(true);

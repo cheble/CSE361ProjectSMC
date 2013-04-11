@@ -177,7 +177,8 @@ public class GameInstance{
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
 				while(isGameOver() < 0 && 
 						(position[1][0] == -1 ||
-						myBoard.getPiece(position[0]) != null)){
+						myBoard.getPiece(position[0]) != null) ||
+						myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
 					position[1] = boardInterface.positionSelect();
 					if(position[1][0] != -1){
 						break;
@@ -189,7 +190,23 @@ public class GameInstance{
 
 			} else {
 				//Computer AI
-				position = players[playerID].movePiece();
+				while(isGameOver() < 0 && 
+						(position[0][0] == -1 || 
+						myBoard.getPiece(position[0]) == null ||
+						!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
+						!isMovePossible(position[0])))
+				{
+					position[0] = players[playerID].placePiece();
+				}
+				while(isGameOver() < 0 && 
+						(position[1][0] == -1 ||
+						myBoard.getPiece(position[0]) != null) ||
+						myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
+					position[1] = players[playerID].placePiece();
+					if(position[1][0] != -1){
+						break;
+					}
+				}
 			}
 			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		}
@@ -211,11 +228,68 @@ public class GameInstance{
 		//Change current player
 		currentPlayer = (currentPlayer+1) % 2;
 	}
-	
-	public boolean isMoveValid(int[] position1, int[] position2) {
+	public boolean isMovePossible(int[] position){
+		int[] testPosition = new int[2] ;
+		boolean fly = false;
 		//if fly mode is on
 		if(myOptions.getFlyRule() != 3){
 			//check if fly mode has started for the player
+			if ((myOptions.getFlyRule() == 1) && myBoard.piecesOnSide(currentPlayer) >= 6){
+				fly = true;
+			}
+			else if ((myOptions.getFlyRule() == 2) && myBoard.piecesOnSide(currentPlayer) >= 5){
+				fly = true;
+			}
+		}
+		//check if fly mode has started for the player
+		if(!fly){
+			//fly mode is not enabled yet for player
+			//check if positions on either side in same square are open
+			testPosition[0] = position[0];
+			testPosition[1] = (position[1]+1)% 8;
+			if(myBoard.getPiece(testPosition) == null){
+				return true;
+			}
+			testPosition[1] = (position[1]+7)% 8;
+			if(myBoard.getPiece(testPosition) == null){
+				return true;
+			}						
+			//a middle piece is selected
+			if(position[1] % 2 != 0){
+				//check if piece can change squares
+				testPosition[1] = position[1];
+				if((position[0] % 2) == 0 ){
+					testPosition[0] = 1;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+				}
+				else {
+					testPosition[0] = 0;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+					testPosition[0] = 2;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+	public boolean isMoveValid(int[] position1, int[] position2) {
+		boolean fly = false;
+		//if fly mode is on
+		if(myOptions.getFlyRule() != 3){
+			//check if fly mode has started for the player
+			if ((myOptions.getFlyRule() == 1) && myBoard.piecesOnSide(currentPlayer) >= 6){
+				fly = true;
+			}
+			else if ((myOptions.getFlyRule() == 2) && myBoard.piecesOnSide(currentPlayer) >= 5){
+				fly = true;
+			}
 		}
 		
 		if(myBoard.getPiece(position1) == null){
@@ -228,46 +302,51 @@ public class GameInstance{
 			System.out.printf("---- %d -----", currentPlayer);
 			return false;
 		}
-		//check that its one step away on a path
-		//if a corner piece is selected
-		if(position1[1] % 2 == 0){
-			//piece cannot move to different square
-			//this would change for a advance game board type
-			if(position1[0] != position2[0]){
-				return false;
-			}
-			//piece must move only 1 space away
-			if( (position1[1]+1) % 8 != position2[1] &&
-				(position1[1]+7) % 8 != position2[1])
-			{
-				return false;
-			}
-			
-		}
-		//a middle piece is selected
-		else{
-			//if piece changes squares
-			if(position1[0] != position2[0]){
-				//piece can not change position on square number
-				if(position1[1] != position2[1]){
+		//check if fly mode has started for the player
+		if(!fly){
+			//fly mode is not enabled yet for player
+			//check that its one step away on a path
+			//if a corner piece is selected
+			if(position1[1] % 2 == 0){
+				//piece cannot move to different square
+				//this would change for a advance game board type
+				if(position1[0] != position2[0]){
 					return false;
 				}
-				//square must be plus or minus on square
-				if( (position1[0]+1) != position2[0] &&
-					(position1[0]-1) != position2[0])
+				//piece must move only 1 space away
+				if( (position1[1]+1) % 8 != position2[1] &&
+					(position1[1]+7) % 8 != position2[1])
 				{
 					return false;
 				}
-			}
-			//piece stays on same square
-			//piece must move only 1 space away
-			else if( (position1[1]+1) % 8 != position2[1] &&
-					 (position1[1]+7) % 8 != position2[1])
-			{
 				
-				return false;
+			}
+			//a middle piece is selected
+			else{
+				//if piece changes squares
+				if(position1[0] != position2[0]){
+					//piece can not change position on square number
+					if(position1[1] != position2[1]){
+						return false;
+					}
+					//square must be plus or minus on square
+					if( (position1[0]+1) != position2[0] &&
+						(position1[0]-1) != position2[0])
+					{
+						return false;
+					}
+				}
+				//piece stays on same square
+				//piece must move only 1 space away
+				else if( (position1[1]+1) % 8 != position2[1] &&
+						 (position1[1]+7) % 8 != position2[1])
+				{
+					
+					return false;
+				}
 			}
 		}
+		//else doesn't matter where it's placed and ownership is checked earlier
 		
 		return true;
 	}

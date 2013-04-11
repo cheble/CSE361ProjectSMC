@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -62,6 +63,8 @@ public class GameGUI implements GameInterface {
 	private JFrame contentPane;
 	private int slideNum;
 	volatile private boolean isGameQuit;
+	volatile private boolean isTurnSkip;
+	volatile private boolean isUndoTurn;
 	private boolean isGameBegan;
 	private String names[];
 	private int[] selectedPos;
@@ -95,6 +98,8 @@ public class GameGUI implements GameInterface {
 		// Initiate Variables
 		this.contentPane = contentPane;
 		isGameQuit = false;
+		isTurnSkip = false;
+		isUndoTurn = false;
 		isGameBegan = false;
 		slideNum = 1;
 		selectedPos = new int[2];
@@ -113,7 +118,7 @@ public class GameGUI implements GameInterface {
 				numHumans++;
 			}
 		}
-		names = new String[numHumans];
+		names = new String[2];
 
 		// Setup Custom Font
 		File fontLoc = new File("src/font/Coalition_v2.ttf");
@@ -229,7 +234,10 @@ public class GameGUI implements GameInterface {
 					if (nameOne.getText().length() != 0) {
 						// Set Name
 						names[0] = nameOne.getText();
-
+						// Some names for the computer player just for fun
+						Random randomNum = new Random();
+						String[] pcNames = {"Bill", "Steve", "Berners-Lee", "Turing", "von Neumann", "Wozniak"};
+						names[1] = pcNames[randomNum.nextInt(6)];
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
 
@@ -312,7 +320,7 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// DO SOMETHING
+				isUndoTurn = true;
 
 			}
 		});
@@ -339,7 +347,7 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// DO SOMETHING
+				isTurnSkip = true;
 
 			}
 		});
@@ -401,12 +409,8 @@ public class GameGUI implements GameInterface {
 		buttons.add(pOneColor);
 
 		// Add Player Two Name JLabel and add to JPanel
-		JLabel pTwo = new JLabel();
-		if (names.length == 2) {
-			pTwo.setText("<html><center>" + names[1].toUpperCase());
-		} else {
-			pTwo.setText("<html><center>COMPUTER");
-		}
+		JLabel pTwo = new JLabel();	
+		pTwo.setText("<html><center>" + names[1].toUpperCase());
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		pTwo.setFont(coalition.deriveFont((float) 25));
@@ -1251,11 +1255,25 @@ public class GameGUI implements GameInterface {
 		return isGameQuit;
 	}
 
+	
+	public int isTurnSkipUndo(){
+		if(isTurnSkip){
+			return 1;
+		}
+		else if(isUndoTurn){
+			return 2;
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	@Override
 	public void setBoard(GameBoard gm) {
 		// Clear
 		clearSelections();
-
+		isTurnSkip = false;
+		isUndoTurn = false;
 		// Set Pieces On Board
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 8; j++) {
