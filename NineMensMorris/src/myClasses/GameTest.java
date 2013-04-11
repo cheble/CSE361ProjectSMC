@@ -64,4 +64,10 @@ public class GameTest implements GameInterface {
 		return null;
 	}
 
+	@Override
+	public int isTurnSkipUndo() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

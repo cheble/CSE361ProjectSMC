@@ -14,6 +14,8 @@ public interface GameInterface {
 	
 	boolean isGameQuit();
 	
+	int isTurnSkipUndo();
+	
 	boolean isGameBegan();
 	
 	void clearSelections();
