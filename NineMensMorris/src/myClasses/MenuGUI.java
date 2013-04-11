@@ -2,6 +2,7 @@ package myClasses;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
@@ -315,6 +316,12 @@ public class MenuGUI implements MenuInterface {
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		buttons.add(exit);
+		
+		//TODO change addMouseListener to addActionListener then disable pane before loading the next menu
+		//
+		//
+		//
+		
 
 	}
 
@@ -383,6 +390,7 @@ public class MenuGUI implements MenuInterface {
 				layeredPane.setLayer(howToPanel, 3);
 				// Open How To Play
 				drawHowTo(howToPanel);
+				
 			}
 		});
 		howTo.setFont(coalition.deriveFont((float) 40));
