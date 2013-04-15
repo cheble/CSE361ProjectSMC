@@ -76,4 +76,10 @@ public class GameTest implements GameInterface {
 		return false;
 	}
 
+	@Override
+	public void setPosSelected(int ring, int position) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

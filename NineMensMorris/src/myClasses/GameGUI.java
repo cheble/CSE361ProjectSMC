@@ -775,15 +775,29 @@ public class GameGUI implements GameInterface {
 		background.setVisible(true);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
+		
+		// Create Glass Panel and Add to LayeredPane on Layer 2
+		final JPanel glass = new JPanel();
+		glass.setBounds(0,0,contentPane.getWidth(),contentPane.getHeight());
+		glass.setOpaque(false);
+		glass.setVisible(true);
+		glass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Do Nothing
+			}
+		});
+		layeredPane.add(glass);
+		layeredPane.setLayer(glass, 2);
 
-		// Create Buttons JPanel and Add to LayeredPane on Layer 2
+		// Create Buttons JPanel and Add to LayeredPane on Layer 3
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
 		buttons.setOpaque(false);
 		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		buttons.setVisible(true);
 		layeredPane.add(buttons);
-		layeredPane.setLayer(buttons, 2);
+		layeredPane.setLayer(buttons, 3);
 
 		// Create Title and add to Layer
 		JLabel title = new JLabel("HOW TO PLAY");
@@ -946,18 +960,21 @@ public class GameGUI implements GameInterface {
 		panel.setLayout(null);
 		panel.setVisible(true);
 		panel.add(layeredPane);
-
-		// Create Dim Panel and add as layer 1
-		// Initialize LayeredPane
-		final JLayeredPane dim = new JLayeredPane();
-		dim.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
-		dim.setLayout(null);
-		dim.setOpaque(false);
-		dim.setVisible(true);
-		dim.setOpaque(false);
-		layeredPane.add(dim);
-		layeredPane.setLayer(dim, 1);
+		
+		final JPanel glass = new JPanel();
+		glass.setBounds(0,0,contentPane.getWidth(),contentPane.getHeight());
+		glass.setOpaque(false);
+		glass.setVisible(true);
+		glass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Delete Layer
+				panel.setVisible(false);
+				glass.setVisible(false);
+			}
+		});
+		layeredPane.add(glass);
+		layeredPane.setLayer(glass, 1);
 
 		// Create Menu with and add as layer 2
 		final JPanel menu = new JPanel();
@@ -1088,6 +1105,7 @@ public class GameGUI implements GameInterface {
 			public void mouseClicked(MouseEvent arg0) {
 				// Delete Layer
 				panel.setVisible(false);
+				glass.setVisible(false);
 			}
 		});
 		close.setFont(coalition.deriveFont((float) 40));

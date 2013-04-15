@@ -93,8 +93,7 @@ public class MenuGUI implements MenuInterface {
 		this.myOptions.setFlyRule(flyMode);
 		timer = false;
 		resolution = false;
-		
-		
+
 		// Setup Custom Font
 		File fontLoc = new File("src/font/Coalition_v2.ttf");
 		try {
@@ -343,12 +342,6 @@ public class MenuGUI implements MenuInterface {
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		buttons.add(exit);
-		
-		//TODO change addMouseListener to addActionListener then disable pane before loading the next menu
-		//
-		//
-		//
-		
 
 		contentPane.repaint();
 	}
@@ -385,8 +378,6 @@ public class MenuGUI implements MenuInterface {
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
-		
-
 		// Create Title and add to Layer
 		JLabel title = new JLabel("OPTIONS");
 		title.setForeground(Color.LIGHT_GRAY);
@@ -410,7 +401,7 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+
 				// Create howToPanel JPanel & Add to LayerdPane on Layer 3
 				final JPanel howToPanel = new JPanel();
 				howToPanel.setOpaque(false);
@@ -418,7 +409,7 @@ public class MenuGUI implements MenuInterface {
 				layeredPane.setLayer(howToPanel, 3);
 				// Open How To Play
 				drawHowTo(howToPanel);
-				
+
 			}
 		});
 		howTo.setFont(coalition.deriveFont((float) 40));
@@ -667,9 +658,9 @@ public class MenuGUI implements MenuInterface {
 
 	public void drawHowTo(final JPanel panel) {
 		slideNum = 1;
-		
+
 		JPanel[] slides = new JPanel[4];
-		
+
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
@@ -695,14 +686,28 @@ public class MenuGUI implements MenuInterface {
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
-		// Create Buttons JPanel and Add to LayeredPane on Layer 2
+		// Create Glass Panel and Add to LayeredPane on Layer 2
+		final JPanel glass = new JPanel();
+		glass.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		glass.setOpaque(false);
+		glass.setVisible(true);
+		glass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Do Nothing
+			}
+		});
+		layeredPane.add(glass);
+		layeredPane.setLayer(glass, 2);
+
+		// Create Buttons JPanel and Add to LayeredPane on Layer 3
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
 		buttons.setOpaque(false);
 		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		buttons.setVisible(true);
 		layeredPane.add(buttons);
-		layeredPane.setLayer(buttons, 2);
+		layeredPane.setLayer(buttons, 3);
 
 		// Create Title and add to Layer
 		JLabel title = new JLabel("HOW TO PLAY");
@@ -769,7 +774,7 @@ public class MenuGUI implements MenuInterface {
 		cardPanel.setLayout(cl);
 		layeredPane.add(cardPanel);
 		layeredPane.setLayer(cardPanel, 3);
-				
+
 		for (int i = 0; i < slides.length; i++) {
 			slides[i] = new JPanel();
 			slides[i].setVisible(true);
