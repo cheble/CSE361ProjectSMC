@@ -2,20 +2,28 @@ package myClasses;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class MenuGUI implements MenuInterface {
 
@@ -72,6 +80,9 @@ public class MenuGUI implements MenuInterface {
 	private ImageIcon off = new ImageIcon("src/images/off.png");
 	private ImageIcon on = new ImageIcon("src/images/on.png");
 
+	// Leaderboard
+	private String lbLoc = "src/files/leaderboard.txt";
+
 	public MenuGUI(JFrame contentPane) {
 		// Initialize variables
 		this.contentPane = contentPane;
@@ -95,6 +106,9 @@ public class MenuGUI implements MenuInterface {
 			e.printStackTrace();
 			System.out.println("File not loaded");
 		}
+
+		// Process Leaderboards Text File
+		processLeaderboard();
 
 		// Draw Main Menu
 		drawMenu();
@@ -122,8 +136,15 @@ public class MenuGUI implements MenuInterface {
 			System.out.println("File not loaded");
 		}
 
+		// Process Leaderboards Text File
+		processLeaderboard();
+
 		// Draw Main Menu
 		drawMenu();
+	}
+
+	private void processLeaderboard() {
+
 	}
 
 	public void loading() {
@@ -251,6 +272,11 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				// Clear contentPane
+				contentPane.remove(layeredPane);
+
+				// Draw the Leaderboards
+				drawLeaderboards();
 			}
 		});
 		lb.setFont(coalition.deriveFont((float) 40));
@@ -324,6 +350,7 @@ public class MenuGUI implements MenuInterface {
 		//
 		
 
+		contentPane.repaint();
 	}
 
 	public void drawOptions() {
@@ -634,6 +661,8 @@ public class MenuGUI implements MenuInterface {
 		} else {
 			rOff.setIcon(on);
 		}
+
+		contentPane.repaint();
 	}
 
 	public void drawHowTo(final JPanel panel) {
@@ -820,10 +849,154 @@ public class MenuGUI implements MenuInterface {
 				}
 			}
 		});
+
+		contentPane.repaint();
 	}
 
 	public void drawLeaderboards() {
-		throw new UnsupportedOperationException();
+		// Initialize LayeredPane
+		final JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
+		layeredPane.setLayout(null);
+		this.contentPane.add(layeredPane);
+
+		// Create Background JPanel & Add to LayeredPane on Layer 1
+		JPanel background;
+		try {
+			background = new JPanelWithBackground(backS);
+		} catch (IOException e) {
+			e.printStackTrace();
+			background = null;
+		}
+		background.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
+		background.setVisible(true);
+		layeredPane.add(background);
+		layeredPane.setLayer(background, 1);
+
+		// Create Buttons JPanel and Add to LayeredPane on Layer 2
+		JPanel buttons = new JPanel();
+		buttons.setLayout(null);
+		buttons.setOpaque(false);
+		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		buttons.setVisible(true);
+		layeredPane.add(buttons);
+		layeredPane.setLayer(buttons, 2);
+
+		// Create Title and add to Layer
+		JLabel title = new JLabel("LEADERBOARDS");
+		title.setForeground(Color.LIGHT_GRAY);
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setFont(coalition.deriveFont((float) 70));
+		title.setBounds(0, 60, contentPane.getWidth(), 125);
+		buttons.add(title);
+
+		// Add back button to JPanel
+		final JButton back = new JButton("BACK");
+		back.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				back.setForeground(Color.LIGHT_GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				back.setForeground(Color.WHITE);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Remove Current Screen
+				contentPane.remove(layeredPane);
+
+				// Open Main Menu
+				drawMenu();
+			}
+		});
+		back.setFont(coalition.deriveFont((float) 40));
+		back.setForeground(Color.WHITE);
+		back.setBounds((contentPane.getWidth() / 2) - 100,
+				contentPane.getHeight() - 100, 200, 65);
+		back.setOpaque(false);
+		back.setContentAreaFilled(false);
+		back.setBorderPainted(false);
+		buttons.add(back);
+
+		// Read Leaderboards File
+		FileReader fr;
+		BufferedReader br;
+		int lbLength;
+		String[][] data;
+
+		try {
+			fr = new FileReader(lbLoc);
+		} catch (FileNotFoundException e) {
+			fr = null;
+			System.out.println("File Not Read.... Incorrect File Name");
+		}
+		br = new BufferedReader(fr);
+		try {
+			lbLength = Integer.parseInt(br.readLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Number Format Incorrect in MenuGui");
+			lbLength = 0;
+		} catch (IOException e) {
+			System.out.println("Error with Number of Entries");
+			lbLength = 0;
+		}
+
+		// Run through the entries in Text File & Check against Winner Num Turns
+		data = new String[lbLength][2];
+		for (int i = 0; i < lbLength; i++) {
+			try {
+				data[i] = br.readLine().split(",");
+				data[i][0].toUpperCase();
+				data[i][1].toUpperCase();
+			} catch (IOException e) {
+				System.out.println("Could not read line Number: " + (i + 1));
+				data[i] = null;
+			}
+		}
+		try {
+			fr.close();
+			br.close();
+		} catch (IOException e) {
+			System.out.println("Could not Close File from Reading");
+		}
+
+		// Draw JPanel board to display names
+		String columnNames[] = { "NAME", "TURN NUMBER" };
+		JTable table = new JTable(data, columnNames);
+		table.setForeground(Color.white);
+		table.setVisible(true);
+		table.setOpaque(false);
+		((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class))
+				.setOpaque(false);
+		table.setRowHeight(35);
+		table.setFont(coalition.deriveFont((float) 30));
+		table.setBounds((contentPane.getWidth() / 2) - 400, 165, 800, 425);
+		table.getColumn("NAME").setWidth(table.getWidth() / 2);
+		table.getColumn("TURN NUMBER").setWidth(table.getWidth() / 2);
+		table.setShowGrid(false);
+		table.getTableHeader().setFont(coalition.deriveFont((float) 35));
+		table.getTableHeader().setForeground(Color.GRAY);
+		table.getTableHeader().setBorder(BorderFactory.createEmptyBorder());
+		table.getTableHeader().setBackground(Color.BLACK);
+		JScrollPane scroll = new JScrollPane(table,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
+		scroll.setWheelScrollingEnabled(true);
+		scroll.setBounds(contentPane.getWidth() / 2 - 400, 165, 800, 425);
+		scroll.setBorder(BorderFactory.createEmptyBorder());
+		buttons.add(scroll);
+
+		// Repaint
+		contentPane.repaint();
+
 	}
 
 	@Override

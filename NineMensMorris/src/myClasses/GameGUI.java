@@ -21,9 +21,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 public class GameGUI implements GameInterface {
-
-	// Comment here
-
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
 			+ "THE NINE MEN'S MORRIS BOARD CONTAINS 24 INTERSECTIONS<br>"
@@ -71,6 +68,7 @@ public class GameGUI implements GameInterface {
 	private int[] selectedPos;
 	private Player[] players;
 	private Font coalition;
+	private ImageIcon beforeYellow; 
 
 	// Side Images
 	private JPanel[] bSide;
@@ -87,12 +85,14 @@ public class GameGUI implements GameInterface {
 	private String backS = "src/images/backgroundSmall.jpg";
 	// private String boardL = "src/images/boardLarge.jpg";
 	private String boardS = "src/images/boardSmall.jpg";
-	private String dimBackground = "src/images/dimBackground.png";
+	//private String dimBackground = "src/images/dimBackground.png";
 	private String blue = "src/images/blue.png";
 	private String red = "src/images/red.png";
+	private String yellow = "src/images/yellow.png";
 	private String blank = "src/images/blankPiece.png";
 	private ImageIcon bluePiece = new ImageIcon(blue);
 	private ImageIcon redPiece = new ImageIcon(red);
+	private ImageIcon yellowPiece = new ImageIcon(yellow);
 	private ImageIcon blankPiece = new ImageIcon(blank);
 
 	public GameGUI(JFrame contentPane, Player players[]) {
@@ -1340,9 +1340,27 @@ public class GameGUI implements GameInterface {
 		return names[playerID];
 	}
 
+	public void setPosSelected(int ring, int position) {
+		// Check to see if yellow piecealready on board
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (board[i][j].equals(yellowPiece)) {
+					// Set it back to what it was before and break
+					board[i][j].equals(beforeYellow);
+					break;
+				}
+			}
+		}
+		
+		// Save desired position's piece color
+		beforeYellow = (ImageIcon) board[ring][position].getIcon();
+		
+		// Set desired piece to yellow
+		board[ring][position].setIcon(yellowPiece);
+	}
+
 	@Override
 	public boolean isGameReset() {		
 		return isGameReset;
 	}
-
 }

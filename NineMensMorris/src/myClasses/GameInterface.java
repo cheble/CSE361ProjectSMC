@@ -27,5 +27,7 @@ public interface GameInterface {
 	void setTurnInfo(int playerID, String message);
 	
 	public String getName(int playerID);
+	
+	public void setPosSelected(int ring, int position);
 
 }
