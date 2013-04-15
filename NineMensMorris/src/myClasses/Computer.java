@@ -14,7 +14,12 @@ public class Computer extends Player {
 	}
 
 	public int[][] movePiece() {
-		return null;
+		int[][] temp = new int[2][2];
+		temp[0][0] = (int) ((Math.random() * 99.0) % 3);
+		temp[0][1] = (int) ((Math.random() * 99.0) % 8);
+		temp[1][0] = (int) ((Math.random() * 99.0) % 3);
+		temp[1][1] = (int) ((Math.random() * 99.0) % 8);
+		return temp;
 	}
 
 	public int[] takePiece() {

@@ -1,5 +1,7 @@
 package myClasses;
 
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 
 /**
@@ -157,59 +159,73 @@ public class GameInstance{
 	public void playerTurnMove(int playerID) {
 		int position[][] = {{-1, -1},{-1, -1}};		
 		// TODO implement skip/undo somehow
-		while (isGameOver() < 0 && ( position[0][0] == -1 || 
-				position[1][0] == -1 ||
-				!isMoveValid(position[0], position[1]) || 
-				myBoard.movePiece(position[0], position[1]) == -1)) {
-			// invalid move
-			// tell player or computer
-			// get new move
-			System.out.println("invalid");
-			if(players[playerID].getIsHuman()){
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-				while(isGameOver() < 0 && 
-						(position[0][0] == -1 || 
-						myBoard.getPiece(position[0]) == null ||
-						!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
-				{
-					position[0] = boardInterface.positionSelect();
-				}
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-				while(isGameOver() < 0 && 
-						(position[1][0] == -1 ||
-						myBoard.getPiece(position[0]) != null) ||
-						myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
-					position[1] = boardInterface.positionSelect();
-					if(position[1][0] != -1){
-						break;
-					}
-				}
-				
-				// TODO if position[0] == position[1], delete positions and go back to beginning of loop.
-				// TODO make a selection visible: use yellow icon or something
+		
+		//old while loop conditions:
+//		while (isGameOver() < 0 && ( position[0][0] == -1 || 
+//				position[1][0] == -1 ||
+//				!isMoveValid(position[0], position[1]) || 
+//				myBoard.movePiece(position[0], position[1]) == -1)) {
 
-			} else {
-				//Computer AI
-				while(isGameOver() < 0 && 
-						(position[0][0] == -1 || 
-						myBoard.getPiece(position[0]) == null ||
-						!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
-						!isMovePossible(position[0])))
-				{
-					position[0] = players[playerID].placePiece();
-				}
-				while(isGameOver() < 0 && 
-						(position[1][0] == -1 ||
-						myBoard.getPiece(position[0]) != null) ||
-						myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
-					position[1] = players[playerID].placePiece();
-					if(position[1][0] != -1){
-						break;
-					}
+		// invalid move
+		// tell player or computer
+		// get new move
+		if(players[playerID].getIsHuman()){
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
+			while(isGameOver() < 0 && 
+					(position[0][0] == -1 || 
+					myBoard.getPiece(position[0]) == null ||
+					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
+			{
+				position[0] = boardInterface.positionSelect();
+			}
+			boardInterface.setPosSelected(position[0][0], position[0][1]);
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
+			while(isGameOver() < 0 && 
+					(position[1][0] == -1 ||
+					myBoard.getPiece(position[1]) != null ||
+					!isMoveValid(position[0], position[1]) ||
+					myBoard.movePiece(position[0], position[1]) == -1)){
+				position[1] = boardInterface.positionSelect();
+				//undo first selection if second selection is same piece
+				if(Arrays.equals(position[0], position[1])){
+					//restart move process
+					boardInterface.setBoard(myBoard);
+					return;
+				}else{
+					System.out.println("not equal");
 				}
 			}
-			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
+
+
+		} else {
+			//Computer AI
+			while(isGameOver() < 0 && 
+				(position[0][0] == -1 || 
+				myBoard.getPiece(position[0]) == null ||
+				!isMoveValid(position[0], position[1]) ||
+				myBoard.movePiece(position[0], position[1]) == -1))
+			{
+				position = players[playerID].movePiece();
+			}
+//			while(isGameOver() < 0 && 
+//					(position[0][0] == -1 || 
+//					myBoard.getPiece(position[0]) == null ||
+//					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
+//					!isMovePossible(position[0])))
+//			{
+//				position[0] = players[playerID].placePiece();
+//			}
+//			while(isGameOver() < 0 && 
+//					(position[1][0] == -1 ||
+//					myBoard.getPiece(position[0]) != null) ||
+//					myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
+//				position[1] = players[playerID].placePiece();
+//				if(position[1][0] != -1){
+//					break;
+//				}
+//			}
 		}
+		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 		System.out.println("move accecpted");
 		//Increment number of moves for player
 		players[playerID].incrementNumMoves();
@@ -298,8 +314,6 @@ public class GameInstance{
 		
 		//check if piece is owned by the current player
 		if(!(myBoard.getPiece(position1).getOwner().equals(players[currentPlayer]))){
-			System.out.println("incorrect owner");
-			System.out.printf("---- %d -----", currentPlayer);
 			return false;
 		}
 		//check if fly mode has started for the player

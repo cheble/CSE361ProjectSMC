@@ -1359,22 +1359,23 @@ public class GameGUI implements GameInterface {
 	}
 
 	public void setPosSelected(int ring, int position) {
-		// Check to see if yellow piecealready on board
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (board[i][j].equals(yellowPiece)) {
-					// Set it back to what it was before and break
-					board[i][j].equals(beforeYellow);
-					break;
+		// Check to see if yellow piece already on board
+		if(!isGameQuit){
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (board[i][j].equals(yellowPiece)) {
+						// Set it back to what it was before and break
+						board[i][j].equals(beforeYellow);
+						break;
+					}
 				}
 			}
+			// Save desired position's piece color
+			beforeYellow = (ImageIcon) board[ring][position].getIcon();
+			
+			// Set desired piece to yellow
+			board[ring][position].setIcon(yellowPiece);
 		}
-		
-		// Save desired position's piece color
-		beforeYellow = (ImageIcon) board[ring][position].getIcon();
-		
-		// Set desired piece to yellow
-		board[ring][position].setIcon(yellowPiece);
 	}
 
 	@Override
