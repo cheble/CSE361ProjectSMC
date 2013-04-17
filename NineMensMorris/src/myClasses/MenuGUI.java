@@ -401,7 +401,6 @@ public class MenuGUI implements MenuInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-
 				// Create howToPanel JPanel & Add to LayerdPane on Layer 3
 				final JPanel howToPanel = new JPanel();
 				howToPanel.setOpaque(false);

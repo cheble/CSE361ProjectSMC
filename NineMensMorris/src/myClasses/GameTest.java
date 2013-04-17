@@ -82,4 +82,10 @@ public class GameTest implements GameInterface {
 		
 	}
 
+	@Override
+	public void setFlyMode(int playerID, boolean setMode) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
