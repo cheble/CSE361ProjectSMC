@@ -116,7 +116,6 @@ public class GameBoard {
 		return 0;
 	}
 
-	//TODO double check isMill algorithms
 	
 	/**
 	 * Checks if a piece on the gameboard is apart of a mill
