@@ -90,7 +90,7 @@ public class Main {
 			} //else Player quit game. 
 		}
 		return gameStatus;
-		
+
 	}
 
 	public static void updateLeaderboard(Player winner) {
