@@ -82,7 +82,6 @@ public class Main {
 			winner = game.getWinner();
 			// Update Leaderboard
 			updateLeaderboard(winner);
-
 		} // else Player quit game. }
 		return gameStatus;
 
