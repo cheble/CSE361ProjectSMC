@@ -68,6 +68,27 @@ public class Main {
 		// Initiate Game
 		int gameStatus = -1;
 		game = new GameInstance(options, contentPane);
+		
+		while(gameStatus != 0 && gameStatus != 1){
+			// Wait until game done
+			do {
+				// Cause it doesn't work with out print statement? wtf...
+				System.out.print("");
+				gameStatus = game.getGameStatus();
+			} while (gameStatus == -1);
+			// Determine how game ended
+			if (gameStatus == 0 || gameStatus == 3) {
+				// Game ended normally.
+				// Get Winner
+				winner = game.getWinner();
+				// Update Leaderboard
+				updateLeaderboard(winner);	
+			} 
+			if(gameStatus == 2 || gameStatus == 3){
+				gameStatus = -1;
+				game = new GameInstance(options, contentPane);
+			} //else Player quit game. 
+		}
 
 		// Wait until game done
 		do {

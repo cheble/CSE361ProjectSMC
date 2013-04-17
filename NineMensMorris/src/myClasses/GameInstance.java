@@ -70,10 +70,12 @@ public class GameInstance{
 			// PlacementPhase
 			placementPhase();
 		}
-		if(isGameOver() < 0){
-			// MovementPhase
-			movementPhase();
-		}
+		if(isGameOver() != 2){
+			if(isGameOver() < 0){
+				// MovementPhase
+				movementPhase();
+			}
+		} 
 		System.out.println("Game Ended");
 		if(isGameOver() == 0){
 			gameStatus = 0;
@@ -81,10 +83,13 @@ public class GameInstance{
 			while (true){
 				if (isGameOver() == 1){
 					break;
+				} else if(isGameOver() == 3){
+					gameStatus = 3;
+					break;
 				}
 			}	
 		} else {
-			gameStatus = 1;
+			gameStatus = isGameOver();
 		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
@@ -417,12 +422,21 @@ public class GameInstance{
 			//quit game here
 			return 1;
 		}
-
+		
 		// If a player has more than 6 of his nine pieces taken
 		if (!isPlacement) {
 			if (myBoard.piecesOnSide(0) > 6 || myBoard.piecesOnSide(1) > 6) {
+				if (boardInterface.isGameReset()){
+					// Game was reset from winner menu
+					return 3;
+				}
 				return 0; // Game is over
 			}
+		}
+
+		if (boardInterface.isGameReset()){
+			// Game was reset from in game menu
+			return 2;
 		}
 
 		return -1;
