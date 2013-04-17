@@ -79,6 +79,7 @@ public class GameGUI implements GameInterface {
 
 	// Turn Based Information
 	private JLabel[] info;
+	private JLabel[] flyModeBanners;
 
 	// Image Locations, etc.
 	// private String backL = "src/images/backgroundLarge.jpg";
@@ -111,6 +112,7 @@ public class GameGUI implements GameInterface {
 		rSide = new JPanel[9];
 		board = new JButton[3][8];
 		info = new JLabel[2];
+		flyModeBanners = new JLabel[2];
 		this.players = players;
 
 		// Get number of Humans
@@ -443,12 +445,27 @@ public class GameGUI implements GameInterface {
 			info[i].setVisible(true);
 			info[i].setForeground(Color.CYAN);
 			info[i].setFont(coalition.deriveFont((float) 18));
+			info[i].setHorizontalAlignment(SwingConstants.CENTER);
+			info[i].setVerticalAlignment(SwingConstants.CENTER);
 			pieces.add(info[i]);
 		}
 
 		// Set individual bounds, etc.
 		info[0].setBounds(pOne.getX(), pOne.getY() - 100, pOne.getWidth(), 75);
 		info[1].setBounds(pTwo.getX(), pTwo.getY() - 100, pTwo.getWidth(), 75);
+		
+		// Create FlyMode Banners
+		for (int i = 0; i < flyModeBanners.length; i++) {
+			flyModeBanners[i] = new JLabel();
+			flyModeBanners[i].setOpaque(false);
+			flyModeBanners[i].setVisible(true);
+			flyModeBanners[i].setForeground(Color.YELLOW);
+			flyModeBanners[i].setFont(coalition.deriveFont((float) 18));
+			flyModeBanners[i].setBounds(info[i].getX(),info[i].getY() - 75,info[i].getWidth(),50);
+			flyModeBanners[i].setHorizontalAlignment(SwingConstants.CENTER);
+			flyModeBanners[i].setVerticalAlignment(SwingConstants.CENTER);
+			pieces.add(flyModeBanners[i]);
+		}
 
 		// Create Blue Side Pieces
 		for (int i = 0; i < 9; i++) {
@@ -1275,7 +1292,7 @@ public class GameGUI implements GameInterface {
 		return isGameQuit;
 	}
 	
-	public int isTurnSkipUndo(){
+	public int isTurnSkipUndo() {
 		if(isTurnSkip){
 			return 1;
 		}
@@ -1381,5 +1398,13 @@ public class GameGUI implements GameInterface {
 	@Override
 	public boolean isGameReset() {		
 		return isGameReset;
+	}
+
+	public void setFlyMode(int playerID, boolean setMode) {
+		if (setMode) {
+			flyModeBanners[playerID].setText("<html><center>FLY MODE<br>ENABLED");
+		} else {
+			flyModeBanners[playerID].setText("");
+		}
 	}
 }
