@@ -1258,7 +1258,7 @@ public class GameGUI implements GameInterface {
 		clearSelections();
 		int[] passedPos = new int[2];
 		while (true) {
-			if (!isGameQuit) {
+			if (!isGameQuit && (isTurnSkipUndo() == 0)) {
 				passedPos[1] = selectedPos[1];
 				passedPos[0] = selectedPos[0];
 				if (passedPos[0] != -1 && passedPos[1] != -1) {

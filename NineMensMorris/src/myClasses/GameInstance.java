@@ -15,8 +15,6 @@ import javax.swing.JFrame;
  */
 public class GameInstance{
 
-	// TODO Should we move human input to the player class and pass the gameInterface
-	// TODO We need to give feedback to player for incorrect moves, instructions, etc...
 
 	private GameInterface boardInterface;
 	private Player[] players;
@@ -38,7 +36,6 @@ public class GameInstance{
 		myOptions = options;
 		players = new Player[2];
 		players[0] = new Player();
-		//TODO should we get name here? Or should we delete attribute from class?
 		players[0].setIsHuman(true);
 		if (myOptions.getComputerPlayer()) {
 			players[1] = new Computer();
@@ -157,6 +154,8 @@ public class GameInstance{
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
+		//TODO loop through each piece owned by player and check isMovePossible(), then display if no moves are possible
+		
 		int position[][] = {{-1, -1},{-1, -1}};		
 		// TODO implement skip/undo somehow
 		
@@ -177,6 +176,12 @@ public class GameInstance{
 					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
 			{
 				position[0] = boardInterface.positionSelect();
+				if(boardInterface.isTurnSkipUndo() == 1){
+					System.out.println(boardInterface.isTurnSkipUndo());
+					currentPlayer = (currentPlayer+1) % 2;
+					passBoard();
+					return;
+				}
 			}
 			boardInterface.setPosSelected(position[0][0], position[0][1]);
 			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
@@ -184,8 +189,16 @@ public class GameInstance{
 					(position[1][0] == -1 ||
 					myBoard.getPiece(position[1]) != null ||
 					!isMoveValid(position[0], position[1]) ||
-					myBoard.movePiece(position[0], position[1]) == -1)){
+					myBoard.movePiece(position[0], position[1]) == -1))
+			{
 				position[1] = boardInterface.positionSelect();
+				//Skip turn if button pressed
+				if(boardInterface.isTurnSkipUndo() == 1){
+					players[playerID].incrementNumMoves();
+					passBoard();
+					currentPlayer = (currentPlayer+1) % 2;
+					return;
+				}
 				//undo first selection if second selection is same piece
 				if(Arrays.equals(position[0], position[1])){
 					//restart move process
@@ -457,6 +470,8 @@ public Player getWinner() {
 	}
 
 	public void undo() {
+		//TODO check if game went back to placement phase
+		//TODO check if fly mode changed for player
 		throw new UnsupportedOperationException();
 	}
 

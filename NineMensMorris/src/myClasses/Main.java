@@ -18,6 +18,9 @@ public class Main {
 	private static Options options;
 	private static String lbLoc = "src/files/leaderboard.txt";
 
+	//TODO move name input screen to main and pass into game inside options
+	//TODO account for all pieces trapped for user and player
+	
 	public static void main(String[] args) {
 		// Instantiate new GUI
 		// InterfaceTest gui = new InterfaceTest();
