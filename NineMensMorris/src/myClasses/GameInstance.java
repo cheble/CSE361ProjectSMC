@@ -157,7 +157,7 @@ public class GameInstance{
 		//TODO loop through each piece owned by player and check isMovePossible(), then display if no moves are possible
 		
 		int position[][] = {{-1, -1},{-1, -1}};		
-		// TODO implement skip/undo somehow
+		// TODO implement undo somehow
 		
 		//old while loop conditions:
 //		while (isGameOver() < 0 && ( position[0][0] == -1 || 
@@ -165,9 +165,6 @@ public class GameInstance{
 //				!isMoveValid(position[0], position[1]) || 
 //				myBoard.movePiece(position[0], position[1]) == -1)) {
 
-		// invalid move
-		// tell player or computer
-		// get new move
 		if(players[playerID].getIsHuman()){
 			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
 			while(isGameOver() < 0 && 
@@ -472,6 +469,12 @@ public Player getWinner() {
 	public void undo() {
 		//TODO check if game went back to placement phase
 		//TODO check if fly mode changed for player
+		
+		//UNDO
+		//Can Happen:
+		//	Beginning of next human player move
+		//	Beginning of your next move if facing computer
+		//	??Beginning of playerTake??  NO
 		throw new UnsupportedOperationException();
 	}
 
