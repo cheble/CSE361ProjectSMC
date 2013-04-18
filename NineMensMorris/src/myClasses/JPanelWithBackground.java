@@ -2,10 +2,12 @@ package myClasses;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class JPanelWithBackground extends JPanel {
@@ -13,7 +15,8 @@ public class JPanelWithBackground extends JPanel {
 	private Image backgroundImage;
 
 	public JPanelWithBackground(String fileName) throws IOException {
-		backgroundImage = ImageIO.read(new File(fileName));
+		backgroundImage = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource(fileName));
+				//ImageIO.read(new File(fileName));
 	}
 
 	public void paintComponent(Graphics g) {

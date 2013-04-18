@@ -83,18 +83,18 @@ public class GameGUI implements GameInterface {
 
 	// Image Locations, etc.
 	// private String backL = "src/images/backgroundLarge.jpg";
-	private String backS = "src/images/backgroundSmall.jpg";
+	private String backS = "images/backgroundSmall.jpg";
 	// private String boardL = "src/images/boardLarge.jpg";
-	private String boardS = "src/images/boardSmall.jpg";
+	private String boardS = "images/boardSmall.jpg";
 	//private String dimBackground = "src/images/dimBackground.png";
-	private String blue = "src/images/blue.png";
-	private String red = "src/images/red.png";
-	private String yellow = "src/images/yellow.png";
-	private String blank = "src/images/blankPiece.png";
-	private ImageIcon bluePiece = new ImageIcon(blue);
-	private ImageIcon redPiece = new ImageIcon(red);
-	private ImageIcon yellowPiece = new ImageIcon(yellow);
-	private ImageIcon blankPiece = new ImageIcon(blank);
+	private String blue = "images/blue.png";
+	private String red = "images/red.png";
+	private String yellow = "images/yellow.png";
+	private String blank = "images/blankPiece.png";
+	private ImageIcon bluePiece = new ImageIcon(getClass().getClassLoader().getResource(blue));
+	private ImageIcon redPiece = new ImageIcon(getClass().getClassLoader().getResource(red));
+	private ImageIcon yellowPiece = new ImageIcon(getClass().getClassLoader().getResource(yellow));
+	private ImageIcon blankPiece = new ImageIcon(getClass().getClassLoader().getResource(blank));
 
 	public GameGUI(JFrame contentPane, Player players[]) {
 		// Initiate Variables
@@ -125,9 +125,8 @@ public class GameGUI implements GameInterface {
 		names = new String[2];
 
 		// Setup Custom Font
-		File fontLoc = new File("src/font/Coalition_v2.ttf");
 		try {
-			coalition = Font.createFont(Font.PLAIN, fontLoc);
+			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");

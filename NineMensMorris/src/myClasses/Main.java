@@ -16,7 +16,7 @@ public class Main {
 	private static MenuInterface menu;
 	private static Player winner;
 	private static Options options;
-	private static String lbLoc = "src/files/leaderboard.txt";
+	private static String lbLoc = "files/leaderboard.txt";
 
 	//TODO move name input screen to main and pass into game inside options
 	//TODO account for all pieces trapped for user and player
@@ -111,7 +111,7 @@ public class Main {
 			fr = new FileReader(lbLoc);
 		} catch (FileNotFoundException e) {
 			fr = null;
-			System.out.println("File Not Read.... Incorrect File Name");
+			System.out.println("File Not Read.... Incorrect File Name" + lbLoc);
 		}
 		br = new BufferedReader(fr);
 		try {
@@ -157,7 +157,7 @@ public class Main {
 			fw = new FileWriter(lbLoc);
 		} catch (IOException e) {
 			fw = null;
-			System.out.println("File Not Read.... Incorrect File Name");
+			System.out.println("File Not Read.... Incorrect File Name" + lbLoc);
 		}
 		pw = new PrintWriter(fw);
 		pw.println(lbLength + 1);
