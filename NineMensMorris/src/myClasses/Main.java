@@ -2,6 +2,7 @@ package myClasses;
 
 import java.awt.Dimension;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,14 +17,13 @@ public class Main {
 	private static MenuInterface menu;
 	private static Player winner;
 	private static Options options;
+//	private static String lbLoc = System.getProperty("user.home")
+//			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
 	private static String lbLoc = "files/leaderboard.txt";
 
-	//TODO move name input screen to main and pass into game inside options
-	//TODO account for all pieces trapped for user and player
-	
 	public static void main(String[] args) {
-		// Instantiate new GUI
-		// InterfaceTest gui = new InterfaceTest();
+		// Check Directory Location
+		//checkDirectory();
 
 		// Initialize contentPane
 		contentPane = new JFrame();
@@ -71,8 +71,8 @@ public class Main {
 		// Initiate Game
 		int gameStatus = -1;
 		game = new GameInstance(options, contentPane);
-		
-		while(gameStatus != 0 && gameStatus != 1){
+
+		while (gameStatus != 0 && gameStatus != 1) {
 			// Wait until game done
 			do {
 				// Cause it doesn't work with out print statement? wtf...
@@ -85,14 +85,55 @@ public class Main {
 				// Get Winner
 				winner = game.getWinner();
 				// Update Leaderboard
-				updateLeaderboard(winner);	
-			} 
-			if(gameStatus == 2 || gameStatus == 3){
+				updateLeaderboard(winner);
+			}
+			if (gameStatus == 2 || gameStatus == 3) {
 				gameStatus = -1;
 				game = new GameInstance(options, contentPane);
-			} //else Player quit game. 
+			} // else Player quit game.
 		}
 		return gameStatus;
+
+	}
+
+	public static void checkDirectory() {
+		if (System.getProperty("os.name").equals("Mac OS X")) {
+			String directoryPath = System.getProperty("user.home")
+					+ "/Library/Application Support/NineMensMorris";
+			String leaderboardPath = directoryPath + "/leaderboard.txt";
+			File dir = new File(directoryPath);
+			File file = new File(leaderboardPath);
+			// Create directory if it doesn't already exist
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			// Create file if it doesn't already exist
+			if (!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					System.out.println("File couldn't be created");
+				}
+				FileWriter fw;
+				try {
+					fw = new FileWriter(leaderboardPath);
+				} catch (IOException e) {
+					System.out.println("Could not open FileWriter");
+					fw = null;
+				}
+				PrintWriter pw = new PrintWriter(fw);
+				pw.print("0");
+				pw.close();
+				try {
+					fw.close();
+				} catch (IOException e) {
+					System.out.println("Could not Close FileWriter");
+				}
+			}
+
+		} else {
+			System.out.println("Wrong OS");
+		}
 
 	}
 
@@ -138,7 +179,8 @@ public class Main {
 			if (data[i] != null) {
 				// Check to see if player has less turns than players in data
 				line = data[i].split(",");
-				if (Integer.parseInt(line[1]) > winner.getNumMoves() && !winPosFound) {
+				if (Integer.parseInt(line[1]) > winner.getNumMoves()
+						&& !winPosFound) {
 					// If less moves
 					winnerPos = i;
 					winPosFound = true;
@@ -151,7 +193,7 @@ public class Main {
 		} catch (IOException e) {
 			System.out.println("Could not Close File after Reading");
 		}
-		
+
 		// Write back to text file
 		try {
 			fw = new FileWriter(lbLoc);
@@ -165,9 +207,10 @@ public class Main {
 			if (i < winnerPos) {
 				pw.println(data[i]);
 			} else if (i == winnerPos) {
-				pw.println(winner.getName().toUpperCase() + "," + winner.getNumMoves());
+				pw.println(winner.getName().toUpperCase() + ","
+						+ winner.getNumMoves());
 			} else {
-				pw.println(data[i-1]);
+				pw.println(data[i - 1]);
 			}
 		}
 		try {
@@ -176,5 +219,5 @@ public class Main {
 			System.out.println("Could not Close File after Writing");
 		}
 	}
-	
+
 }

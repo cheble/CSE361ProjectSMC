@@ -81,6 +81,8 @@ public class MenuGUI implements MenuInterface {
 	private ImageIcon on = new ImageIcon(getClass().getClassLoader().getResource("images/on.png"));
 
 	// Leaderboard
+//	private static String lbLoc = System.getProperty("user.home")
+//	+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
 	private String lbLoc = "files/leaderboard.txt";
 
 	public MenuGUI(JFrame contentPane) {

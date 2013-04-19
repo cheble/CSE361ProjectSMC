@@ -86,7 +86,6 @@ public class GameGUI implements GameInterface {
 	private String backS = "images/backgroundSmall.jpg";
 	// private String boardL = "src/images/boardLarge.jpg";
 	private String boardS = "images/boardSmall.jpg";
-	//private String dimBackground = "src/images/dimBackground.png";
 	private String blue = "images/blue.png";
 	private String red = "images/red.png";
 	private String yellow = "images/yellow.png";
@@ -263,6 +262,7 @@ public class GameGUI implements GameInterface {
 					}
 				}
 			}
+			
 		});
 
 		info.repaint();
@@ -1407,4 +1407,5 @@ public class GameGUI implements GameInterface {
 			flyModeBanners[playerID].setText("");
 		}
 	}
+
 }

@@ -14,7 +14,6 @@ public class JPanelWithBackground extends JPanel {
 
 	public JPanelWithBackground(String fileName) throws IOException {
 		backgroundImage = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource(fileName));
-				//ImageIO.read(new File(fileName));
 	}
 
 	public void paintComponent(Graphics g) {
