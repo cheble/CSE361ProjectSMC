@@ -105,7 +105,9 @@ public class GameInstance{
 			}
 		}
 		System.out.println("END PLACEMENT PHASE");
-		isPlacement = false;
+		if(isGameOver() != 2){
+			isPlacement = false;
+		}
 	}
 
 	public void movementPhase() {

@@ -8,7 +8,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
@@ -114,15 +112,6 @@ public class GameGUI implements GameInterface {
 		info = new JLabel[2];
 		flyModeBanners = new JLabel[2];
 		this.players = players;
-
-		// Get number of Humans
-		int numHumans = 0;
-		for (int i = 0; i < players.length; i++) {
-			if (players[i].getIsHuman() == true) {
-				numHumans++;
-			}
-		}
-		//TODO names = new String[2];
 
 		// Setup Custom Font
 		try {
