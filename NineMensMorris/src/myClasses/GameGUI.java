@@ -64,7 +64,7 @@ public class GameGUI implements GameInterface {
 	volatile private boolean isUndoTurn;
 	private boolean isGameBegan;
 	volatile private boolean isGameReset;
-	private String names[];
+	//private String names[];
 	private int[] selectedPos;
 	private Player[] players;
 	private Font coalition;
@@ -122,7 +122,7 @@ public class GameGUI implements GameInterface {
 				numHumans++;
 			}
 		}
-		names = new String[2];
+		//TODO names = new String[2];
 
 		// Setup Custom Font
 		try {
@@ -136,138 +136,11 @@ public class GameGUI implements GameInterface {
 			System.out.println("File not loaded");
 		}
 
-		// Ask for Player Names
-		playerNames(numHumans);
+		
+		drawBoard();
 
 	}
 
-	private void playerNames(final int numHumans) {
-		// Initialize LayeredPane
-		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
-		layeredPane.setLayout(null);
-		contentPane.add(layeredPane);
-
-		// Create Background JPanel & Add to LayeredPane on Layer 1
-		JPanel background;
-		try {
-			background = new JPanelWithBackground(backS);
-		} catch (IOException e) {
-			e.printStackTrace();
-			background = null;
-		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
-		background.setVisible(true);
-		layeredPane.add(background);
-		layeredPane.setLayer(background, 1);
-
-		// Create info JPanel & Add to LayerdPane on Layer 2
-		JPanel info = new JPanel();
-		info.setOpaque(false);
-		info.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
-		info.setVisible(true);
-		info.setLayout(null);
-		layeredPane.add(info);
-		layeredPane.setLayer(info, 2);
-
-		JLabel titleOne = new JLabel("<html><center>PLAYER 1<br>NAME</center>");
-		titleOne.setHorizontalAlignment(SwingConstants.CENTER);
-		titleOne.setVisible(true);
-		titleOne.setBounds(0, 100, info.getWidth() / numHumans, 200);
-		titleOne.setFont(coalition.deriveFont((float) 50));
-		titleOne.setForeground(Color.white);
-		info.add(titleOne);
-
-		final JTextField nameOne = new JTextField();
-		nameOne.setBounds(100, titleOne.getY() + 250,
-				(info.getWidth() / numHumans) - 200, 50);
-		nameOne.setFont(coalition.deriveFont((float) 30));
-		nameOne.setVisible(true);
-		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
-		info.add(nameOne);
-
-		final JTextField nameTwo;
-		if (numHumans == 2) {
-			JLabel titleTwo = new JLabel(
-					"<html><center>PLAYER 2<br>NAME</center>");
-			titleTwo.setHorizontalAlignment(SwingConstants.CENTER);
-			titleTwo.setVisible(true);
-			titleTwo.setBounds((info.getWidth() / 2), 100,
-					(info.getWidth() / numHumans), 200);
-			titleTwo.setFont(coalition.deriveFont((float) 50));
-			titleTwo.setForeground(Color.white);
-			info.add(titleTwo);
-
-			nameTwo = new JTextField();
-			nameTwo.setBounds((info.getWidth() / 2) + 100,
-					titleTwo.getY() + 250, (info.getWidth() / numHumans) - 200,
-					50);
-			nameTwo.setFont(coalition.deriveFont((float) 30));
-			nameTwo.setVisible(true);
-			nameTwo.setHorizontalAlignment(SwingConstants.CENTER);
-			info.add(nameTwo);
-		} else {
-			nameTwo = null;
-		}
-
-		final JButton ready = new JButton("Ready");
-		ready.setContentAreaFilled(false);
-		ready.setBorderPainted(false);
-		ready.setVisible(true);
-		ready.setBounds(0, info.getHeight() - 150, info.getWidth(), 50);
-		ready.setFont(coalition.deriveFont((float) 40));
-		ready.setForeground(Color.white);
-		ready.setOpaque(false);
-		info.add(ready);
-		ready.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				ready.setForeground(Color.LIGHT_GRAY);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				ready.setForeground(Color.WHITE);
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (numHumans == 1) {
-					if (nameOne.getText().length() != 0) {
-						// Set Name
-						names[0] = nameOne.getText();
-						// Some names for the computer player just for fun
-						Random randomNum = new Random();
-						String[] pcNames = {"Bill", "Steve", "Berners-Lee", "Turing", "von Neumann", "Wozniak"};
-						names[1] = pcNames[randomNum.nextInt(6)];
-						// Remove Layered Pane
-						contentPane.remove(layeredPane);
-
-						// Draw Game With Updated Name
-						drawBoard();
-					}
-				} else {
-					if (nameOne.getText().length() != 0
-							&& nameTwo.getText().length() != 0) {
-						// Set Name
-						names[0] = nameOne.getText();
-						names[1] = nameTwo.getText();
-
-						// Remove Layered Pane
-						contentPane.remove(layeredPane);
-
-						// Draw Game With Updated Names
-						drawBoard();
-					}
-				}
-			}
-		});
-
-		info.repaint();
-
-	}
 
 	public void drawBoard() {
 		// Initialize LayeredPane
@@ -397,7 +270,7 @@ public class GameGUI implements GameInterface {
 		buttons.add(gameMenu);
 
 		// Add Player One Name JLabel and add to JPanel
-		JLabel pOne = new JLabel("<html><center>" + names[0].toUpperCase());
+		JLabel pOne = new JLabel("<html><center>" + players[0].getName().toUpperCase());
 		pOne.setForeground(Color.LIGHT_GRAY);
 		pOne.setHorizontalAlignment(SwingConstants.CENTER);
 		pOne.setFont(coalition.deriveFont((float) 25));
@@ -414,7 +287,7 @@ public class GameGUI implements GameInterface {
 
 		// Add Player Two Name JLabel and add to JPanel
 		JLabel pTwo = new JLabel();	
-		pTwo.setText("<html><center>" + names[1].toUpperCase());
+		pTwo.setText("<html><center>" + players[1].getName().toUpperCase());
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		pTwo.setFont(coalition.deriveFont((float) 25));
@@ -1372,7 +1245,7 @@ public class GameGUI implements GameInterface {
 	}
 
 	public String getName(int playerID) {
-		return names[playerID];
+		return players[playerID].getName();
 	}
 
 	public void setPosSelected(int ring, int position) {

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class Main {
 	private static GameInstance game;
@@ -37,7 +38,7 @@ public class Main {
 		while (true) {
 			// Instantiate Menu Gui
 			menu = new MenuGUI(contentPane);
-
+			SwingUtilities.invokeLater((MenuGUI)menu);
 			// Wait Until Game Ready
 			while (true) {
 				// Cause it doesn't work with out print statement? wtf...
@@ -53,6 +54,7 @@ public class Main {
 				playGame();
 				// Game over so open Menu.
 				menu = new MenuGUI(contentPane, options);
+				SwingUtilities.invokeLater((MenuGUI)menu);
 				// Wait Until Game Ready
 				while (true) {
 					// Cause it doesn't work with out print statement? wtf...
