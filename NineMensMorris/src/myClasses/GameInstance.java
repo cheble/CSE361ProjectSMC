@@ -52,6 +52,8 @@ public class GameInstance{
 			players[1] = new Player();
 			players[1].setIsHuman(true);
 		}
+		players[0].setName(options.getPlayerNames(0));
+		players[1].setName(options.getPlayerNames(1));
 		
 
 		// create the gameboard and draw the Board gui
@@ -114,7 +116,9 @@ public class GameInstance{
 			}
 		}
 		System.out.println("END PLACEMENT PHASE");
-		isPlacement = false;
+		if(isGameOver() != 2){
+			isPlacement = false;
+		}
 	}
 
 	public void movementPhase() {
