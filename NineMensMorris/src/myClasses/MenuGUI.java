@@ -5,11 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Toolkit;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -96,10 +95,9 @@ public class MenuGUI implements MenuInterface {
 		resolution = false;
 
 		// Setup Custom Font
-		//File fontLoc = new File("src/font/Coalition_v2.ttf");
-		//File fontLoc = new File(getClass().getClassLoader().getResource("Coalition_v2.ttf").toString());
 		try {
 			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
 					//Font.createFont(Font.PLAIN, fontLoc);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
@@ -127,10 +125,9 @@ public class MenuGUI implements MenuInterface {
 		resolution = lastOptions.getGameRes();
 
 		// Setup Custom Font
-		//File fontLoc = getClass().getClassLoader().getResource("src/font/Coalition_v2.ttf");
-		File fontLoc = new File(getClass().getClassLoader().getResource("font/Coalition_v2.ttf").toString());
 		try {
 			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");

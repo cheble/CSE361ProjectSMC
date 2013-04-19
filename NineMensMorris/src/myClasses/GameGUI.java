@@ -4,9 +4,9 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -127,6 +127,7 @@ public class GameGUI implements GameInterface {
 		// Setup Custom Font
 		try {
 			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");
