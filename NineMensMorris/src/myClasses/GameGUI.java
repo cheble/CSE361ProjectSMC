@@ -112,13 +112,6 @@ public class GameGUI implements GameInterface {
 		flyModeBanners = new JLabel[2];
 		this.players = players;
 
-		// Get number of Humans
-		int numHumans = 0;
-		for (int i = 0; i < players.length; i++) {
-			if (players[i].getIsHuman() == true) {
-				numHumans++;
-			}
-		}
 		//TODO names = new String[2];
 
 		// Setup Custom Font

@@ -2,6 +2,7 @@ package myClasses;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -12,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -76,16 +78,23 @@ public class MenuGUI implements MenuInterface, Runnable {
 	// Custom Font
 	private Font coalition;
 
+	private Thread loadingThread;
+	private ArrayList<Component> components;
+
 	// Image Locations
 	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "images/backgroundSmall.jpg";
-	private ImageIcon off = new ImageIcon(getClass().getClassLoader().getResource("images/off.png"));
-	private ImageIcon on = new ImageIcon(getClass().getClassLoader().getResource("images/on.png"));
+	private String loading = "images/loading.jpg";
+	private ImageIcon off = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/off.png"));
+	private ImageIcon on = new ImageIcon(getClass().getClassLoader()
+			.getResource("images/on.png"));
 
 	// Leaderboard
-//	private static String lbLoc = System.getProperty("user.home")
-//	+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
-	private String lbLoc = "files/leaderboard.txt";
+	private static String lbLoc = System.getProperty("user.home")
+			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
+
+	// private String lbLoc = "files/leaderboard.txt";
 
 	public MenuGUI(JFrame contentPane) {
 		// Initialize variables
@@ -97,12 +106,15 @@ public class MenuGUI implements MenuInterface, Runnable {
 		this.myOptions.setFlyRule(flyMode);
 		timer = false;
 		resolution = false;
+		components = new ArrayList<Component>();
 
 		// Setup Custom Font
 		try {
-			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
-					//Font.createFont(Font.PLAIN, fontLoc);
+			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader()
+					.getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(
+					coalition);
+			// Font.createFont(Font.PLAIN, fontLoc);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");
@@ -111,8 +123,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			System.out.println("File not loaded");
 		}
 
-		// Process Leaderboards Text File
-		processLeaderboard();
+		// Begin Loading
+		loading();
 
 	}
 
@@ -125,11 +137,14 @@ public class MenuGUI implements MenuInterface, Runnable {
 		flyMode = lastOptions.getFlyRule();
 		timer = lastOptions.getTimer();
 		resolution = lastOptions.getGameRes();
+		components = new ArrayList<Component>();
 
 		// Setup Custom Font
 		try {
-			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
+			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader()
+					.getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(
+					coalition);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");
@@ -138,20 +153,57 @@ public class MenuGUI implements MenuInterface, Runnable {
 			System.out.println("File not loaded");
 		}
 
-		// Process Leaderboards Text File
-		processLeaderboard();
-
-		// Draw Main Menu
-		drawMenu();
-	}
-
-	private void processLeaderboard() {
-
+		// Begin Loading
+		loading();
 	}
 
 	public void loading() {
-		// TODO Create a loading menu without sending a JFrame to the different
-		// functions
+		// // Create Background JPanel & Add to LayeredPane on Layer 1
+		JPanel background;
+		try {
+			background = new JPanelWithBackground(loading);
+		} catch (IOException e) {
+			e.printStackTrace();
+			background = null;
+		}
+		background.setName("loading");
+		background.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
+		background.setVisible(true);
+		contentPane.add(background);
+		contentPane.repaint();
+
+		drawMenu();
+		// Remove all components but the loading screen
+		for (int i = 0; i < contentPane.getContentPane().getComponentCount(); i++) {
+			if (!(contentPane.getContentPane().getComponents()[i].getName() == null)) {
+				contentPane.getContentPane().remove(
+						contentPane.getContentPane().getComponents()[i]);
+			}
+		}
+		
+		drawOptions();
+		// Remove all components but the loading screen
+		for (int i = 0; i < contentPane.getContentPane().getComponentCount(); i++) {
+			if (!(contentPane.getContentPane().getComponents()[i].getName() == null)) {
+				contentPane.getContentPane().remove(
+						contentPane.getContentPane().getComponents()[i]);
+			}
+		}
+		
+		loadingThread = new Thread() {
+			public void run() {
+				for (int i = 0; i < components.size(); i++) {
+					while (!components.get(i).isShowing());
+				}
+			}
+		};
+		loadingThread.start();
+
+		while (loadingThread.isAlive());
+
+		contentPane.getContentPane().removeAll();
+		drawMenu();
 	}
 
 	public void drawMenu() {
@@ -173,6 +225,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		background.setBounds(0, 0, contentPane.getWidth(),
 				contentPane.getHeight());
 		background.setVisible(true);
+		components.add(background);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
@@ -182,6 +235,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
+		components.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
@@ -191,6 +245,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
 		title.setBounds(0, 86, contentPane.getWidth(), 127);
+		components.add(title);
 		buttons.add(title);
 
 		// Create Human vs. Computer Button
@@ -213,8 +268,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 				// Update Options
 				myOptions.setComputerPlayer(true);
-				
-				//Get playerNames
+
+				// Get playerNames
 				playerNames(1);
 			}
 		});
@@ -224,6 +279,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		hvc.setOpaque(false);
 		hvc.setContentAreaFilled(false);
 		hvc.setBorderPainted(false);
+		components.add(hvc);
 		buttons.add(hvc);
 
 		// Create Human vs. Human Button
@@ -247,9 +303,9 @@ public class MenuGUI implements MenuInterface, Runnable {
 				// Update Options
 				myOptions.setComputerPlayer(false);
 
-				//Get playerNames
-				playerNames(2);				
-				
+				// Get playerNames
+				playerNames(2);
+
 			}
 		});
 		hvh.setFont(coalition.deriveFont((float) 40));
@@ -258,6 +314,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		hvh.setOpaque(false);
 		hvh.setContentAreaFilled(false);
 		hvh.setBorderPainted(false);
+		components.add(hvh);
 		buttons.add(hvh);
 
 		// Create Leaderboard Button
@@ -288,6 +345,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		lb.setOpaque(false);
 		lb.setContentAreaFilled(false);
 		lb.setBorderPainted(false);
+		components.add(lb);
 		buttons.add(lb);
 
 		// Create Options Button
@@ -318,6 +376,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		options.setOpaque(false);
 		options.setContentAreaFilled(false);
 		options.setBorderPainted(false);
+		components.add(options);
 		buttons.add(options);
 
 		// Create Exit Button
@@ -345,6 +404,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		exit.setOpaque(false);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
+		components.add(exit);
 		buttons.add(exit);
 
 		contentPane.repaint();
@@ -370,6 +430,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 				contentPane.getHeight());
 		background.setVisible(true);
 		background.setLayout(null);
+		components.add(background);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
@@ -379,6 +440,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
+		components.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
@@ -388,6 +450,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
 		title.setBounds(0, 86, contentPane.getWidth(), 127);
+		components.add(title);
 		buttons.add(title);
 
 		// Create How to Play button & add to Layer
@@ -421,6 +484,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		howTo.setOpaque(false);
 		howTo.setContentAreaFilled(false);
 		howTo.setBorderPainted(false);
+		components.add(howTo);
 		buttons.add(howTo);
 
 		// Create Fly Mode Title & add to Layer
@@ -429,6 +493,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		fly.setHorizontalAlignment(SwingConstants.CENTER);
 		fly.setFont(coalition.deriveFont((float) 40));
 		fly.setBounds(0, howTo.getY() + 70, contentPane.getWidth(), 65);
+		components.add(fly);
 		buttons.add(fly);
 
 		// Create Fly Mode 4 Radio button & add to Layer
@@ -438,6 +503,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		fMThree.setOpaque(false);
 		fMThree.setContentAreaFilled(false);
 		fMThree.setBorderPainted(false);
+		components.add(fMThree);
 		buttons.add(fMThree);
 
 		// Create Fly Mode 3 Radio button & add to Layer
@@ -447,6 +513,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		fMFour.setOpaque(false);
 		fMFour.setContentAreaFilled(false);
 		fMFour.setBorderPainted(false);
+		components.add(fMFour);
 		buttons.add(fMFour);
 
 		// Create Fly Mode Off Radio button & add to Layer
@@ -456,6 +523,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		fMOff.setOpaque(false);
 		fMOff.setContentAreaFilled(false);
 		fMOff.setBorderPainted(false);
+		components.add(fMOff);
 		buttons.add(fMOff);
 
 		// If Fly Mode buttons are clicked...
@@ -507,6 +575,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		timerTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		timerTitle.setFont(coalition.deriveFont((float) 40));
 		timerTitle.setBounds(0, fly.getY() + 70, contentPane.getWidth(), 65);
+		components.add(timerTitle);
 		buttons.add(timerTitle);
 
 		// Create Timer On Radio button & add to Layer
@@ -516,6 +585,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		tOn.setOpaque(false);
 		tOn.setContentAreaFilled(false);
 		tOn.setBorderPainted(false);
+		components.add(tOn);
 		buttons.add(tOn);
 
 		// Create Timer Off Radio button & add to Layer
@@ -525,6 +595,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		tOff.setOpaque(false);
 		tOff.setContentAreaFilled(false);
 		tOff.setBorderPainted(false);
+		components.add(tOff);
 		buttons.add(tOff);
 
 		// If timer buttons are pressed...
@@ -560,6 +631,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		res.setHorizontalAlignment(SwingConstants.CENTER);
 		res.setFont(coalition.deriveFont((float) 40));
 		res.setBounds(0, timerTitle.getY() + 70, contentPane.getWidth(), 65);
+		components.add(res);
 		buttons.add(res);
 
 		// Create Timer On Radio button & add to Layer
@@ -569,6 +641,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		rOn.setOpaque(false);
 		rOn.setContentAreaFilled(false);
 		rOn.setBorderPainted(false);
+		components.add(rOn);
 		buttons.add(rOn);
 
 		// Create Timer Off Radio button & add to Layer
@@ -578,6 +651,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		rOff.setOpaque(false);
 		rOff.setContentAreaFilled(false);
 		rOff.setBorderPainted(false);
+		components.add(rOff);
 		buttons.add(rOff);
 
 		// If timer buttons are pressed...
@@ -635,6 +709,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		main.setOpaque(false);
 		main.setContentAreaFilled(false);
 		main.setBorderPainted(false);
+		components.add(main);
 		buttons.add(main);
 
 		// Set Default Settings for Options Menu
@@ -1101,14 +1176,16 @@ public class MenuGUI implements MenuInterface, Runnable {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (numHumans == 1) {
-					if (nameOne.getText().length() != 0) {						
+					if (nameOne.getText().length() != 0) {
 						// Some names for the computer player just for fun
 						Random randomNum = new Random();
-						String[] pcNames = {"Bill", "Steve", "Berners-Lee", "Turing", "von Neumann", "Wozniak"};
+						String[] pcNames = { "Bill", "Steve", "Berners-Lee",
+								"Turing", "von Neumann", "Wozniak" };
 
 						// Set Names
-						myOptions.setPlayerNames(nameOne.getText(), pcNames[randomNum.nextInt(6)]);
-						
+						myOptions.setPlayerNames(nameOne.getText(),
+								pcNames[randomNum.nextInt(6)]);
+
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
 					}
@@ -1116,7 +1193,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 					if (nameOne.getText().length() != 0
 							&& nameTwo.getText().length() != 0) {
 						// Set Name
-						myOptions.setPlayerNames(nameOne.getText(), nameTwo.getText());
+						myOptions.setPlayerNames(nameOne.getText(),
+								nameTwo.getText());
 
 						// Remove Layered Pane
 						contentPane.remove(layeredPane);
@@ -1132,7 +1210,6 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 	}
 
-	
 	@Override
 	public Options getOptions() {
 		return myOptions;
@@ -1153,7 +1230,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 		// Draw Main Menu
 		drawMenu();
-		
+
 	}
 
 }
