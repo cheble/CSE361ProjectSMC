@@ -8,6 +8,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -111,8 +113,6 @@ public class GameGUI implements GameInterface {
 		info = new JLabel[2];
 		flyModeBanners = new JLabel[2];
 		this.players = players;
-
-		//TODO names = new String[2];
 
 		// Setup Custom Font
 		try {

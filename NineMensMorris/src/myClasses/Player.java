@@ -49,7 +49,14 @@ public class Player {
 	 */
 	public void incrementNumMoves(){
 		numMoves++;
-		
+	}
+	
+	/**
+	 * @author Chase
+	 * 
+	 */
+	public void decrementNumMoves(){
+		numMoves--;
 	}
 	
 	public int[] placePiece() {
