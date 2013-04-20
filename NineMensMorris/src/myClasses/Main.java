@@ -18,13 +18,13 @@ public class Main {
 	private static MenuInterface menu;
 	private static Player winner;
 	private static Options options;
-//	private static String lbLoc = System.getProperty("user.home")
-//			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
-	private static String lbLoc = "files/leaderboard.txt";
+	private static String lbLoc = System.getProperty("user.home")
+			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
+//	private static String lbLoc = "files/leaderboard.txt";
 
 	public static void main(String[] args) {
 		// Check Directory Location
-		//checkDirectory();
+		checkDirectory();
 
 		// Initialize contentPane
 		contentPane = new JFrame();
