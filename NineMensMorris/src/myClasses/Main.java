@@ -33,6 +33,7 @@ public class Main {
 		contentPane.setResizable(false);
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
+		
 
 		// Forever until user quit on close
 		while (true) {
