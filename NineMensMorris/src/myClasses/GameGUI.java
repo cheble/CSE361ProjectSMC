@@ -2,12 +2,15 @@ package myClasses;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -61,11 +64,11 @@ public class GameGUI implements GameInterface {
 	volatile private boolean isUndoTurn;
 	private boolean isGameBegan;
 	volatile private boolean isGameReset;
-	//private String names[];
+	// private String names[];
 	private int[] selectedPos;
 	private Player[] players;
 	private Font coalition;
-	private ImageIcon beforeYellow; 
+	private ImageIcon beforeYellow;
 
 	// Side Images
 	private JPanel[] bSide;
@@ -78,20 +81,29 @@ public class GameGUI implements GameInterface {
 	private JLabel[] info;
 	private JLabel[] flyModeBanners;
 
+	// Loading Vars
+	private boolean isLoaded;
+	private ArrayList<Component> boardComponents;
+	private Thread loadingThread;
+
 	// Image Locations, etc.
 	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "images/backgroundSmall.jpg";
 	// private String boardL = "src/images/boardLarge.jpg";
 	private String boardS = "images/boardSmall.jpg";
-	//private String dimBackground = "src/images/dimBackground.png";
+	// private String dimBackground = "src/images/dimBackground.png";
 	private String blue = "images/blue.png";
 	private String red = "images/red.png";
 	private String yellow = "images/yellow.png";
 	private String blank = "images/blankPiece.png";
-	private ImageIcon bluePiece = new ImageIcon(getClass().getClassLoader().getResource(blue));
-	private ImageIcon redPiece = new ImageIcon(getClass().getClassLoader().getResource(red));
-	private ImageIcon yellowPiece = new ImageIcon(getClass().getClassLoader().getResource(yellow));
-	private ImageIcon blankPiece = new ImageIcon(getClass().getClassLoader().getResource(blank));
+	private ImageIcon bluePiece = new ImageIcon(getClass().getClassLoader()
+			.getResource(blue));
+	private ImageIcon redPiece = new ImageIcon(getClass().getClassLoader()
+			.getResource(red));
+	private ImageIcon yellowPiece = new ImageIcon(getClass().getClassLoader()
+			.getResource(yellow));
+	private ImageIcon blankPiece = new ImageIcon(getClass().getClassLoader()
+			.getResource(blank));
 
 	public GameGUI(JFrame contentPane, Player players[]) {
 		// Initiate Variables
@@ -110,12 +122,25 @@ public class GameGUI implements GameInterface {
 		board = new JButton[3][8];
 		info = new JLabel[2];
 		flyModeBanners = new JLabel[2];
+		isLoaded = false;
 		this.players = players;
+		boardComponents = new ArrayList<Component>();
+		loadingThread = new Thread() {
+			public void run() {
+				drawBoard();
+				for (int i = 0; i < boardComponents.size(); i++) {
+					while (!boardComponents.get(i).isShowing())
+						;
+				}
+			}
+		};
 
 		// Setup Custom Font
 		try {
-			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader().getResourceAsStream("font/Coalition_v2.ttf"));
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(coalition);
+			coalition = Font.createFont(Font.PLAIN, getClass().getClassLoader()
+					.getResourceAsStream("font/Coalition_v2.ttf"));
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(
+					coalition);
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 			System.out.println("Font Format not Accepted");
@@ -124,11 +149,43 @@ public class GameGUI implements GameInterface {
 			System.out.println("File not loaded");
 		}
 
-		
-		drawBoard();
+		// Start Loading
+		loading();
 
 	}
 
+	private void loading() {
+		// Create Background JPanel & Add to LayeredPane on Layer 1
+		JPanel background = new JPanel();
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
+		background.setVisible(true);
+		background.setBackground(Color.black);
+		background.setName("Background");
+		contentPane.getContentPane().add(background);
+		contentPane.getContentPane().repaint();
+
+		JLabel loadingText = new JLabel("<html><center>LOADING..");
+		loadingText.setFont(coalition.deriveFont((float) 100));
+		loadingText.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
+		loadingText.setForeground(Color.gray);
+		loadingText.setVisible(true);
+		loadingText.setOpaque(false);
+		loadingText.setName("loadingText");
+		loadingText.setHorizontalAlignment(SwingConstants.CENTER);
+		loadingText.setVerticalAlignment(SwingConstants.CENTER);
+		background.add(loadingText);
+		
+		loadingThread.start();
+		while (loadingThread.isAlive())
+			;
+
+		isLoaded = true;
+		contentPane.getContentPane().removeAll();
+		drawBoard();
+
+	}
 
 	public void drawBoard() {
 		// Initialize LayeredPane
@@ -136,6 +193,8 @@ public class GameGUI implements GameInterface {
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
 				contentPane.getHeight());
 		layeredPane.setLayout(null);
+		if (!isLoaded)
+			boardComponents.add(layeredPane);
 		contentPane.add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
@@ -149,6 +208,8 @@ public class GameGUI implements GameInterface {
 		background.setBounds(0, 0, contentPane.getWidth(),
 				contentPane.getHeight());
 		background.setVisible(true);
+		if (!isLoaded)
+			boardComponents.add(background);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
@@ -158,6 +219,8 @@ public class GameGUI implements GameInterface {
 		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
+		if (!isLoaded)
+			boardComponents.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
@@ -167,6 +230,8 @@ public class GameGUI implements GameInterface {
 		menu.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		menu.setVisible(true);
 		menu.setLayout(null);
+		if (!isLoaded)
+			boardComponents.add(menu);
 		layeredPane.add(menu);
 		layeredPane.setLayer(menu, 3);
 
@@ -195,6 +260,8 @@ public class GameGUI implements GameInterface {
 		undo.setOpaque(false);
 		undo.setContentAreaFilled(false);
 		undo.setBorderPainted(false);
+		if (!isLoaded)
+			boardComponents.add(undo);
 		buttons.add(undo);
 
 		// Add skip button to JPanel
@@ -223,6 +290,8 @@ public class GameGUI implements GameInterface {
 		skip.setOpaque(false);
 		skip.setContentAreaFilled(false);
 		skip.setBorderPainted(false);
+		if (!isLoaded)
+			boardComponents.add(skip);
 		buttons.add(skip);
 
 		// Add menu button to JPanel
@@ -255,14 +324,20 @@ public class GameGUI implements GameInterface {
 		gameMenu.setOpaque(false);
 		gameMenu.setContentAreaFilled(false);
 		gameMenu.setBorderPainted(false);
+		if (!isLoaded)
+			boardComponents.add(gameMenu);
 		buttons.add(gameMenu);
 
 		// Add Player One Name JLabel and add to JPanel
-		JLabel pOne = new JLabel("<html><center>" + players[0].getName().toUpperCase());
+		JLabel pOne = new JLabel("<html><center>"
+				+ players[0].getName().toUpperCase());
 		pOne.setForeground(Color.LIGHT_GRAY);
 		pOne.setHorizontalAlignment(SwingConstants.CENTER);
 		pOne.setFont(coalition.deriveFont((float) 25));
 		pOne.setBounds(39, 233, 218, 25);
+
+		if (!isLoaded)
+			boardComponents.add(pOne);
 		buttons.add(pOne);
 
 		JLabel pOneColor = new JLabel("<html><center>BLUE");
@@ -271,15 +346,20 @@ public class GameGUI implements GameInterface {
 		pOneColor.setFont(coalition.deriveFont((float) 25));
 		pOneColor.setBounds(pOne.getX(), pOne.getY() + pOne.getHeight(),
 				pOne.getWidth(), pOne.getHeight());
+
+		if (!isLoaded)
+			boardComponents.add(pOneColor);
 		buttons.add(pOneColor);
 
 		// Add Player Two Name JLabel and add to JPanel
-		JLabel pTwo = new JLabel();	
+		JLabel pTwo = new JLabel();
 		pTwo.setText("<html><center>" + players[1].getName().toUpperCase());
 		pTwo.setForeground(Color.LIGHT_GRAY);
 		pTwo.setHorizontalAlignment(SwingConstants.CENTER);
 		pTwo.setFont(coalition.deriveFont((float) 25));
 		pTwo.setBounds(862, 233, 218, 25);
+		if (!isLoaded)
+			boardComponents.add(pTwo);
 		buttons.add(pTwo);
 
 		JLabel pTwoColor = new JLabel("<html><center>RED");
@@ -288,6 +368,9 @@ public class GameGUI implements GameInterface {
 		pTwoColor.setFont(coalition.deriveFont((float) 25));
 		pTwoColor.setBounds(pTwo.getX(), pTwo.getY() + pTwo.getHeight(),
 				pTwo.getWidth(), pTwo.getHeight());
+
+		if (!isLoaded)
+			boardComponents.add(pTwoColor);
 		buttons.add(pTwoColor);
 
 		// Create Pieces JPanel & Add to LayerdPane on Layer 3
@@ -296,6 +379,8 @@ public class GameGUI implements GameInterface {
 		pieces.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		pieces.setVisible(true);
 		pieces.setLayout(null);
+		if (!isLoaded)
+			boardComponents.add(pieces);
 		layeredPane.add(pieces);
 		layeredPane.setLayer(pieces, 3);
 
@@ -308,13 +393,15 @@ public class GameGUI implements GameInterface {
 			info[i].setFont(coalition.deriveFont((float) 18));
 			info[i].setHorizontalAlignment(SwingConstants.CENTER);
 			info[i].setVerticalAlignment(SwingConstants.CENTER);
+			if (!isLoaded)
+				boardComponents.add(info[i]);
 			pieces.add(info[i]);
 		}
 
 		// Set individual bounds, etc.
 		info[0].setBounds(pOne.getX(), pOne.getY() - 100, pOne.getWidth(), 75);
 		info[1].setBounds(pTwo.getX(), pTwo.getY() - 100, pTwo.getWidth(), 75);
-		
+
 		// Create FlyMode Banners
 		for (int i = 0; i < flyModeBanners.length; i++) {
 			flyModeBanners[i] = new JLabel();
@@ -322,9 +409,12 @@ public class GameGUI implements GameInterface {
 			flyModeBanners[i].setVisible(true);
 			flyModeBanners[i].setForeground(Color.YELLOW);
 			flyModeBanners[i].setFont(coalition.deriveFont((float) 18));
-			flyModeBanners[i].setBounds(info[i].getX(),info[i].getY() - 75,info[i].getWidth(),50);
+			flyModeBanners[i].setBounds(info[i].getX(), info[i].getY() - 75,
+					info[i].getWidth(), 50);
 			flyModeBanners[i].setHorizontalAlignment(SwingConstants.CENTER);
 			flyModeBanners[i].setVerticalAlignment(SwingConstants.CENTER);
+			if (!isLoaded)
+				boardComponents.add(flyModeBanners[i]);
 			pieces.add(flyModeBanners[i]);
 		}
 
@@ -338,6 +428,8 @@ public class GameGUI implements GameInterface {
 			}
 			bSide[i].setVisible(true);
 			bSide[i].setOpaque(false);
+			if (!isLoaded)
+				boardComponents.add(bSide[i]);
 			pieces.add(bSide[i]);
 		}
 
@@ -363,6 +455,8 @@ public class GameGUI implements GameInterface {
 			}
 			rSide[i].setVisible(true);
 			rSide[i].setOpaque(false);
+			if (!isLoaded)
+				boardComponents.add(rSide[i]);
 			pieces.add(rSide[i]);
 		}
 
@@ -388,6 +482,8 @@ public class GameGUI implements GameInterface {
 				board[i][j].setContentAreaFilled(false);
 				board[i][j].setBorderPainted(false);
 				board[i][j].setIcon(blankPiece);
+				if (!isLoaded)
+					boardComponents.add(board[i][j]);
 				pieces.add(board[i][j]);
 			}
 		}
@@ -628,7 +724,7 @@ public class GameGUI implements GameInterface {
 		slideNum = 1;
 
 		JPanel[] slides = new JPanel[4];
-		
+
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 0, contentPane.getWidth(),
@@ -653,10 +749,10 @@ public class GameGUI implements GameInterface {
 		background.setVisible(true);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
-		
+
 		// Create Glass Panel and Add to LayeredPane on Layer 2
 		final JPanel glass = new JPanel();
-		glass.setBounds(0,0,contentPane.getWidth(),contentPane.getHeight());
+		glass.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		glass.setOpaque(false);
 		glass.setVisible(true);
 		glass.addMouseListener(new MouseAdapter() {
@@ -838,9 +934,9 @@ public class GameGUI implements GameInterface {
 		panel.setLayout(null);
 		panel.setVisible(true);
 		panel.add(layeredPane);
-		
+
 		final JPanel glass = new JPanel();
-		glass.setBounds(0,0,contentPane.getWidth(),contentPane.getHeight());
+		glass.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
 		glass.setOpaque(false);
 		glass.setVisible(true);
 		glass.addMouseListener(new MouseAdapter() {
@@ -865,7 +961,6 @@ public class GameGUI implements GameInterface {
 		layeredPane.add(menu);
 		layeredPane.setLayer(menu, 2);
 
-
 		// Create Menu Title and add to Menu
 		JLabel menuTitle = new JLabel("MENU");
 		menuTitle.setForeground(Color.BLACK);
@@ -889,7 +984,7 @@ public class GameGUI implements GameInterface {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+
 				// Create howToPanel Panel and add as layer 3
 				final JPanel howToPanel = new JPanel();
 				howToPanel.setOpaque(false);
@@ -1040,7 +1135,8 @@ public class GameGUI implements GameInterface {
 		// Congrats label add to Menu
 		final JLabel congrats = new JLabel("<html><center>CONGRAGULATIONS <br>"
 				+ players[winnerID].getName().toUpperCase()
-				+ "<br>YOU HAVE WON IN<br>" + players[winnerID].getNumMoves() + " MOVES</center></html>");
+				+ "<br>YOU HAVE WON IN<br>" + players[winnerID].getNumMoves()
+				+ " MOVES</center></html>");
 		congrats.setFont(coalition.deriveFont((float) 25));
 		congrats.setForeground(Color.BLACK);
 		congrats.setBounds(0, menuTitle.getY() + 90, menu.getWidth(), 100);
@@ -1131,9 +1227,7 @@ public class GameGUI implements GameInterface {
 		menu.add(exit);
 
 	}
-	
-	
-	
+
 	public int[] positionSelect() {
 		clearSelections();
 		int[] passedPos = new int[2];
@@ -1145,7 +1239,7 @@ public class GameGUI implements GameInterface {
 			}
 		} while (!isGameQuit && (isTurnSkipUndo() == 0) && !isGameReset);
 		if (passedPos[0] == -1 || passedPos[1] == -1) {
-			return new int[] {-1,-1};
+			return new int[] { -1, -1 };
 		} else {
 			return passedPos;
 		}
@@ -1154,19 +1248,17 @@ public class GameGUI implements GameInterface {
 	public boolean isGameQuit() {
 		return isGameQuit;
 	}
-	
+
 	public int isTurnSkipUndo() {
-		if(isTurnSkip){
+		if (isTurnSkip) {
 			return 1;
-		}
-		else if(isUndoTurn){
+		} else if (isUndoTurn) {
 			return 2;
-		}
-		else {
+		} else {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public void setBoard(GameBoard gm) {
 		// Clear
@@ -1240,8 +1332,8 @@ public class GameGUI implements GameInterface {
 
 	public void setPosSelected(int ring, int position) {
 		// Check to see if yellow piece already on board
-		if(ring != -1 && position != -1){
-			if(!isGameQuit){
+		if (ring != -1 && position != -1) {
+			if (!isGameQuit && !isGameReset) {
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 8; j++) {
 						if (board[i][j].equals(yellowPiece)) {
@@ -1253,7 +1345,7 @@ public class GameGUI implements GameInterface {
 				}
 				// Save desired position's piece color
 				beforeYellow = (ImageIcon) board[ring][position].getIcon();
-				
+
 				// Set desired piece to yellow
 				board[ring][position].setIcon(yellowPiece);
 			}
@@ -1261,15 +1353,17 @@ public class GameGUI implements GameInterface {
 	}
 
 	@Override
-	public boolean isGameReset() {		
+	public boolean isGameReset() {
 		return isGameReset;
 	}
 
 	public void setFlyMode(int playerID, boolean setMode) {
 		if (setMode) {
-			flyModeBanners[playerID].setText("<html><center>FLY MODE<br>ENABLED");
+			flyModeBanners[playerID]
+					.setText("<html><center>FLY MODE<br>ENABLED");
 		} else {
 			flyModeBanners[playerID].setText("");
 		}
 	}
+
 }

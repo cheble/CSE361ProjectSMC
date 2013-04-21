@@ -72,6 +72,7 @@ public class GameInstance{
 		players[1].setName(boardInterface.getName(1));
 		
 		
+		
 		System.out.println("Game Started");
 		if(isGameOver() < 0){
 			// PlacementPhase
