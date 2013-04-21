@@ -8,8 +8,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Random;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -1133,22 +1131,24 @@ public class GameGUI implements GameInterface {
 		menu.add(exit);
 
 	}
-
+	
+	
+	
 	public int[] positionSelect() {
 		clearSelections();
 		int[] passedPos = new int[2];
-		while (true) {
-			if (!isGameQuit && (isTurnSkipUndo() == 0) && !isGameReset) {
-				passedPos[1] = selectedPos[1];
-				passedPos[0] = selectedPos[0];
-				if (passedPos[0] != -1 && passedPos[1] != -1) {
-					break;
-				}
-			} else {
-				return new int[] {-1, -1};
+		do {
+			passedPos[1] = selectedPos[1];
+			passedPos[0] = selectedPos[0];
+			if (passedPos[0] != -1 && passedPos[1] != -1) {
+				break;
 			}
+		} while (!isGameQuit && (isTurnSkipUndo() == 0) && !isGameReset);
+		if (passedPos[0] == -1 || passedPos[1] == -1) {
+			return new int[] {-1,-1};
+		} else {
+			return passedPos;
 		}
-		return passedPos;
 	}
 
 	public boolean isGameQuit() {
@@ -1240,21 +1240,23 @@ public class GameGUI implements GameInterface {
 
 	public void setPosSelected(int ring, int position) {
 		// Check to see if yellow piece already on board
-		if(!isGameQuit){
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 8; j++) {
-					if (board[i][j].equals(yellowPiece)) {
-						// Set it back to what it was before and break
-						board[i][j].equals(beforeYellow);
-						break;
+		if(ring != -1 && position != -1){
+			if(!isGameQuit){
+				for (int i = 0; i < 3; i++) {
+					for (int j = 0; j < 8; j++) {
+						if (board[i][j].equals(yellowPiece)) {
+							// Set it back to what it was before and break
+							board[i][j].equals(beforeYellow);
+							break;
+						}
 					}
 				}
+				// Save desired position's piece color
+				beforeYellow = (ImageIcon) board[ring][position].getIcon();
+				
+				// Set desired piece to yellow
+				board[ring][position].setIcon(yellowPiece);
 			}
-			// Save desired position's piece color
-			beforeYellow = (ImageIcon) board[ring][position].getIcon();
-			
-			// Set desired piece to yellow
-			board[ring][position].setIcon(yellowPiece);
 		}
 	}
 
