@@ -35,6 +35,7 @@ public class Main {
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.black);
 		
+		
 
 		// Forever until user quit on close
 		while (true) {
