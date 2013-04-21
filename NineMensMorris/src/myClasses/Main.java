@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.swing.*;
 import javax.swing.JFrame;
 
 public class Main {
@@ -35,12 +34,11 @@ public class Main {
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.black);
-		
 
 		// Forever until user quit on close
 		while (true) {
 			// Instantiate Menu Gui
-			menu = new MenuGUI(contentPane);
+			menu = new MenuGUI(contentPane, lbLoc);
 			// Wait Until Game Ready
 			while (true) {
 				// Cause it doesn't work with out print statement? wtf...
@@ -55,7 +53,7 @@ public class Main {
 				// Play Game
 				playGame();
 				// Game over so open Menu.
-				menu = new MenuGUI(contentPane, options);
+				menu = new MenuGUI(contentPane, options, lbLoc);
 				// Wait Until Game Ready
 				while (true) {
 					// Cause it doesn't work with out print statement? wtf...
@@ -100,43 +98,48 @@ public class Main {
 	}
 
 	public static void checkDirectory() {
+		String directoryPath;
+		String leaderboardPath;
 		if (System.getProperty("os.name").equals("Mac OS X")) {
-			String directoryPath = System.getProperty("user.home")
+			directoryPath = System.getProperty("user.home")
 					+ "/Library/Application Support/NineMensMorris";
-			String leaderboardPath = directoryPath + "/leaderboard.txt";
-			File dir = new File(directoryPath);
-			File file = new File(leaderboardPath);
-			// Create directory if it doesn't already exist
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
-			// Create file if it doesn't already exist
-			if (!file.exists()) {
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					System.out.println("File couldn't be created");
-				}
-				FileWriter fw;
-				try {
-					fw = new FileWriter(leaderboardPath);
-				} catch (IOException e) {
-					System.out.println("Could not open FileWriter");
-					fw = null;
-				}
-				PrintWriter pw = new PrintWriter(fw);
-				pw.print("0");
-				pw.close();
-				try {
-					fw.close();
-				} catch (IOException e) {
-					System.out.println("Could not Close FileWriter");
-				}
-			}
-
+			leaderboardPath = directoryPath + "/leaderboard.txt";
+			
 		} else {
-			System.out.println("Wrong OS");
+			directoryPath = "files";
+			leaderboardPath = "files/leaderboard.txt";
 		}
+		lbLoc = leaderboardPath;
+		File dir = new File(directoryPath);
+		File file = new File(leaderboardPath);
+		// Create directory if it doesn't already exist
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		// Create file if it doesn't already exist
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("File couldn't be created");
+			}
+			FileWriter fw;
+			try {
+				fw = new FileWriter(leaderboardPath);
+			} catch (IOException e) {
+				System.out.println("Could not open FileWriter");
+				fw = null;
+			}
+			PrintWriter pw = new PrintWriter(fw);
+			pw.print("0");
+			pw.close();
+			try {
+				fw.close();
+			} catch (IOException e) {
+				System.out.println("Could not Close FileWriter");
+			}
+		}
+
 
 	}
 

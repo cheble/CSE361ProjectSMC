@@ -1156,23 +1156,7 @@ public class MenuGUI implements MenuInterface {
 		nameOne.setFont(coalition.deriveFont((float) 30));
 		nameOne.setVisible(true);
 		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
-		nameOne.addKeyListener(new KeyListener () {
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {				
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				if(nameOne.getText().length()>=8) {
-					nameOne.setText(nameOne.getText().substring(0, 7));
-			    }
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {				
-			}
-		});
+		nameOne.setText("");
 		info.add(nameOne);
 
 		final JTextField nameTwo;
@@ -1251,6 +1235,9 @@ public class MenuGUI implements MenuInterface {
 
 						// Remove Layered Pane
 						contentPane.getContentPane().remove(layeredPane);
+						
+						// Set isGameReady
+						isGameReady = true;
 					}
 				} else {
 					if (nameOne.getText().length() != 0
@@ -1261,11 +1248,13 @@ public class MenuGUI implements MenuInterface {
 
 						// Remove Layered Pane
 						contentPane.getContentPane().remove(layeredPane);
+						
+						// Set isGameReady
+						isGameReady = true;
 					}
 				}
 
-				// Set isGameReady
-				isGameReady = true;
+				
 			}
 		});
 
