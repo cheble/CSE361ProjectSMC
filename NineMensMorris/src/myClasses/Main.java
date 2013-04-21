@@ -1,5 +1,6 @@
 package myClasses;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 public class Main {
 	private static GameInstance game;
@@ -18,13 +18,13 @@ public class Main {
 	private static MenuInterface menu;
 	private static Player winner;
 	private static Options options;
-	private static String lbLoc = System.getProperty("user.home")
-			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
-//	private static String lbLoc = "files/leaderboard.txt";
+//	private static String lbLoc = System.getProperty("user.home")
+//			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
+	private static String lbLoc = "files/leaderboard.txt";
 
 	public static void main(String[] args) {
 		// Check Directory Location
-		checkDirectory();
+//		checkDirectory();
 
 		// Initialize contentPane
 		contentPane = new JFrame();
@@ -33,13 +33,13 @@ public class Main {
 		contentPane.setResizable(false);
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
+		contentPane.setBackground(Color.black);
 		
 
 		// Forever until user quit on close
 		while (true) {
 			// Instantiate Menu Gui
 			menu = new MenuGUI(contentPane);
-			SwingUtilities.invokeLater((MenuGUI)menu);
 			// Wait Until Game Ready
 			while (true) {
 				// Cause it doesn't work with out print statement? wtf...
@@ -55,7 +55,6 @@ public class Main {
 				playGame();
 				// Game over so open Menu.
 				menu = new MenuGUI(contentPane, options);
-				SwingUtilities.invokeLater((MenuGUI)menu);
 				// Wait Until Game Ready
 				while (true) {
 					// Cause it doesn't work with out print statement? wtf...
