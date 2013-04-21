@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -18,7 +20,9 @@ import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -1075,6 +1079,7 @@ public class MenuGUI implements MenuInterface {
 		table.setForeground(Color.white);
 		table.setVisible(true);
 		table.setOpaque(false);
+		table.setEnabled(false);
 		((DefaultTableCellRenderer) table.getDefaultRenderer(Object.class))
 				.setOpaque(false);
 		table.setRowHeight(35);
@@ -1151,6 +1156,23 @@ public class MenuGUI implements MenuInterface {
 		nameOne.setFont(coalition.deriveFont((float) 30));
 		nameOne.setVisible(true);
 		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
+		nameOne.addKeyListener(new KeyListener () {
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(nameOne.getText().length()>=8) {
+					nameOne.setText(nameOne.getText().substring(0, 7));
+			    }
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {				
+			}
+		});
 		info.add(nameOne);
 
 		final JTextField nameTwo;
@@ -1172,6 +1194,23 @@ public class MenuGUI implements MenuInterface {
 			nameTwo.setFont(coalition.deriveFont((float) 30));
 			nameTwo.setVisible(true);
 			nameTwo.setHorizontalAlignment(SwingConstants.CENTER);
+			nameTwo.addKeyListener(new KeyListener () {
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {				
+				}
+
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					if(nameTwo.getText().length()>=8) {
+						nameTwo.setText(nameTwo.getText().substring(0, 7));
+				    }
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {				
+				}
+			});
 			info.add(nameTwo);
 		} else {
 			nameTwo = null;
@@ -1203,8 +1242,8 @@ public class MenuGUI implements MenuInterface {
 					if (nameOne.getText().length() != 0) {
 						// Some names for the computer player just for fun
 						Random randomNum = new Random();
-						String[] pcNames = { "Bill", "Steve", "Berners-Lee",
-								"Turing", "von Neumann", "Wozniak" };
+						String[] pcNames = { "Bill", "Steve", "Brick",
+								"Turing", "Mario", "Wozniak" };
 
 						// Set Names
 						myOptions.setPlayerNames(nameOne.getText(),

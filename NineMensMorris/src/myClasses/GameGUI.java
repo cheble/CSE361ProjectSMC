@@ -1047,7 +1047,10 @@ public class GameGUI implements GameInterface {
 		congrats.setOpaque(false);
 		congrats.setHorizontalAlignment(SwingConstants.CENTER);
 		menu.add(congrats);
-
+		//used to get congrats to show
+		menu.setEnabled(false);
+		menu.setEnabled(true);
+		
 		// Restart Button add to Menu
 		final JButton restart = new JButton("RESTART");
 		restart.addMouseListener(new MouseAdapter() {
@@ -1065,7 +1068,7 @@ public class GameGUI implements GameInterface {
 			public void mouseClicked(MouseEvent arg0) {
 				isGameReset = true;
 			}
-		});
+		});		
 		restart.setFont(coalition.deriveFont((float) 40));
 		restart.setForeground(Color.BLACK);
 		restart.setBounds(0, congrats.getY() + 135, menu.getWidth(), 65);
