@@ -1164,7 +1164,7 @@ public class GameGUI implements GameInterface {
 			public void mouseClicked(MouseEvent arg0) {
 				isGameReset = true;
 			}
-		});		
+		});
 		restart.setFont(coalition.deriveFont((float) 40));
 		restart.setForeground(Color.BLACK);
 		restart.setBounds(0, congrats.getY() + 135, menu.getWidth(), 65);
