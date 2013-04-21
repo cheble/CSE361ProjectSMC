@@ -265,5 +265,41 @@ public class GameBoard {
 	public Piece[][] getBoard() {
 		return board;
 	}
+	public boolean isMovePossible(Player player){
+		//Go through each piece on board
+		for(int i=0; i<=2; i++){
+			for(int j=0; j<=7; j++){
+				//check if piece is at position
+				if(board[i][j] == null){
+					//go to the next position
+				}
+				//check if piece is owned by player
+				else if(board[i][j].getOwner() == player){
+					//check if positions on either side in same square are open
+					if(board[i][(j+1) % 8] == null || board[i][(j+7) % 8] == null){
+						return true;
+					}
+					// check if a middle piece is selected
+					if(j % 2 != 0){
+						//check if piece can change squares
+						if((i % 2) == 0 ){
+							// it's on the outer or the inner most square
+							// so only need to check if it can go to the middle square
+							if (board[1][j] == null){
+								return true;
+							}
+						}
+						else {
+							// otherwise it's in the middle and have to check either side.
+							if (board[0][j] == null || board[2][j] == null){
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}	
+		return false;
+	}
 
 }

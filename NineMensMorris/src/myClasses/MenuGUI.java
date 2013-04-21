@@ -56,7 +56,8 @@ public class MenuGUI implements MenuInterface {
 			+ "OF THIS PHASE IS TO CREATE MILLS AND REMOVE THE<br>"
 			+ "OPPONENT'S PIECES. ONCE A MILL HAS BEEN FORMED, THE<br>"
 			+ "PLAYER CAN REMOVE ANY OF THE OPPOSING PLAYER'S PIECES<br>"
-			+ "EXCEPT ONE THAT IS IN A MILL.";
+			+ "EXCEPT ONE THAT IS IN A MILL. IF A PLAYER BECOMES<br>"
+			+ "TRAPPED, THEIR TURN IS SKIPPED UNTIL THEY CAN MOVE.";
 	private static final String flying = "<html><center>FLYING MODE</center><br>"
 			+ "THE FLYING MODE BEGINS AT EITHER 3 OR 4 (SPECIFIED<br>"
 			+ "IN THE MENU WHERE IT CAN BE TURNED OFF AS WELL).<br>"
@@ -95,10 +96,11 @@ public class MenuGUI implements MenuInterface {
 	// + "/Library/Application Support/NineMensMorris/leaderboard.txt";
 	private String lbLoc = "files/leaderboard.txt";
 
-	public MenuGUI(JFrame contentPane) {
+	public MenuGUI(JFrame contentPane, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
 		this.myOptions = new Options();
+		lbLoc = leaderboardLocation;
 		isGameReady = false;
 		slideNum = 1;
 		flyMode = 1;
@@ -138,10 +140,11 @@ public class MenuGUI implements MenuInterface {
 
 	}
 
-	public MenuGUI(JFrame contentPane, Options lastOptions) {
+	public MenuGUI(JFrame contentPane, Options lastOptions, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
 		this.myOptions = new Options();
+		lbLoc = leaderboardLocation;
 		isGameReady = false;
 		slideNum = 1;
 		flyMode = lastOptions.getFlyRule();
