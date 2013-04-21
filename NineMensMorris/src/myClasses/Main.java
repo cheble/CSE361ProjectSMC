@@ -1,5 +1,6 @@
 package myClasses;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,9 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.swing.*;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 public class Main {
 	private static GameInstance game;
@@ -19,13 +18,13 @@ public class Main {
 	private static MenuInterface menu;
 	private static Player winner;
 	private static Options options;
-	private static String lbLoc = System.getProperty("user.home")
-			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
-//	private static String lbLoc = "files/leaderboard.txt";
+//	private static String lbLoc = System.getProperty("user.home")
+//			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
+	private static String lbLoc = "files/leaderboard.txt";
 
 	public static void main(String[] args) {
 		// Check Directory Location
-		checkDirectory();
+//		checkDirectory();
 
 		// Initialize contentPane
 		contentPane = new JFrame();
@@ -34,13 +33,13 @@ public class Main {
 		contentPane.setResizable(false);
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
-		
+		contentPane.setBackground(Color.black);
+		checkDirectory();
 
 		// Forever until user quit on close
 		while (true) {
 			// Instantiate Menu Gui
-			menu = new MenuGUI(contentPane);
-			SwingUtilities.invokeLater((MenuGUI)menu);
+			menu = new MenuGUI(contentPane, lbLoc);
 			// Wait Until Game Ready
 			while (true) {
 				// Cause it doesn't work with out print statement? wtf...
@@ -55,8 +54,7 @@ public class Main {
 				// Play Game
 				playGame();
 				// Game over so open Menu.
-				menu = new MenuGUI(contentPane, options);
-				SwingUtilities.invokeLater((MenuGUI)menu);
+				menu = new MenuGUI(contentPane, options, lbLoc);
 				// Wait Until Game Ready
 				while (true) {
 					// Cause it doesn't work with out print statement? wtf...
@@ -101,43 +99,48 @@ public class Main {
 	}
 
 	public static void checkDirectory() {
+		String directoryPath;
+		String leaderboardPath;
 		if (System.getProperty("os.name").equals("Mac OS X")) {
-			String directoryPath = System.getProperty("user.home")
+			directoryPath = System.getProperty("user.home")
 					+ "/Library/Application Support/NineMensMorris";
-			String leaderboardPath = directoryPath + "/leaderboard.txt";
-			File dir = new File(directoryPath);
-			File file = new File(leaderboardPath);
-			// Create directory if it doesn't already exist
-			if (!dir.exists()) {
-				dir.mkdir();
-			}
-			// Create file if it doesn't already exist
-			if (!file.exists()) {
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					System.out.println("File couldn't be created");
-				}
-				FileWriter fw;
-				try {
-					fw = new FileWriter(leaderboardPath);
-				} catch (IOException e) {
-					System.out.println("Could not open FileWriter");
-					fw = null;
-				}
-				PrintWriter pw = new PrintWriter(fw);
-				pw.print("0");
-				pw.close();
-				try {
-					fw.close();
-				} catch (IOException e) {
-					System.out.println("Could not Close FileWriter");
-				}
-			}
-
+			leaderboardPath = directoryPath + "/leaderboard.txt";
+			
 		} else {
-			System.out.println("Wrong OS");
+			directoryPath = "files";
+			leaderboardPath = "files/leaderboard.txt";
 		}
+		lbLoc = leaderboardPath;
+		File dir = new File(directoryPath);
+		File file = new File(leaderboardPath);
+		// Create directory if it doesn't already exist
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		// Create file if it doesn't already exist
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("File couldn't be created");
+			}
+			FileWriter fw;
+			try {
+				fw = new FileWriter(leaderboardPath);
+			} catch (IOException e) {
+				System.out.println("Could not open FileWriter");
+				fw = null;
+			}
+			PrintWriter pw = new PrintWriter(fw);
+			pw.print("0");
+			pw.close();
+			try {
+				fw.close();
+			} catch (IOException e) {
+				System.out.println("Could not Close FileWriter");
+			}
+		}
+
 
 	}
 

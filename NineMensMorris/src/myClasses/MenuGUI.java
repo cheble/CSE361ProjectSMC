@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class MenuGUI implements MenuInterface, Runnable {
+public class MenuGUI implements MenuInterface {
 
 	// Static
 	private static final String basics = "<html><center>BASICS</center><br>"
@@ -85,22 +85,19 @@ public class MenuGUI implements MenuInterface, Runnable {
 	// Image Locations
 	// private String backL = "src/images/backgroundLarge.jpg";
 	private String backS = "images/backgroundSmall.jpg";
-	private String loading = "images/loading.jpg";
 	private ImageIcon off = new ImageIcon(getClass().getClassLoader()
 			.getResource("images/off.png"));
 	private ImageIcon on = new ImageIcon(getClass().getClassLoader()
 			.getResource("images/on.png"));
 
 	// Leaderboard
-	private static String lbLoc = System.getProperty("user.home")
-			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
+	private String lbLoc = "files/leaderboard.txt";
 
-	// private String lbLoc = "files/leaderboard.txt";
-
-	public MenuGUI(JFrame contentPane) {
+	public MenuGUI(JFrame contentPane, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
 		this.myOptions = new Options();
+		lbLoc = leaderboardLocation;
 		isGameReady = false;
 		slideNum = 1;
 		flyMode = 1;
@@ -108,6 +105,16 @@ public class MenuGUI implements MenuInterface, Runnable {
 		timer = false;
 		resolution = false;
 		components = new ArrayList<Component>();
+		loadingThread = new Thread() {
+			public void run() {
+				drawMenu();
+				drawOptions();
+				for (int i = 0; i < components.size(); i++) {
+					while (!components.get(i).isShowing())
+						;
+				}
+			}
+		};
 
 		// Setup Custom Font
 		try {
@@ -129,16 +136,27 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 	}
 
-	public MenuGUI(JFrame contentPane, Options lastOptions) {
+	public MenuGUI(JFrame contentPane, Options lastOptions, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
 		this.myOptions = new Options();
+		lbLoc = leaderboardLocation;
 		isGameReady = false;
 		slideNum = 1;
 		flyMode = lastOptions.getFlyRule();
 		timer = lastOptions.getTimer();
 		resolution = lastOptions.getGameRes();
 		components = new ArrayList<Component>();
+		loadingThread = new Thread() {
+			public void run() {
+				drawMenu();
+				drawOptions();
+				for (int i = 0; i < components.size(); i++) {
+					while (!components.get(i).isShowing())
+						;
+				}
+			}
+		};
 
 		// Setup Custom Font
 		try {
@@ -159,49 +177,31 @@ public class MenuGUI implements MenuInterface, Runnable {
 	}
 
 	public void loading() {
-		// // Create Background JPanel & Add to LayeredPane on Layer 1
-		JPanel background;
-		try {
-			background = new JPanelWithBackground(loading);
-		} catch (IOException e) {
-			e.printStackTrace();
-			background = null;
-		}
-		background.setName("loading");
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		// Create Background JPanel & Add to LayeredPane on Layer 1
+		JPanel background = new JPanel();
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
-		contentPane.add(background);
-		contentPane.repaint();
+		background.setBackground(Color.black);
+		background.setName("Background");
+		contentPane.getContentPane().add(background);
+		contentPane.getContentPane().repaint();
 
-		drawMenu();
-		// Remove all components but the loading screen
-		for (int i = 0; i < contentPane.getContentPane().getComponentCount(); i++) {
-			if (!(contentPane.getContentPane().getComponents()[i].getName() == null)) {
-				contentPane.getContentPane().remove(
-						contentPane.getContentPane().getComponents()[i]);
-			}
-		}
+		JLabel loadingText = new JLabel("<html><center>LOADING..");
+		loadingText.setFont(coalition.deriveFont((float) 100));
+		loadingText.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
+		loadingText.setForeground(Color.gray);
+		loadingText.setVisible(true);
+		loadingText.setOpaque(false);
+		loadingText.setName("loadingText");
+		loadingText.setHorizontalAlignment(SwingConstants.CENTER);
+		loadingText.setVerticalAlignment(SwingConstants.CENTER);
+		background.add(loadingText);
 		
-		drawOptions();
-		// Remove all components but the loading screen
-		for (int i = 0; i < contentPane.getContentPane().getComponentCount(); i++) {
-			if (!(contentPane.getContentPane().getComponents()[i].getName() == null)) {
-				contentPane.getContentPane().remove(
-						contentPane.getContentPane().getComponents()[i]);
-			}
-		}
-		
-		loadingThread = new Thread() {
-			public void run() {
-				for (int i = 0; i < components.size(); i++) {
-					while (!components.get(i).isShowing());
-				}
-			}
-		};
 		loadingThread.start();
-
-		while (loadingThread.isAlive());
+		while (loadingThread.isAlive())
+			;
 
 		contentPane.getContentPane().removeAll();
 		drawMenu();
@@ -210,10 +210,10 @@ public class MenuGUI implements MenuInterface, Runnable {
 	public void drawMenu() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
-		contentPane.add(layeredPane);
+		contentPane.getContentPane().add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
@@ -223,8 +223,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			e.printStackTrace();
 			background = null;
 		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		components.add(background);
 		layeredPane.add(background);
@@ -233,9 +233,11 @@ public class MenuGUI implements MenuInterface, Runnable {
 		// Create Buttons JPanel & Add to LayerdPane on Layer 1
 		JPanel buttons = new JPanel();
 		buttons.setOpaque(false);
-		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		buttons.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
+		buttons.setName("Buttons");
 		components.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
@@ -245,7 +247,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
-		title.setBounds(0, 86, contentPane.getWidth(), 127);
+		title.setBounds(0, 86, contentPane.getContentPane().getWidth(), 127);
 		components.add(title);
 		buttons.add(title);
 
@@ -264,19 +266,20 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Clear contentPane
-				contentPane.remove(layeredPane);
+				// Clear contentPane.getContentPane()
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Update Options
 				myOptions.setComputerPlayer(true);
 
 				// Get playerNames
-				playerNames(1);
+				drawPlayerNames(1);
 			}
 		});
 		hvc.setFont(coalition.deriveFont((float) 40));
 		hvc.setForeground(Color.WHITE);
-		hvc.setBounds(0, title.getY() + 145, contentPane.getWidth(), 65);
+		hvc.setBounds(0, title.getY() + 145, contentPane.getContentPane()
+				.getWidth(), 65);
 		hvc.setOpaque(false);
 		hvc.setContentAreaFilled(false);
 		hvc.setBorderPainted(false);
@@ -298,20 +301,21 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Clear contentPane
-				contentPane.remove(layeredPane);
+				// Clear contentPane.getContentPane()
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Update Options
 				myOptions.setComputerPlayer(false);
 
 				// Get playerNames
-				playerNames(2);
+				drawPlayerNames(2);
 
 			}
 		});
 		hvh.setFont(coalition.deriveFont((float) 40));
 		hvh.setForeground(Color.WHITE);
-		hvh.setBounds(0, hvc.getY() + 70, contentPane.getWidth(), 65);
+		hvh.setBounds(0, hvc.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		hvh.setOpaque(false);
 		hvh.setContentAreaFilled(false);
 		hvh.setBorderPainted(false);
@@ -333,8 +337,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// Clear contentPane
-				contentPane.remove(layeredPane);
+				// Clear contentPane.getContentPane()
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Draw the Leaderboards
 				drawLeaderboards();
@@ -342,7 +346,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		lb.setFont(coalition.deriveFont((float) 40));
 		lb.setForeground(Color.WHITE);
-		lb.setBounds(0, hvh.getY() + 70, contentPane.getWidth(), 65);
+		lb.setBounds(0, hvh.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		lb.setOpaque(false);
 		lb.setContentAreaFilled(false);
 		lb.setBorderPainted(false);
@@ -365,7 +370,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Remove Current Screen
-				contentPane.remove(layeredPane);
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Open Options Menu
 				drawOptions();
@@ -373,7 +378,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		options.setFont(coalition.deriveFont((float) 40));
 		options.setForeground(Color.WHITE);
-		options.setBounds(0, lb.getY() + 70, contentPane.getWidth(), 65);
+		options.setBounds(0, lb.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		options.setOpaque(false);
 		options.setContentAreaFilled(false);
 		options.setBorderPainted(false);
@@ -396,28 +402,30 @@ public class MenuGUI implements MenuInterface, Runnable {
 			@SuppressWarnings("static-access")
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				System.exit(contentPane.ABORT);
+				System.exit(contentPane.getContentPane().ABORT);
 			}
 		});
 		exit.setFont(coalition.deriveFont((float) 40));
 		exit.setForeground(Color.WHITE);
-		exit.setBounds(0, options.getY() + 70, contentPane.getWidth(), 65);
+		exit.setBounds(0, options.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		exit.setOpaque(false);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		components.add(exit);
 		buttons.add(exit);
 
-		contentPane.repaint();
+		maintainArray();
+		contentPane.getContentPane().repaint();
 	}
 
 	public void drawOptions() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
-		this.contentPane.add(layeredPane);
+		this.contentPane.getContentPane().add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
@@ -427,8 +435,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			e.printStackTrace();
 			background = null;
 		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		background.setLayout(null);
 		components.add(background);
@@ -438,7 +446,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		// Create Buttons JPanel & Add to LayerdPane on Layer 2
 		JPanel buttons = new JPanel();
 		buttons.setOpaque(false);
-		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		buttons.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
 		components.add(buttons);
@@ -450,7 +459,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
-		title.setBounds(0, 86, contentPane.getWidth(), 127);
+		title.setBounds(0, 86, contentPane.getContentPane().getWidth(), 127);
 		components.add(title);
 		buttons.add(title);
 
@@ -481,7 +490,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		howTo.setFont(coalition.deriveFont((float) 40));
 		howTo.setForeground(Color.WHITE);
-		howTo.setBounds(0, title.getY() + 145, contentPane.getWidth(), 65);
+		howTo.setBounds(0, title.getY() + 145, contentPane.getContentPane()
+				.getWidth(), 65);
 		howTo.setOpaque(false);
 		howTo.setContentAreaFilled(false);
 		howTo.setBorderPainted(false);
@@ -493,7 +503,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		fly.setForeground(Color.WHITE);
 		fly.setHorizontalAlignment(SwingConstants.CENTER);
 		fly.setFont(coalition.deriveFont((float) 40));
-		fly.setBounds(0, howTo.getY() + 70, contentPane.getWidth(), 65);
+		fly.setBounds(0, howTo.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		components.add(fly);
 		buttons.add(fly);
 
@@ -575,7 +586,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		timerTitle.setForeground(Color.WHITE);
 		timerTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		timerTitle.setFont(coalition.deriveFont((float) 40));
-		timerTitle.setBounds(0, fly.getY() + 70, contentPane.getWidth(), 65);
+		timerTitle.setBounds(0, fly.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		components.add(timerTitle);
 		buttons.add(timerTitle);
 
@@ -631,7 +643,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		res.setForeground(Color.WHITE);
 		res.setHorizontalAlignment(SwingConstants.CENTER);
 		res.setFont(coalition.deriveFont((float) 40));
-		res.setBounds(0, timerTitle.getY() + 70, contentPane.getWidth(), 65);
+		res.setBounds(0, timerTitle.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		components.add(res);
 		buttons.add(res);
 
@@ -698,7 +711,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Remove Current Screen
-				contentPane.remove(layeredPane);
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Open Main Menu
 				drawMenu();
@@ -706,7 +719,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		main.setFont(coalition.deriveFont((float) 40));
 		main.setForeground(Color.WHITE);
-		main.setBounds(0, res.getY() + 70, contentPane.getWidth(), 65);
+		main.setBounds(0, res.getY() + 70, contentPane.getContentPane()
+				.getWidth(), 65);
 		main.setOpaque(false);
 		main.setContentAreaFilled(false);
 		main.setBorderPainted(false);
@@ -732,7 +746,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			rOff.setIcon(on);
 		}
 
-		contentPane.repaint();
+		maintainArray();
+		contentPane.getContentPane().repaint();
 	}
 
 	public void drawHowTo(final JPanel panel) {
@@ -742,11 +757,12 @@ public class MenuGUI implements MenuInterface, Runnable {
 
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
 		panel.setOpaque(true);
-		panel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		panel.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		panel.setLayout(null);
 		panel.setVisible(true);
 		panel.add(layeredPane);
@@ -759,15 +775,16 @@ public class MenuGUI implements MenuInterface, Runnable {
 			e.printStackTrace();
 			background = null;
 		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
 		// Create Glass Panel and Add to LayeredPane on Layer 2
 		final JPanel glass = new JPanel();
-		glass.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		glass.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		glass.setOpaque(false);
 		glass.setVisible(true);
 		glass.addMouseListener(new MouseAdapter() {
@@ -783,7 +800,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
 		buttons.setOpaque(false);
-		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		buttons.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		buttons.setVisible(true);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 3);
@@ -793,14 +811,15 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
-		title.setBounds(0, 60, contentPane.getWidth(), 125);
+		title.setBounds(0, 60, contentPane.getContentPane().getWidth(), 125);
 		buttons.add(title);
 
 		// Add previous button to JPanel
 		final JButton previous = new JButton("PREVIOUS");
 		previous.setFont(coalition.deriveFont((float) 40));
 		previous.setForeground(Color.WHITE);
-		previous.setBounds(20, contentPane.getHeight() - 100, 325, 65);
+		previous.setBounds(20, contentPane.getContentPane().getHeight() - 100,
+				325, 65);
 		previous.setOpaque(false);
 		previous.setContentAreaFilled(false);
 		previous.setBorderPainted(false);
@@ -827,8 +846,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		back.setFont(coalition.deriveFont((float) 40));
 		back.setForeground(Color.WHITE);
-		back.setBounds((contentPane.getWidth() / 2) - 100,
-				contentPane.getHeight() - 100, 200, 65);
+		back.setBounds((contentPane.getContentPane().getWidth() / 2) - 100,
+				contentPane.getContentPane().getHeight() - 100, 200, 65);
 		back.setOpaque(false);
 		back.setContentAreaFilled(false);
 		back.setBorderPainted(false);
@@ -838,8 +857,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		final JButton next = new JButton("NEXT");
 		next.setFont(coalition.deriveFont((float) 40));
 		next.setForeground(Color.WHITE);
-		next.setBounds(contentPane.getWidth() - 220,
-				contentPane.getHeight() - 100, 200, 65);
+		next.setBounds(contentPane.getContentPane().getWidth() - 220,
+				contentPane.getContentPane().getHeight() - 100, 200, 65);
 		next.setContentAreaFilled(false);
 		next.setBorderPainted(false);
 		buttons.add(next);
@@ -934,16 +953,16 @@ public class MenuGUI implements MenuInterface, Runnable {
 			}
 		});
 
-		contentPane.repaint();
+		contentPane.getContentPane().repaint();
 	}
 
 	public void drawLeaderboards() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
-		this.contentPane.add(layeredPane);
+		this.contentPane.getContentPane().add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
@@ -953,8 +972,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			e.printStackTrace();
 			background = null;
 		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
@@ -963,7 +982,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
 		buttons.setOpaque(false);
-		buttons.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		buttons.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		buttons.setVisible(true);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
@@ -973,7 +993,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 		title.setForeground(Color.LIGHT_GRAY);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
-		title.setBounds(0, 60, contentPane.getWidth(), 125);
+		title.setBounds(0, 60, contentPane.getContentPane().getWidth(), 125);
 		buttons.add(title);
 
 		// Add back button to JPanel
@@ -992,7 +1012,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Remove Current Screen
-				contentPane.remove(layeredPane);
+				contentPane.getContentPane().remove(layeredPane);
 
 				// Open Main Menu
 				drawMenu();
@@ -1000,8 +1020,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		});
 		back.setFont(coalition.deriveFont((float) 40));
 		back.setForeground(Color.WHITE);
-		back.setBounds((contentPane.getWidth() / 2) - 100,
-				contentPane.getHeight() - 100, 200, 65);
+		back.setBounds((contentPane.getContentPane().getWidth() / 2) - 100,
+				contentPane.getContentPane().getHeight() - 100, 200, 65);
 		back.setOpaque(false);
 		back.setContentAreaFilled(false);
 		back.setBorderPainted(false);
@@ -1059,7 +1079,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 				.setOpaque(false);
 		table.setRowHeight(35);
 		table.setFont(coalition.deriveFont((float) 30));
-		table.setBounds((contentPane.getWidth() / 2) - 400, 165, 800, 425);
+		table.setBounds((contentPane.getContentPane().getWidth() / 2) - 400,
+				165, 800, 425);
 		table.getColumn("NAME").setWidth(table.getWidth() / 2);
 		table.getColumn("TURN NUMBER").setWidth(table.getWidth() / 2);
 		table.setShowGrid(false);
@@ -1074,22 +1095,23 @@ public class MenuGUI implements MenuInterface, Runnable {
 		scroll.setOpaque(false);
 		scroll.getViewport().setOpaque(false);
 		scroll.setWheelScrollingEnabled(true);
-		scroll.setBounds(contentPane.getWidth() / 2 - 400, 165, 800, 425);
+		scroll.setBounds(contentPane.getContentPane().getWidth() / 2 - 400,
+				165, 800, 425);
 		scroll.setBorder(BorderFactory.createEmptyBorder());
 		buttons.add(scroll);
 
 		// Repaint
-		contentPane.repaint();
+		contentPane.getContentPane().repaint();
 
 	}
 
-	private void playerNames(final int numHumans) {
+	private void drawPlayerNames(final int numHumans) {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
-		contentPane.add(layeredPane);
+		contentPane.getContentPane().add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background;
@@ -1099,8 +1121,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 			e.printStackTrace();
 			background = null;
 		}
-		background.setBounds(0, 0, contentPane.getWidth(),
-				contentPane.getHeight());
+		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
@@ -1108,7 +1130,8 @@ public class MenuGUI implements MenuInterface, Runnable {
 		// Create info JPanel & Add to LayerdPane on Layer 2
 		JPanel info = new JPanel();
 		info.setOpaque(false);
-		info.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		info.setBounds(0, 0, contentPane.getContentPane().getWidth(),
+				contentPane.getContentPane().getHeight());
 		info.setVisible(true);
 		info.setLayout(null);
 		layeredPane.add(info);
@@ -1188,7 +1211,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 								pcNames[randomNum.nextInt(6)]);
 
 						// Remove Layered Pane
-						contentPane.remove(layeredPane);
+						contentPane.getContentPane().remove(layeredPane);
 					}
 				} else {
 					if (nameOne.getText().length() != 0
@@ -1198,7 +1221,7 @@ public class MenuGUI implements MenuInterface, Runnable {
 								nameTwo.getText());
 
 						// Remove Layered Pane
-						contentPane.remove(layeredPane);
+						contentPane.getContentPane().remove(layeredPane);
 					}
 				}
 
@@ -1226,12 +1249,12 @@ public class MenuGUI implements MenuInterface, Runnable {
 		return isGameReady;
 	}
 
-	@Override
-	public void run() {
-
-		// Draw Main Menu
-		drawMenu();
-
+	private void maintainArray() {
+		if (components.size() > 31) {
+			for (int i = 0; i < components.size() - 31; i++) {
+				components.remove(i);
+			}
+		}
 	}
 
 }
