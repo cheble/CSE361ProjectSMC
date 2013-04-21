@@ -34,7 +34,6 @@ public class Main {
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.black);
-		checkDirectory();
 
 		// Forever until user quit on close
 		while (true) {

@@ -75,7 +75,6 @@ public class MenuGUI implements MenuInterface {
 	private int flyMode;
 	private boolean timer;
 	private boolean resolution;
-	private boolean isLoaded;
 
 	// Custom Font
 	private Font coalition;
@@ -92,8 +91,6 @@ public class MenuGUI implements MenuInterface {
 			.getResource("images/on.png"));
 
 	// Leaderboard
-	// private static String lbLoc = System.getProperty("user.home")
-	// + "/Library/Application Support/NineMensMorris/leaderboard.txt";
 	private String lbLoc = "files/leaderboard.txt";
 
 	public MenuGUI(JFrame contentPane, String leaderboardLocation) {
@@ -108,7 +105,6 @@ public class MenuGUI implements MenuInterface {
 		timer = false;
 		resolution = false;
 		components = new ArrayList<Component>();
-		isLoaded = false;
 		loadingThread = new Thread() {
 			public void run() {
 				drawMenu();
@@ -177,7 +173,7 @@ public class MenuGUI implements MenuInterface {
 		}
 
 		// Begin Loading
-		drawMenu();
+		loading();
 	}
 
 	public void loading() {
@@ -202,12 +198,11 @@ public class MenuGUI implements MenuInterface {
 		loadingText.setHorizontalAlignment(SwingConstants.CENTER);
 		loadingText.setVerticalAlignment(SwingConstants.CENTER);
 		background.add(loadingText);
-
+		
 		loadingThread.start();
 		while (loadingThread.isAlive())
 			;
 
-		isLoaded = true;
 		contentPane.getContentPane().removeAll();
 		drawMenu();
 	}
@@ -218,8 +213,6 @@ public class MenuGUI implements MenuInterface {
 		layeredPane.setBounds(0, 0, contentPane.getContentPane().getWidth(),
 				contentPane.getContentPane().getHeight());
 		layeredPane.setLayout(null);
-		if (!isLoaded)
-			components.add(layeredPane);
 		contentPane.getContentPane().add(layeredPane);
 
 		// Create Background JPanel & Add to LayeredPane on Layer 1
@@ -233,8 +226,7 @@ public class MenuGUI implements MenuInterface {
 		background.setBounds(0, 0, contentPane.getContentPane().getWidth(),
 				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
-		if (!isLoaded)
-			components.add(background);
+		components.add(background);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
@@ -246,8 +238,7 @@ public class MenuGUI implements MenuInterface {
 		buttons.setVisible(true);
 		buttons.setLayout(null);
 		buttons.setName("Buttons");
-		if (!isLoaded)
-			components.add(buttons);
+		components.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
@@ -257,8 +248,7 @@ public class MenuGUI implements MenuInterface {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
 		title.setBounds(0, 86, contentPane.getContentPane().getWidth(), 127);
-		if (!isLoaded)
-			components.add(title);
+		components.add(title);
 		buttons.add(title);
 
 		// Create Human vs. Computer Button
@@ -293,8 +283,7 @@ public class MenuGUI implements MenuInterface {
 		hvc.setOpaque(false);
 		hvc.setContentAreaFilled(false);
 		hvc.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(hvc);
+		components.add(hvc);
 		buttons.add(hvc);
 
 		// Create Human vs. Human Button
@@ -330,8 +319,7 @@ public class MenuGUI implements MenuInterface {
 		hvh.setOpaque(false);
 		hvh.setContentAreaFilled(false);
 		hvh.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(hvh);
+		components.add(hvh);
 		buttons.add(hvh);
 
 		// Create Leaderboard Button
@@ -363,8 +351,7 @@ public class MenuGUI implements MenuInterface {
 		lb.setOpaque(false);
 		lb.setContentAreaFilled(false);
 		lb.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(lb);
+		components.add(lb);
 		buttons.add(lb);
 
 		// Create Options Button
@@ -396,8 +383,7 @@ public class MenuGUI implements MenuInterface {
 		options.setOpaque(false);
 		options.setContentAreaFilled(false);
 		options.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(options);
+		components.add(options);
 		buttons.add(options);
 
 		// Create Exit Button
@@ -426,10 +412,10 @@ public class MenuGUI implements MenuInterface {
 		exit.setOpaque(false);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(exit);
+		components.add(exit);
 		buttons.add(exit);
-		
+
+		maintainArray();
 		contentPane.getContentPane().repaint();
 	}
 
@@ -453,8 +439,7 @@ public class MenuGUI implements MenuInterface {
 				contentPane.getContentPane().getHeight());
 		background.setVisible(true);
 		background.setLayout(null);
-		if (!isLoaded)
-			components.add(background);
+		components.add(background);
 		layeredPane.add(background);
 		layeredPane.setLayer(background, 1);
 
@@ -465,8 +450,7 @@ public class MenuGUI implements MenuInterface {
 				contentPane.getContentPane().getHeight());
 		buttons.setVisible(true);
 		buttons.setLayout(null);
-		if (!isLoaded)
-			components.add(buttons);
+		components.add(buttons);
 		layeredPane.add(buttons);
 		layeredPane.setLayer(buttons, 2);
 
@@ -476,8 +460,7 @@ public class MenuGUI implements MenuInterface {
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setFont(coalition.deriveFont((float) 70));
 		title.setBounds(0, 86, contentPane.getContentPane().getWidth(), 127);
-		if (!isLoaded)
-			components.add(title);
+		components.add(title);
 		buttons.add(title);
 
 		// Create How to Play button & add to Layer
@@ -512,8 +495,7 @@ public class MenuGUI implements MenuInterface {
 		howTo.setOpaque(false);
 		howTo.setContentAreaFilled(false);
 		howTo.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(howTo);
+		components.add(howTo);
 		buttons.add(howTo);
 
 		// Create Fly Mode Title & add to Layer
@@ -523,8 +505,7 @@ public class MenuGUI implements MenuInterface {
 		fly.setFont(coalition.deriveFont((float) 40));
 		fly.setBounds(0, howTo.getY() + 70, contentPane.getContentPane()
 				.getWidth(), 65);
-		if (!isLoaded)
-			components.add(fly);
+		components.add(fly);
 		buttons.add(fly);
 
 		// Create Fly Mode 4 Radio button & add to Layer
@@ -534,8 +515,7 @@ public class MenuGUI implements MenuInterface {
 		fMThree.setOpaque(false);
 		fMThree.setContentAreaFilled(false);
 		fMThree.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(fMThree);
+		components.add(fMThree);
 		buttons.add(fMThree);
 
 		// Create Fly Mode 3 Radio button & add to Layer
@@ -545,8 +525,7 @@ public class MenuGUI implements MenuInterface {
 		fMFour.setOpaque(false);
 		fMFour.setContentAreaFilled(false);
 		fMFour.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(fMFour);
+		components.add(fMFour);
 		buttons.add(fMFour);
 
 		// Create Fly Mode Off Radio button & add to Layer
@@ -556,8 +535,7 @@ public class MenuGUI implements MenuInterface {
 		fMOff.setOpaque(false);
 		fMOff.setContentAreaFilled(false);
 		fMOff.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(fMOff);
+		components.add(fMOff);
 		buttons.add(fMOff);
 
 		// If Fly Mode buttons are clicked...
@@ -610,8 +588,7 @@ public class MenuGUI implements MenuInterface {
 		timerTitle.setFont(coalition.deriveFont((float) 40));
 		timerTitle.setBounds(0, fly.getY() + 70, contentPane.getContentPane()
 				.getWidth(), 65);
-		if (!isLoaded)
-			components.add(timerTitle);
+		components.add(timerTitle);
 		buttons.add(timerTitle);
 
 		// Create Timer On Radio button & add to Layer
@@ -621,8 +598,7 @@ public class MenuGUI implements MenuInterface {
 		tOn.setOpaque(false);
 		tOn.setContentAreaFilled(false);
 		tOn.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(tOn);
+		components.add(tOn);
 		buttons.add(tOn);
 
 		// Create Timer Off Radio button & add to Layer
@@ -632,8 +608,7 @@ public class MenuGUI implements MenuInterface {
 		tOff.setOpaque(false);
 		tOff.setContentAreaFilled(false);
 		tOff.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(tOff);
+		components.add(tOff);
 		buttons.add(tOff);
 
 		// If timer buttons are pressed...
@@ -670,8 +645,7 @@ public class MenuGUI implements MenuInterface {
 		res.setFont(coalition.deriveFont((float) 40));
 		res.setBounds(0, timerTitle.getY() + 70, contentPane.getContentPane()
 				.getWidth(), 65);
-		if (!isLoaded)
-			components.add(res);
+		components.add(res);
 		buttons.add(res);
 
 		// Create Timer On Radio button & add to Layer
@@ -681,8 +655,7 @@ public class MenuGUI implements MenuInterface {
 		rOn.setOpaque(false);
 		rOn.setContentAreaFilled(false);
 		rOn.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(rOn);
+		components.add(rOn);
 		buttons.add(rOn);
 
 		// Create Timer Off Radio button & add to Layer
@@ -692,8 +665,7 @@ public class MenuGUI implements MenuInterface {
 		rOff.setOpaque(false);
 		rOff.setContentAreaFilled(false);
 		rOff.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(rOff);
+		components.add(rOff);
 		buttons.add(rOff);
 
 		// If timer buttons are pressed...
@@ -752,8 +724,7 @@ public class MenuGUI implements MenuInterface {
 		main.setOpaque(false);
 		main.setContentAreaFilled(false);
 		main.setBorderPainted(false);
-		if (!isLoaded)
-			components.add(main);
+		components.add(main);
 		buttons.add(main);
 
 		// Set Default Settings for Options Menu
@@ -774,7 +745,8 @@ public class MenuGUI implements MenuInterface {
 		} else {
 			rOff.setIcon(on);
 		}
-		
+
+		maintainArray();
 		contentPane.getContentPane().repaint();
 	}
 
@@ -1179,7 +1151,6 @@ public class MenuGUI implements MenuInterface {
 		nameOne.setFont(coalition.deriveFont((float) 30));
 		nameOne.setVisible(true);
 		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
-		nameOne.setText("");
 		info.add(nameOne);
 
 		final JTextField nameTwo;
@@ -1201,7 +1172,6 @@ public class MenuGUI implements MenuInterface {
 			nameTwo.setFont(coalition.deriveFont((float) 30));
 			nameTwo.setVisible(true);
 			nameTwo.setHorizontalAlignment(SwingConstants.CENTER);
-			nameTwo.setText("");
 			info.add(nameTwo);
 		} else {
 			nameTwo = null;
@@ -1242,9 +1212,6 @@ public class MenuGUI implements MenuInterface {
 
 						// Remove Layered Pane
 						contentPane.getContentPane().remove(layeredPane);
-						
-						// Set isGameReady
-						isGameReady = true;
 					}
 				} else {
 					if (nameOne.getText().length() != 0
@@ -1255,13 +1222,11 @@ public class MenuGUI implements MenuInterface {
 
 						// Remove Layered Pane
 						contentPane.getContentPane().remove(layeredPane);
-						
-						// Set isGameReady
-						isGameReady = true;
 					}
 				}
 
-				
+				// Set isGameReady
+				isGameReady = true;
 			}
 		});
 
@@ -1282,6 +1247,14 @@ public class MenuGUI implements MenuInterface {
 	@Override
 	public boolean isGameReady() {
 		return isGameReady;
+	}
+
+	private void maintainArray() {
+		if (components.size() > 31) {
+			for (int i = 0; i < components.size() - 31; i++) {
+				components.remove(i);
+			}
+		}
 	}
 
 }
