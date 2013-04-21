@@ -89,7 +89,7 @@ public class GameInstance{
 			}	
 		} else {
 			gameStatus = isGameOver();
-		} 
+		}
 		// Clear contentPane
 		contentPane.getContentPane().removeAll();
 	}
@@ -163,117 +163,157 @@ public class GameInstance{
 	 * @param player
 	 */
 	public void playerTurnMove(int playerID) {
-		// loop through each piece owned by player and check isMovePossible() and if flymode is enabled , 
-		if (!myBoard.isMovePossible(players[playerID]) && !(myOptions.getFlyRule() != 3  
-				&& (((myOptions.getFlyRule() == 1) 
-						&& myBoard.piecesOnSide(currentPlayer) >= 6) 
-						|| ((myOptions.getFlyRule() == 2) 
-								&& myBoard.piecesOnSide(currentPlayer) >= 5)))){
-			//then skip turn they shouldn't have gotten trapped
-			currentPlayer = (currentPlayer+1) % 2;
-			System.out.println("player trapped");
-		} else 
-		{
-			int position[][] = {{-1, -1},{-1, -1}};		
-			// TODO implement undo somehow
-			
-			//old while loop conditions:
-	//		while (isGameOver() < 0 && ( position[0][0] == -1 || 
-	//				position[1][0] == -1 ||
-	//				!isMoveValid(position[0], position[1]) || 
-	//				myBoard.movePiece(position[0], position[1]) == -1)) {
-	
-			if(players[playerID].getIsHuman()){
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
-				while(isGameOver() < 0 && 
-						(position[0][0] == -1 || 
-						myBoard.getPiece(position[0]) == null ||
-						!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
-				{
-					position[0] = boardInterface.positionSelect();
-					if(boardInterface.isTurnSkipUndo() == 1){
-						System.out.println(boardInterface.isTurnSkipUndo());
-						currentPlayer = (currentPlayer+1) % 2;
-						passBoard();
-						return;
-					}
-				}
-				boardInterface.setPosSelected(position[0][0], position[0][1]);
-				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
-				while(isGameOver() < 0 && 
-						(position[1][0] == -1 ||
-						myBoard.getPiece(position[1]) != null ||
-						!isMoveValid(position[0], position[1]) ||
-						myBoard.movePiece(position[0], position[1]) == -1))
-				{
-					position[1] = boardInterface.positionSelect();
-					//Skip turn if button pressed
-					if(boardInterface.isTurnSkipUndo() == 1){
-						players[playerID].incrementNumMoves();
-						passBoard();
-						currentPlayer = (currentPlayer+1) % 2;
-						return;
-					}
-					//undo first selection if second selection is same piece
-					if(Arrays.equals(position[0], position[1])){
-						//restart move process
-						boardInterface.setBoard(myBoard);
-						return;
-					}else{
-						System.out.println("not equal");
-					}
-				}
-	
-	
-			} else {
-				//Computer AI
-				while(isGameOver() < 0 && 
+		//TODO loop through each piece owned by player and check isMovePossible(), then display if no moves are possible
+		
+		int position[][] = {{-1, -1},{-1, -1}};		
+		// TODO implement undo somehow
+		
+		//old while loop conditions:
+//		while (isGameOver() < 0 && ( position[0][0] == -1 || 
+//				position[1][0] == -1 ||
+//				!isMoveValid(position[0], position[1]) || 
+//				myBoard.movePiece(position[0], position[1]) == -1)) {
+
+		if(players[playerID].getIsHuman()){
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A PIECE");
+			while(isGameOver() < 0 && 
 					(position[0][0] == -1 || 
 					myBoard.getPiece(position[0]) == null ||
+					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID])))
+			{
+				position[0] = boardInterface.positionSelect();
+				if(boardInterface.isTurnSkipUndo() == 1){
+					System.out.println(boardInterface.isTurnSkipUndo());
+					currentPlayer = (currentPlayer+1) % 2;
+					passBoard();
+					return;
+				}
+			}
+			boardInterface.setPosSelected(position[0][0], position[0][1]);
+			boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
+			while(isGameOver() < 0 && 
+					(position[1][0] == -1 ||
+					myBoard.getPiece(position[1]) != null ||
 					!isMoveValid(position[0], position[1]) ||
 					myBoard.movePiece(position[0], position[1]) == -1))
-				{
-					position = players[playerID].movePiece();
+			{
+				position[1] = boardInterface.positionSelect();
+				//Skip turn if button pressed
+				if(boardInterface.isTurnSkipUndo() == 1){
+					players[playerID].incrementNumMoves();
+					passBoard();
+					currentPlayer = (currentPlayer+1) % 2;
+					return;
 				}
-	//			while(isGameOver() < 0 && 
-	//					(position[0][0] == -1 || 
-	//					myBoard.getPiece(position[0]) == null ||
-	//					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
-	//					!isMovePossible(position[0])))
-	//			{
-	//				position[0] = players[playerID].placePiece();
-	//			}
-	//			while(isGameOver() < 0 && 
-	//					(position[1][0] == -1 ||
-	//					myBoard.getPiece(position[0]) != null) ||
-	//					myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
-	//				position[1] = players[playerID].placePiece();
-	//				if(position[1][0] != -1){
-	//					break;
-	//				}
-	//			}
+				//undo first selection if second selection is same piece
+				if(Arrays.equals(position[0], position[1])){
+					//restart move process
+					boardInterface.setBoard(myBoard);
+					return;
+				}else{
+					System.out.println("not equal");
+				}
 			}
-			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
-			System.out.println("move accecpted");
-			//Increment number of moves for player
-			players[playerID].incrementNumMoves();
-			//check if move created a mill
-			System.out.println("is Mill?");
-	
-			if((isGameOver() < 0) && myBoard.isMill(position[1])){
-				System.out.println("it is");
-				passBoard();
-				System.out.println("board passed");
-				playerTake(playerID);
+
+
+		} else {
+			//Computer AI
+			while(isGameOver() < 0 && 
+				(position[0][0] == -1 || 
+				myBoard.getPiece(position[0]) == null ||
+				!isMoveValid(position[0], position[1]) ||
+				myBoard.movePiece(position[0], position[1]) == -1))
+			{
+				position = players[playerID].movePiece();
 			}
-			// pass the board to the gui
-			passBoard();
-			
-			//Change current player
-			currentPlayer = (currentPlayer+1) % 2;
+//			while(isGameOver() < 0 && 
+//					(position[0][0] == -1 || 
+//					myBoard.getPiece(position[0]) == null ||
+//					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
+//					!isMovePossible(position[0])))
+//			{
+//				position[0] = players[playerID].placePiece();
+//			}
+//			while(isGameOver() < 0 && 
+//					(position[1][0] == -1 ||
+//					myBoard.getPiece(position[0]) != null) ||
+//					myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
+//				position[1] = players[playerID].placePiece();
+//				if(position[1][0] != -1){
+//					break;
+//				}
+//			}
 		}
+		System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
+		System.out.println("move accecpted");
+		//Increment number of moves for player
+		players[playerID].incrementNumMoves();
+		//check if move created a mill
+		System.out.println("is Mill?");
+
+		if((isGameOver() < 0) && myBoard.isMill(position[1])){
+			System.out.println("it is");
+			passBoard();
+			System.out.println("board passed");
+			playerTake(playerID);
+		}
+		// pass the board to the gui
+		passBoard();
+		
+		//Change current player
+		currentPlayer = (currentPlayer+1) % 2;
 	}
-	
+	public boolean isMovePossible(int[] position){
+		int[] testPosition = new int[2] ;
+		boolean fly = false;
+		//if fly mode is on
+		if(myOptions.getFlyRule() != 3){
+			//check if fly mode has started for the player
+			if ((myOptions.getFlyRule() == 1) && myBoard.piecesOnSide(currentPlayer) >= 6){
+				fly = true;
+			}
+			else if ((myOptions.getFlyRule() == 2) && myBoard.piecesOnSide(currentPlayer) >= 5){
+				fly = true;
+			}
+		}
+		//check if fly mode has started for the player
+		if(!fly){
+			//fly mode is not enabled yet for player
+			//check if positions on either side in same square are open
+			testPosition[0] = position[0];
+			testPosition[1] = (position[1]+1)% 8;
+			if(myBoard.getPiece(testPosition) == null){
+				return true;
+			}
+			testPosition[1] = (position[1]+7)% 8;
+			if(myBoard.getPiece(testPosition) == null){
+				return true;
+			}						
+			//a middle piece is selected
+			if(position[1] % 2 != 0){
+				//check if piece can change squares
+				testPosition[1] = position[1];
+				if((position[0] % 2) == 0 ){
+					testPosition[0] = 1;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+				}
+				else {
+					testPosition[0] = 0;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+					testPosition[0] = 2;
+					if (myBoard.getPiece(testPosition) == null){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		return true;
+	}
 	public boolean isMoveValid(int[] position1, int[] position2) {
 		boolean fly = false;
 		//if fly mode is on

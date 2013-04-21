@@ -8,6 +8,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,8 +45,7 @@ public class GameGUI implements GameInterface {
 			+ "OF THIS PHASE IS TO CREATE MILLS AND REMOVE THE<br>"
 			+ "OPPONENT'S PIECES. ONCE A MILL HAS BEEN FORMED, THE<br>"
 			+ "PLAYER CAN REMOVE ANY OF THE OPPOSING PLAYER'S PIECES<br>"
-			+ "EXCEPT ONE THAT IS IN A MILL. IF A PLAYER BECOMES<br>"
-			+ "TRAPPED, THEIR TURN IS SKIPPED UNTIL THEY CAN MOVE.";
+			+ "EXCEPT ONE THAT IS IN A MILL.";
 	private static final String flying = "<html><center>FLYING MODE</center><br>"
 			+ "THE FLYING MODE BEGINS AT EITHER 3 OR 4 (SPECIFIED<br>"
 			+ "IN THE MENU WHERE IT CAN BE TURNED OFF AS WELL).<br>"
@@ -1240,7 +1240,7 @@ public class GameGUI implements GameInterface {
 
 	public void setPosSelected(int ring, int position) {
 		// Check to see if yellow piece already on board
-		if(!isGameQuit && !isGameReset){
+		if(!isGameQuit){
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 8; j++) {
 					if (board[i][j].equals(yellowPiece)) {
