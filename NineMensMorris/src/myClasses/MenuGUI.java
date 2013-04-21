@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -1151,6 +1153,23 @@ public class MenuGUI implements MenuInterface {
 		nameOne.setFont(coalition.deriveFont((float) 30));
 		nameOne.setVisible(true);
 		nameOne.setHorizontalAlignment(SwingConstants.CENTER);
+		nameOne.addKeyListener(new KeyListener () {
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(nameOne.getText().length()>=8) {
+					nameOne.setText(nameOne.getText().substring(0, 7));
+			    }
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {				
+			}
+		});
 		info.add(nameOne);
 
 		final JTextField nameTwo;
@@ -1172,6 +1191,23 @@ public class MenuGUI implements MenuInterface {
 			nameTwo.setFont(coalition.deriveFont((float) 30));
 			nameTwo.setVisible(true);
 			nameTwo.setHorizontalAlignment(SwingConstants.CENTER);
+			nameTwo.addKeyListener(new KeyListener () {
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {				
+				}
+
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					if(nameTwo.getText().length()>=8) {
+						nameTwo.setText(nameTwo.getText().substring(0, 7));
+				    }
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {				
+				}
+			});
 			info.add(nameTwo);
 		} else {
 			nameTwo = null;
