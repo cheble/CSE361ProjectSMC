@@ -246,6 +246,7 @@ public class GameInstance{
 					myBoard.movePiece(position[0], position[1]) == -1))
 				{
 					position = players[playerID].movePiece();
+					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
 				}
 	//			while(isGameOver() < 0 && 
 	//					(position[0][0] == -1 || 
@@ -377,7 +378,7 @@ public class GameInstance{
 			}
 		}
 		//else doesn't matter where it's placed and ownership is checked earlier
-		
+		//System.out.println(fly);
 		return true;
 	}
 

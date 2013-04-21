@@ -696,7 +696,7 @@ public class MenuGUI implements MenuInterface {
 				myOptions.setGameRes(false);
 			}
 		});
-
+		
 		// Create Main Menu button & add to Layer
 		final JButton main = new JButton("MAIN MENU");
 		main.addMouseListener(new MouseAdapter() {
@@ -748,6 +748,7 @@ public class MenuGUI implements MenuInterface {
 			rOff.setIcon(on);
 		}
 
+		
 		maintainArray();
 		contentPane.getContentPane().repaint();
 	}
@@ -1239,8 +1240,8 @@ public class MenuGUI implements MenuInterface {
 					if (nameOne.getText().length() != 0) {
 						// Some names for the computer player just for fun
 						Random randomNum = new Random();
-						String[] pcNames = { "Bill", "Steve", "Berners-Lee",
-								"Turing", "von Neumann", "Wozniak" };
+						String[] pcNames = { "Bill", "Steve", "Brick",
+								"Turing", "Mario", "Wozniak" };
 
 						// Set Names
 						myOptions.setPlayerNames(nameOne.getText(),
