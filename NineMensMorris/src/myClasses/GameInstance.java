@@ -29,6 +29,7 @@ public class GameInstance{
 	private int gameStatus;
 
 	/**
+	 * @param contentPane - Window being used by the program.
 	 * @param options
 	 *            - The options for the game selected in the main menu.
 	 */
@@ -103,6 +104,9 @@ public class GameInstance{
 		contentPane.getContentPane().removeAll();
 	}
 	
+	/**
+	 * Control method for handling the placement phase of the game.
+	 */
 	public void placementPhase() {
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
@@ -119,6 +123,9 @@ public class GameInstance{
 		}
 	}
 
+	/**
+	 * Control method for handling the movement phase of the game.
+	 */
 	public void movementPhase() {
 		System.out.println("Movement Phase started");
 		//save board state 
@@ -132,11 +139,21 @@ public class GameInstance{
 		}
 	}
 
+	/**
+	 * Method that randomly chooses a number either 0 or 1 for 
+	 * choosing the starting player
+	 * @return The index for the player chosen to start.
+	 */
 	public int chooseStartingPlayer() {
 		// choose random player to start the game
 		return (int) ((Math.random() * 99.0) % 2);
 	}
 
+	/**
+	 * Controls the logic and some validation behind allowing a 
+	 * player to place their pieces
+	 * @param playerID - ID of the current player who is placing pieces.
+	 */
 	public void playerTurnPlace(int playerID) {
 		int position[] = {-1, -1};
 
@@ -160,7 +177,7 @@ public class GameInstance{
 				}
 			} else {
 				//Computer AI
-				position = players[playerID].placePiece();
+				position = ((Computer)players[playerID]).placePiece();
 			}
 		}
 		//Do not increment number of moves for player
@@ -171,8 +188,9 @@ public class GameInstance{
 	}
 
 	/**
-	 * 
-	 * @param player
+	 * Controls the logic and some validation behind allowing a
+	 * player to move their pieces.
+	 * @param player - ID of player making a move.
 	 */
 	public void playerTurnMove(int playerID) {
 		if (!myBoard.isMovePossible(players[playerID]) && !(myOptions.getFlyRule() != 3  
@@ -245,7 +263,7 @@ public class GameInstance{
 					!isMoveValid(position[0], position[1]) ||
 					myBoard.movePiece(position[0], position[1]) == -1))
 				{
-					position = players[playerID].movePiece();
+					position = ((Computer)players[playerID]).movePiece();
 				}
 	//			while(isGameOver() < 0 && 
 	//					(position[0][0] == -1 || 
@@ -311,6 +329,12 @@ public class GameInstance{
 		}
 	}
 	
+	/**
+	 * Validation method to determine if a move is allowed.
+	 * @param position1 - location of the piece being moved.
+	 * @param position2 - location of where to place the piece.
+	 * @return A boolean value as to if the move is valid.
+	 */
 	public boolean isMoveValid(int[] position1, int[] position2) {
 		boolean fly = false;
 		//if fly mode is on
@@ -381,6 +405,11 @@ public class GameInstance{
 		return true;
 	}
 
+	/**
+	 * Controls the logic of taking a piece from another player.
+	 * @param playerID - ID of player taking a piece.
+	 * @return The position of the piece taken.
+	 */
 	public int[] playerTake(int playerID){
 		System.out.println("Take a piece");
 		int position[] = new int[] {-1, -1};		
@@ -399,7 +428,7 @@ public class GameInstance{
 				System.out.printf("[%d, %d]\n",position[0], position[1]);
 			} else {
 				//Computer AI
-				position = players[playerID].takePiece();
+				position = ((Computer)players[playerID]).takePiece();
 			}
 		}
 		
@@ -407,6 +436,11 @@ public class GameInstance{
 		return position;
 	}
 	
+	/**
+	 * Validation method to check if a chosen piece can be taken.
+	 * @param position - location of the piece to be taken.
+	 * @return Whether the taking of the piece is allowed.
+	 */
 	public boolean isTakeValid(int[] position){
 		//check if a piece is at the position
 		if(myBoard.getPiece(position) == null){
@@ -427,10 +461,31 @@ public class GameInstance{
 		return true;
 	}
 	
+	/**
+	 * @return The current status of the game.
+	 */
 	public int getGameStatus(){
 		return gameStatus ;
 	}
 	
+	/**
+	 * Method to determine if the game should end.
+	 * @return End game codes 
+	 * <dl>
+	 * <dt>-1</dt>
+	 * <dd>- Game is not yet over</dd>
+	 * <dt>0</dt>
+	 * <dd>- Game ended normally with a winner,<br> 
+	 * and is to go to main menu.</dd>
+	 * <dt>1</dt>
+	 * <dd>- Game was ended in game and is to go to the menu.</dd>
+	 * <dt>2</dt>
+	 * <dd>- Game was restarted in game.</dd>
+	 * <dt>3</dt>
+	 * <dd>- Game ended normally with a winner,<br> 
+	 * and the game is to restart. </dd>
+	 * </dl>
+	 */
 	public int isGameOver() {
 		// If game is quit inside of interface.
 		if (boardInterface.isGameQuit()) {
@@ -458,6 +513,11 @@ public class GameInstance{
 		return -1;
 	}
 
+	
+	/**
+	 * Winner of the game
+	 * @return The index of the winner of the game.
+	 */
 	public int getWinnerIndex() {
 		if(isPlacement){
 			return -1;
@@ -471,6 +531,11 @@ public class GameInstance{
 		return -1;
 	}
 
+	
+	/**
+	 * Determines who won the game.
+	 * @return The player that won the game.
+	 */
 	public Player getWinner() {
 		if(isPlacement){
 			return null;
@@ -486,6 +551,10 @@ public class GameInstance{
 		return null;
 	}
 
+	
+	/**
+	 * Control logic for completing an undo during the game.
+	 */
 	public void undo() {
 		// Only works for human players
 		// TODO do not allow two undoes in a row; now it changes players but not game board
@@ -579,6 +648,9 @@ public class GameInstance{
 		passBoard();
 	}
 
+	/**
+	 * Sends the current state of the board to the gui.
+	 */
 	public void passBoard(){
 		boardInterface.setBoard(myBoard);
 	}	

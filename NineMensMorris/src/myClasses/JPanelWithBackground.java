@@ -7,6 +7,10 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
+/**
+ * Class that holds the background image.
+ *
+ */
 @SuppressWarnings("serial")
 public class JPanelWithBackground extends JPanel {
 

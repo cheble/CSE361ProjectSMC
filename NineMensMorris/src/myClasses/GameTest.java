@@ -2,6 +2,10 @@ package myClasses;
 
 import javax.swing.JPanel;
 
+/**
+ * A file for testing the game in place of the game gui.
+ * @deprecated
+ */
 public class GameTest implements GameInterface {
 
 	@Override

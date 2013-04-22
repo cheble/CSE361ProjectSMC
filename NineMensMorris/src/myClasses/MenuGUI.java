@@ -95,6 +95,11 @@ public class MenuGUI implements MenuInterface {
 	// Leaderboard
 	private String lbLoc = "files/leaderboard.txt";
 
+	/**
+	 * The gui for the Main menu of the  game.
+	 * @param contentPane - Window being used by program.
+	 * @param leaderboardLocation - location of the leaderboard file.
+	 */
 	public MenuGUI(JFrame contentPane, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
@@ -138,6 +143,13 @@ public class MenuGUI implements MenuInterface {
 
 	}
 
+	/**
+	 * Constructor for creating the game's main menu, 
+	 * and this time options have already been choosen.
+	 * @param contentPane - Window the game uses.
+	 * @param lastOptions - Options leftover from the last game.
+	 * @param leaderboardLocation - Location of the leaderbord file.
+	 */
 	public MenuGUI(JFrame contentPane, Options lastOptions, String leaderboardLocation) {
 		// Initialize variables
 		this.contentPane = contentPane;
@@ -178,6 +190,9 @@ public class MenuGUI implements MenuInterface {
 		loading();
 	}
 
+	/**
+	 * Displays loading screen as menu loads.
+	 */
 	public void loading() {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background = new JPanel();
@@ -209,6 +224,10 @@ public class MenuGUI implements MenuInterface {
 		drawMenu();
 	}
 
+	
+	/**
+	 * Draws the Main Menu for the game.
+	 */
 	public void drawMenu() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
@@ -421,6 +440,9 @@ public class MenuGUI implements MenuInterface {
 		contentPane.getContentPane().repaint();
 	}
 
+	/**
+	 * Draws the options menu within the main menu.
+	 */
 	public void drawOptions() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
@@ -696,7 +718,7 @@ public class MenuGUI implements MenuInterface {
 				myOptions.setGameRes(false);
 			}
 		});
-
+		
 		// Create Main Menu button & add to Layer
 		final JButton main = new JButton("MAIN MENU");
 		main.addMouseListener(new MouseAdapter() {
@@ -748,10 +770,16 @@ public class MenuGUI implements MenuInterface {
 			rOff.setIcon(on);
 		}
 
+		
 		maintainArray();
 		contentPane.getContentPane().repaint();
 	}
 
+	
+	/**
+	 * Draws the how to instructions for the game.
+	 * @param panel - where to draw the instructions.
+	 */
 	public void drawHowTo(final JPanel panel) {
 		slideNum = 1;
 
@@ -958,6 +986,10 @@ public class MenuGUI implements MenuInterface {
 		contentPane.getContentPane().repaint();
 	}
 
+	
+	/**
+	 * Draws the leaderboard standings of the game
+	 */
 	public void drawLeaderboards() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
@@ -1107,6 +1139,12 @@ public class MenuGUI implements MenuInterface {
 
 	}
 
+	
+	/**
+	 * Draws the Player name screen. It gets the player names and 
+	 * stores them in the appropriate player object. 
+	 * @param numHumans
+	 */
 	private void drawPlayerNames(final int numHumans) {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
@@ -1239,8 +1277,8 @@ public class MenuGUI implements MenuInterface {
 					if (nameOne.getText().length() != 0) {
 						// Some names for the computer player just for fun
 						Random randomNum = new Random();
-						String[] pcNames = { "Bill", "Steve", "Berners-Lee",
-								"Turing", "von Neumann", "Wozniak" };
+						String[] pcNames = { "Bill", "Steve", "Brick",
+								"Turing", "Mario", "Wozniak" };
 
 						// Set Names
 						myOptions.setPlayerNames(nameOne.getText(),
@@ -1270,21 +1308,33 @@ public class MenuGUI implements MenuInterface {
 
 	}
 
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see myClasses.MenuInterface#getOptions()
+	 */
 	public Options getOptions() {
 		return myOptions;
 	}
 
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see myClasses.MenuInterface#setOptions(myClasses.Options)
+	 */
 	public void setOptions(Options myOptions) {
 		this.myOptions = myOptions;
 	}
-
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see myClasses.MenuInterface#isGameReady()
+	 */
 	public boolean isGameReady() {
 		return isGameReady;
 	}
+	
 
+	/**
+	 * Manages the array of components being displayed.
+	 */
 	private void maintainArray() {
 		if (components.size() > 31) {
 			for (int i = 0; i < components.size() - 31; i++) {

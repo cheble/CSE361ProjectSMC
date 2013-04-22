@@ -12,6 +12,11 @@ import java.io.PrintWriter;
 
 import javax.swing.JFrame;
 
+/**
+ * Primary class for the game. It controls the flow of procedures:  
+ * determining when to display the main menu, how to set up the 
+ * game instance, and when and how to manage the leaderboard. *
+ */
 public class Main {
 	private static GameInstance game;
 	private static JFrame contentPane;
@@ -22,6 +27,9 @@ public class Main {
 //			+ "/Library/Application Support/NineMensMorris/leaderboard.txt";
 	private static String lbLoc = "files/leaderboard.txt";
 
+	/**
+	 * Entrance location of the program.
+	 */
 	public static void main(String[] args) {
 		// Check Directory Location
 //		checkDirectory();
@@ -68,6 +76,10 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Controls the flow for playing the game using the game instance.
+	 * @return The status of the game.
+	 */
 	public static int playGame() {
 		// Initiate Game
 		int gameStatus = -1;
@@ -97,6 +109,11 @@ public class Main {
 
 	}
 
+	/**
+	 * Checks and creates the leaderboard.txt file in the appropriate location.<br><hr>
+	 * /Library/Application Support/NineMensMorris/leaderboard.txt for Mac OS X<br>
+	 * (Current Directory)/files/leaderboard.txt for all other operating systems. 
+	 */
 	public static void checkDirectory() {
 		String directoryPath;
 		String leaderboardPath;
@@ -143,6 +160,10 @@ public class Main {
 
 	}
 
+	/**
+	 * Updates the leaderboard file with the information of the latest winner
+	 * @param winner - latest winner of a game.
+	 */
 	public static void updateLeaderboard(Player winner) {
 		// Variables
 		FileReader fr;

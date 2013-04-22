@@ -4,7 +4,8 @@ package myClasses;
 public class Computer extends Player {
 
 	/**
-	 * creates placement move
+	 * Creates placement move for the AI player
+	 * @return Single dimension array representing a move.
 	 */
 	public int[] placePiece() {
 		int[] temp = new int[2];
@@ -13,6 +14,12 @@ public class Computer extends Player {
 		return temp;
 	}
 
+	/** 
+	 * Creates a move for the computer player to take.
+	 * @return A double array int that has the location 
+	 * of the piece selected in the first array and the 
+	 * position to move to in the second.
+	 */
 	public int[][] movePiece() {
 		int[][] temp = new int[2][2];
 		temp[0][0] = (int) ((Math.random() * 99.0) % 3);
@@ -22,6 +29,10 @@ public class Computer extends Player {
 		return temp;
 	}
 
+	/**
+	 * Chooses an opponent's piece to take.
+	 * @return A location for a piece to choose.
+	 */
 	public int[] takePiece() {
 		int[] temp = new int[2];
 		temp[0] = (int) ((Math.random() * 99.0) % 3);

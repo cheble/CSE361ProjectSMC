@@ -27,8 +27,8 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
+	 * Add's a piece belonging to the player with the given PlayerID
+	 * to the position given.
 	 * @return returns -1 for error
 	 * @param position
 	 */
@@ -60,11 +60,10 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
+	 * Moves a piece in position1 to position2 if possible.
 	 * @return returns -1 for error
-	 * @param position1
-	 * @param position2
+	 * @param position1 : position to move from
+	 * @param position2 : position to move to
 	 */
 	public int movePiece(int[] position1, int[] position2) {
 		//check if position1 and position2 are in range
@@ -91,10 +90,12 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
-	 * 
-	 * @param position
+	 * Takes a piece at the given position from the board and places it on the side
+	 * board belonging to the given player	 * 
+	 * @param position : a position on the board
+	 * @param playerID : ID of the player who's side the
+	 *  piece will go to. Should be the owner of the piece.
+	 *  @return -1 if an error occurs and can't take piece.
 	 */
 	public int takePiece(int playerID, int[] position) {
 		//check if position is in range
@@ -102,7 +103,7 @@ public class GameBoard {
 			return -1;
 		}
 		//--------Conditions BEGIN
-		//check if a piece is at position1 on board
+		//check if a piece is at position on board
 		if (board[position[0]][position[1]] == null) {
 			return -1;
 		}
@@ -118,10 +119,9 @@ public class GameBoard {
 
 	
 	/**
-	 * Checks if a piece on the gameboard is apart of a mill
-	 * @author Chase
-	 * 
-	 * @param position
+	 * Checks if a piece on the gameboard is a part of a mill
+	 * @param position : Position of the piece to check.
+	 * @return A boolean value as to if the piece is in a mill.
 	 */
 	public boolean isMill(int[] position) {
 		//check if position is in range
@@ -186,10 +186,9 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
-	 * 
+	 * Checks if the player has any pieces that aren't in a Mill.
 	 * @param player
+	 * @return A boolean value as to if the player has non mill pieces.
 	 */
 	public boolean hasNonMillPieces(Player player) {
 		//Go through each piece on board
@@ -213,9 +212,9 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
-	 * @param player
+	 * Gives the number of pieces a player has on their side.
+	 * @param playerID 
+	 * @return The number pieces on that player's side.
 	 */
 	public int piecesOnSide(int playerID) {
 		int i = 9;
@@ -230,10 +229,9 @@ public class GameBoard {
 	}
 
 	/**
-	 * @author Chase
-	 * 
-	 * 
+	 * Retrieves the piece at the given location.
 	 * @param position
+	 * @return The Piece object at the given position.
 	 */
 	public Piece getPiece(int[] position) {
 		//check if position is in range
@@ -244,10 +242,9 @@ public class GameBoard {
 	}
 	
 	/**
-	 * @author Chase
-	 * 
-	 * 
+	 * Checks if a position exists on the board.
 	 * @param position
+	 * @return A boolean value as to if the position is on the board.
 	 */
 	public boolean isPositionValid(int[] position) {
 		if(position == null){
@@ -262,9 +259,21 @@ public class GameBoard {
 		return true;
 	}
 	
+	/**
+	 * Get's the Piece array representing the board.
+	 * @return The board array.
+	 */
 	public Piece[][] getBoard() {
 		return board;
 	}
+	
+	/**
+	 * Checks if it is possible for a player to make a move at all.
+	 * Does not account for fly mode, so must be checked as well when calling.
+	 * @param player
+	 * @return A boolean value as to if the player will 
+	 * be able to make a move that turn.
+	 */
 	public boolean isMovePossible(Player player){
 		//Go through each piece on board
 		for(int i=0; i<=2; i++){

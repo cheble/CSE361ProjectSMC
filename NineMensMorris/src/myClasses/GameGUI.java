@@ -105,6 +105,11 @@ public class GameGUI implements GameInterface {
 	private ImageIcon blankPiece = new ImageIcon(getClass().getClassLoader()
 			.getResource(blank));
 
+	/**
+	 * Initializes and sets the the game board for the actual game to be played on.
+	 * @param contentPane : The window being used to display the gui on.
+	 * @param players : The players of the game.
+	 */
 	public GameGUI(JFrame contentPane, Player players[]) {
 		// Initiate Variables
 		this.contentPane = contentPane;
@@ -154,6 +159,9 @@ public class GameGUI implements GameInterface {
 
 	}
 
+	/**
+	 * Display's a loading screen and then loads the game board.
+	 */
 	private void loading() {
 		// Create Background JPanel & Add to LayeredPane on Layer 1
 		JPanel background = new JPanel();
@@ -187,6 +195,9 @@ public class GameGUI implements GameInterface {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#drawBoard()
+	 */
 	public void drawBoard() {
 		// Initialize LayeredPane
 		final JLayeredPane layeredPane = new JLayeredPane();
@@ -920,6 +931,9 @@ public class GameGUI implements GameInterface {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#drawGameMenu(javax.swing.JPanel)
+	 */
 	public void drawGameMenu(final JPanel panel) {
 
 		// Initialize LayeredPane
@@ -1091,6 +1105,9 @@ public class GameGUI implements GameInterface {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#drawWinnerMenu(int)
+	 */
 	public void drawWinnerMenu(int winnerID) {
 
 		// Clear current board
@@ -1231,6 +1248,9 @@ public class GameGUI implements GameInterface {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#positionSelect()
+	 */
 	public int[] positionSelect() {
 		clearSelections();
 		int[] passedPos = new int[2];
@@ -1248,10 +1268,16 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#isGameQuit()
+	 */
 	public boolean isGameQuit() {
 		return isGameQuit;
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#isTurnSkipUndo()
+	 */
 	public int isTurnSkipUndo() {
 		if (isTurnSkip) {
 			return 1;
@@ -1262,7 +1288,9 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
-	@Override
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#setBoard(myClasses.GameBoard)
+	 */
 	public void setBoard(GameBoard gm) {
 		// Clear
 		clearSelections();
@@ -1289,6 +1317,11 @@ public class GameGUI implements GameInterface {
 		contentPane.getContentPane().repaint();
 	}
 
+	/**
+	 * Sets the state of the player's side with the number of pieces given.
+	 * @param playerID
+	 * @param numPieces
+	 */
 	private void setSideState(int playerID, int numPieces) {
 		for (int i = 0; i < numPieces; i++) {
 			if (playerID == 0) {
@@ -1306,7 +1339,9 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
-	@Override
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#setTurnInfo(int, java.lang.String)
+	 */
 	public void setTurnInfo(int playerID, String message) {
 		info[playerID].setText("<html><center>" + message);
 		if (playerID == 0) {
@@ -1316,11 +1351,17 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#isGameBegan()
+	 */
 	@Override
 	public boolean isGameBegan() {
 		return isGameBegan;
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#clearSelections()
+	 */
 	@Override
 	public void clearSelections() {
 		// Clear The selected Positions on setBoard
@@ -1329,10 +1370,16 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#getName(int)
+	 */
 	public String getName(int playerID) {
 		return players[playerID].getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#setPosSelected(int, int)
+	 */
 	public void setPosSelected(int ring, int position) {
 		// Check to see if yellow piece already on board
 		if (ring != -1 && position != -1) {
@@ -1355,11 +1402,17 @@ public class GameGUI implements GameInterface {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#isGameReset()
+	 */
 	@Override
 	public boolean isGameReset() {
 		return isGameReset;
 	}
 
+	/* (non-Javadoc)
+	 * @see myClasses.GameInterface#setFlyMode(int, boolean)
+	 */
 	public void setFlyMode(int playerID, boolean setMode) {
 		if (setMode) {
 			flyModeBanners[playerID]
