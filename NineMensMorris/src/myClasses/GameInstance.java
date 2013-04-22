@@ -263,23 +263,6 @@ public class GameInstance{
 					position = players[playerID].movePiece();
 					System.out.print("");
 				}
-	//			while(isGameOver() < 0 && 
-	//					(position[0][0] == -1 || 
-	//					myBoard.getPiece(position[0]) == null ||
-	//					!myBoard.getPiece(position[0]).getOwner().equals(players[playerID]) ||
-	//					!isMovePossible(position[0])))
-	//			{
-	//				position[0] = players[playerID].placePiece();
-	//			}
-	//			while(isGameOver() < 0 && 
-	//					(position[1][0] == -1 ||
-	//					myBoard.getPiece(position[0]) != null) ||
-	//					myBoard.getPiece(position[0]).getOwner().equals(players[(playerID + 1)%2])){
-	//				position[1] = players[playerID].placePiece();
-	//				if(position[1][0] != -1){
-	//					break;
-	//				}
-	//			}
 			}
 			//Increment number of moves for player
 			players[playerID].incrementNumMoves();
