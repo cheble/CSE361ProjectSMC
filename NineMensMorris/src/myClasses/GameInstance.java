@@ -401,7 +401,7 @@ public class GameInstance{
 			}
 		}
 		//else doesn't matter where it's placed and ownership is checked earlier
-		
+		//System.out.println(fly);
 		return true;
 	}
 
