@@ -9,36 +9,50 @@ public class Options {
 	private boolean computerPlayer;
 	private String[] playerNames ;
 	
+	/**
+	 * Set's up the options with the default values.
+	 */
 	public Options(){
 		this.playerNames = new String[2];
 	}
 
 	/**
-	 * 1 means 3 pieces left until flyRule starts
-	 * 2 means 4 pieces left until flyRule starts
+	 * Tells when fly mode is to be enabled.
+	 * 1 means 3 pieces left when flyRule starts
+	 * 2 means 4 pieces left when flyRule starts
 	 * 3 means flyRule off
 	 * 
-	 * @return flyRule
+	 * @return <b>flyRule</b> <ul>
+	 * <li>1 means 3 pieces left until flyRule starts</li>
+	 * <li>2 means 4 pieces left until flyRule starts</li>
+	 * <li>3 means flyRule off</li></ul>
 	 */
 	public int getFlyRule() {
 		return this.flyRule;
 	}
 
 	/**
-	 * 
-	 * @param flyRule
+	 * Set's which setting flyRule is.
+	 * @param flyRule <ul>
+	 * <li>1 means 3 pieces left until flyRule starts</li>
+	 * <li>2 means 4 pieces left until flyRule starts</li>
+	 * <li>3 means flyRule off</li></ul>
 	 */
 	public void setFlyRule(int flyRule) {
 		this.flyRule = flyRule;
 	}
 
+	/**
+	 * Returns the Timer's current setting.
+	 * @return The current setting of the Timer. 
+	 */
 	public boolean getTimer() {
 		return this.timer;
 	}
 
 	/**
-	 * 
-	 * @param timer
+	 * Set's the Timer
+	 * @param timer Boolean True:On, False:OFF
 	 */
 	public void setTimer(boolean timer) {
 		this.timer = timer;

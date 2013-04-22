@@ -29,6 +29,7 @@ public class GameInstance{
 	private int gameStatus;
 
 	/**
+	 * @param contentPane - Window being used by the program.
 	 * @param options
 	 *            - The options for the game selected in the main menu.
 	 */
@@ -103,6 +104,9 @@ public class GameInstance{
 		contentPane.getContentPane().removeAll();
 	}
 	
+	/**
+	 * Control method for handling the placement phase of the game.
+	 */
 	public void placementPhase() {
 		currentPlayer = chooseStartingPlayer();
 		//while non-starting player has pieces
@@ -119,14 +123,14 @@ public class GameInstance{
 		}
 	}
 
+	/**
+	 * Control method for handling the movement phase of the game.
+	 */
 	public void movementPhase() {
 		System.out.println("Movement Phase started");
 		//save board state 
 		//while non-starting player has pieces
 		while(true){
-			//Test stored move states
-			System.out.printf("prevMove: [%d, %d]   to   [%d, %d]       ",prevMove[0][0], prevMove[0][1],prevMove[1][0], prevMove[1][1]);
-			System.out.printf("prevPrevMove: [%d, %d]   to   [%d, %d]\n",prevPrevMove[0][0], prevPrevMove[0][1],prevPrevMove[1][0], prevPrevMove[1][1]);
 			if(isGameOver() < 0){
 				playerTurnMove(currentPlayer);
 			} else { 
@@ -135,11 +139,21 @@ public class GameInstance{
 		}
 	}
 
+	/**
+	 * Method that randomly chooses a number either 0 or 1 for 
+	 * choosing the starting player
+	 * @return The index for the player chosen to start.
+	 */
 	public int chooseStartingPlayer() {
 		// choose random player to start the game
 		return (int) ((Math.random() * 99.0) % 2);
 	}
 
+	/**
+	 * Controls the logic and some validation behind allowing a 
+	 * player to place their pieces
+	 * @param playerID - ID of the current player who is placing pieces.
+	 */
 	public void playerTurnPlace(int playerID) {
 		int position[] = {-1, -1};
 
@@ -163,7 +177,7 @@ public class GameInstance{
 				}
 			} else {
 				//Computer AI
-				position = players[playerID].placePiece();
+				position = ((Computer)players[playerID]).placePiece();
 			}
 		}
 		//Do not increment number of moves for player
@@ -174,8 +188,9 @@ public class GameInstance{
 	}
 
 	/**
-	 * 
-	 * @param player
+	 * Controls the logic and some validation behind allowing a
+	 * player to move their pieces.
+	 * @param player - ID of player making a move.
 	 */
 	public void playerTurnMove(int playerID) {
 		if (!myBoard.isMovePossible(players[playerID]) && !(myOptions.getFlyRule() != 3  
@@ -247,7 +262,6 @@ public class GameInstance{
 				{
 					position = players[playerID].movePiece();
 					System.out.print("");
-					//System.out.printf("Computer Move Finder: [%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 				}
 	//			while(isGameOver() < 0 && 
 	//					(position[0][0] == -1 || 
@@ -269,10 +283,11 @@ public class GameInstance{
 			}
 			//Increment number of moves for player
 			players[playerID].incrementNumMoves();
-			//check if move created a mill
-	
+			//check if move created a mill	
 			if((isGameOver() < 0) && myBoard.isMill(position[1])){
+				System.out.println("it is");
 				passBoard();
+				System.out.println("board passed");
 				take = playerTake(playerID);
 				// player press undo/skip during playerTake
 				if(take[0] == -1){
@@ -286,9 +301,8 @@ public class GameInstance{
 						return;
 					} else {
 						// skip
-						players[playerID].incrementNumMoves();
-						passBoard();
-						currentPlayer = (currentPlayer+1) % 2;
+						System.out.println("SKIP");
+						skip();
 						return;
 					}
 				}
@@ -308,6 +322,12 @@ public class GameInstance{
 		}
 	}
 	
+	/**
+	 * Validation method to determine if a move is allowed.
+	 * @param position1 - location of the piece being moved.
+	 * @param position2 - location of where to place the piece.
+	 * @return A boolean value as to if the move is valid.
+	 */
 	public boolean isMoveValid(int[] position1, int[] position2) {
 		boolean fly = false;
 		//if fly mode is on
@@ -378,6 +398,11 @@ public class GameInstance{
 		return true;
 	}
 
+	/**
+	 * Controls the logic of taking a piece from another player.
+	 * @param playerID - ID of player taking a piece.
+	 * @return The position of the piece taken.
+	 */
 	public int[] playerTake(int playerID){
 		System.out.println("Take a piece");
 		int position[] = new int[] {-1, -1};		
@@ -396,7 +421,7 @@ public class GameInstance{
 				System.out.printf("[%d, %d]\n",position[0], position[1]);
 			} else {
 				//Computer AI
-				position = players[playerID].takePiece();
+				position = ((Computer)players[playerID]).takePiece();
 			}
 		}
 		
@@ -404,6 +429,11 @@ public class GameInstance{
 		return position;
 	}
 	
+	/**
+	 * Validation method to check if a chosen piece can be taken.
+	 * @param position - location of the piece to be taken.
+	 * @return Whether the taking of the piece is allowed.
+	 */
 	public boolean isTakeValid(int[] position){
 		//check if a piece is at the position
 		if(myBoard.getPiece(position) == null){
@@ -424,10 +454,31 @@ public class GameInstance{
 		return true;
 	}
 	
+	/**
+	 * @return The current status of the game.
+	 */
 	public int getGameStatus(){
 		return gameStatus ;
 	}
 	
+	/**
+	 * Method to determine if the game should end.
+	 * @return End game codes 
+	 * <dl>
+	 * <dt>-1</dt>
+	 * <dd>- Game is not yet over</dd>
+	 * <dt>0</dt>
+	 * <dd>- Game ended normally with a winner,<br> 
+	 * and is to go to main menu.</dd>
+	 * <dt>1</dt>
+	 * <dd>- Game was ended in game and is to go to the menu.</dd>
+	 * <dt>2</dt>
+	 * <dd>- Game was restarted in game.</dd>
+	 * <dt>3</dt>
+	 * <dd>- Game ended normally with a winner,<br> 
+	 * and the game is to restart. </dd>
+	 * </dl>
+	 */
 	public int isGameOver() {
 		// If game is quit inside of interface.
 		if (boardInterface.isGameQuit()) {
@@ -455,6 +506,11 @@ public class GameInstance{
 		return -1;
 	}
 
+	
+	/**
+	 * Winner of the game
+	 * @return The index of the winner of the game.
+	 */
 	public int getWinnerIndex() {
 		if(isPlacement){
 			return -1;
@@ -468,6 +524,11 @@ public class GameInstance{
 		return -1;
 	}
 
+	
+	/**
+	 * Determines who won the game.
+	 * @return The player that won the game.
+	 */
 	public Player getWinner() {
 		if(isPlacement){
 			return null;
@@ -483,8 +544,10 @@ public class GameInstance{
 		return null;
 	}
 
+	/**
+	 * Control logic for completing a skip during the game.
+	 */
 	public void skip(){
-		
 		// Save current move as a skip and save prev moves
 		prevPrevTake = prevTake.clone();
 		prevTake = new int[] {-1,-1};
@@ -495,15 +558,13 @@ public class GameInstance{
 		currentPlayer = (currentPlayer+1) % 2;
 	}
 	
+	/**
+	 * Control logic for completing an undo during the game.
+	 */
 	public void undo() {
 		// Only works for human players
-		// TODO do not allow two undoes in a row; now it changes players but not game board
-		// TODO do not allow undo on a players first movement turn
-		// TODO deal with undo/skip mid turn or during playerTake
 		
 		System.out.println("undo function");
-		
-		
 		
 		if(myOptions.getComputerPlayer()){
 			System.out.println("undo hvc");
@@ -569,6 +630,7 @@ public class GameInstance{
 		}else{
 			System.out.println("undo hvh");
 			// Human vs Human
+			System.out.println("undo piecesOS:" + myBoard.piecesOnSide((currentPlayer+1) % 2));
 			if (prevMove[0][0] == -2){
 				System.out.println("undoing a skip");
 				// last human move was a skip
@@ -582,10 +644,9 @@ public class GameInstance{
 				prevPrevTake = new int[] {-1,-1};				
 			} else if(prevMove[0][0] != -1){
 				System.out.println("undo allowed");
-				// Don't allow undo of placement
-				//prevBoard = prevPrevBoard;
 				// current player goes back to previous
 				currentPlayer = (currentPlayer+1) % 2;
+				System.out.println(prevTake[0] + ", "+ prevTake[1]);
 				if(prevTake[0] != -1){
 					// 		undo take piece
 					// take piece from side and add to board
@@ -596,10 +657,9 @@ public class GameInstance{
 				myBoard.movePiece(prevMove[1], prevMove[0]);
 				
 				players[currentPlayer].decrementNumMoves();
-				//prevMove = prevPrevMove;
+
 				prevMove = new int[][] {{-1,-1},{-1,-1}};
 				prevPrevMove = new int[][] {{-1,-1},{-1,-1}};
-				//prevTake = prevPrevTake;
 				prevTake = new int[] {-1,-1};
 				prevPrevTake = new int[] {-1,-1};
 				System.out.println("undo complete");
@@ -610,6 +670,9 @@ public class GameInstance{
 		passBoard();
 	}
 
+	/**
+	 * Sends the current state of the board to the gui.
+	 */
 	public void passBoard(){
 		boardInterface.setBoard(myBoard);
 	}	

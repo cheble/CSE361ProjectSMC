@@ -11,31 +11,39 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 * Set's the name of the player.
 	 * @param name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Is the player a human?
+	 * @return True: is a human<br>False: is not a human
+	 */
 	public boolean getIsHuman() {
 		return this.isHuman;
 	}
 
 	/**
-	 * 
-	 * @param isHuman
+	 * Set's whether or not the player is human
+	 * @param isHuman: true is human, false is not human
 	 */
 	public void setIsHuman(boolean isHuman) {
 		this.isHuman = isHuman;
 	}
 
+	/**
+	 * Get's the number of moves that a player has taken so far.
+	 * @return The number of rounds a player has gone.
+	 */
 	public int getNumMoves() {
 		return this.numMoves;
 	}
 
 	/**
-	 * 
+	 * Edit's the number of moves taken
 	 * @param numMoves
 	 */
 	public void setNumMoves(int numMoves) {
@@ -44,7 +52,7 @@ public class Player {
 	
 	
 	/**
-	 * @author Chase
+	 * A method to increment the number of moves a player has taken by one.
 	 * 
 	 */
 	public void incrementNumMoves(){
@@ -52,22 +60,15 @@ public class Player {
 	}
 	
 	/**
-	 * @author Chase
+	 * A method to decrement the number of moves a player has taken by one.
 	 * 
 	 */
 	public void decrementNumMoves(){
 		numMoves--;
 	}
-	
-	public int[] placePiece() {
-		return null;
-	}
 
 	public int[][] movePiece() {
-		return null;
-	}
-
-	public int[] takePiece() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
