@@ -31,9 +31,6 @@ public class Main {
 	 * Entrance location of the program.
 	 */
 	public static void main(String[] args) {
-		// Check Directory Location
-//		checkDirectory();
-
 		// Initialize contentPane
 		contentPane = new JFrame();
 		contentPane.setVisible(true);
@@ -42,6 +39,9 @@ public class Main {
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setLayout(null);
 		contentPane.setBackground(Color.black);
+		
+		// Check Directory Location
+		checkDirectory();
 
 		// Forever until user quit on close
 		while (true) {
