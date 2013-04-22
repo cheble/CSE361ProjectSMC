@@ -124,6 +124,9 @@ public class GameInstance{
 		//save board state 
 		//while non-starting player has pieces
 		while(true){
+			//Test stored move states
+			System.out.printf("prevMove: [%d, %d]   to   [%d, %d]       ",prevMove[0][0], prevMove[0][1],prevMove[1][0], prevMove[1][1]);
+			System.out.printf("prevPrevMove: [%d, %d]   to   [%d, %d]\n",prevPrevMove[0][0], prevPrevMove[0][1],prevPrevMove[1][0], prevPrevMove[1][1]);
 			if(isGameOver() < 0){
 				playerTurnMove(currentPlayer);
 			} else { 
@@ -200,13 +203,12 @@ public class GameInstance{
 						undo();
 						return;
 					}
-					position[0] = boardInterface.positionSelect();
 					if(boardInterface.isTurnSkipUndo() == 1){
-						System.out.println(boardInterface.isTurnSkipUndo());
-						currentPlayer = (currentPlayer+1) % 2;
-						passBoard();
+						System.out.println("SKIP");
+						skip();
 						return;
 					}
+					position[0] = boardInterface.positionSelect();
 				}
 				boardInterface.setPosSelected(position[0][0], position[0][1]);
 				boardInterface.setTurnInfo(playerID, "YOUR TURN<br>CLICK A POSITION");
@@ -216,8 +218,6 @@ public class GameInstance{
 						!isMoveValid(position[0], position[1]) ||
 						myBoard.movePiece(position[0], position[1]) == -1))
 				{
-					System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
-					position[1] = boardInterface.positionSelect();
 					if(boardInterface.isTurnSkipUndo() == 2){
 						System.out.println("UNDO");
 						undo();
@@ -225,11 +225,11 @@ public class GameInstance{
 					}
 					//Skip turn if button pressed
 					if(boardInterface.isTurnSkipUndo() == 1){
-						players[playerID].incrementNumMoves();
-						passBoard();
-						currentPlayer = (currentPlayer+1) % 2;
+						System.out.println("SKIP");
+						skip();
 						return;
 					}
+					position[1] = boardInterface.positionSelect();
 					//undo first selection if second selection is same piece
 					if(Arrays.equals(position[0], position[1])){
 						//restart move process
@@ -246,7 +246,8 @@ public class GameInstance{
 					myBoard.movePiece(position[0], position[1]) == -1))
 				{
 					position = players[playerID].movePiece();
-					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
+					System.out.print("");
+					//System.out.printf("Computer Move Finder: [%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
 				}
 	//			while(isGameOver() < 0 && 
 	//					(position[0][0] == -1 || 
@@ -266,17 +267,12 @@ public class GameInstance{
 	//				}
 	//			}
 			}
-			System.out.printf("[%d, %d]   to   [%d, %d]\n",position[0][0], position[0][1],position[1][0], position[1][1]);
-			System.out.println("move accecpted");
 			//Increment number of moves for player
 			players[playerID].incrementNumMoves();
 			//check if move created a mill
-			System.out.println("is Mill?");
 	
 			if((isGameOver() < 0) && myBoard.isMill(position[1])){
-				System.out.println("it is");
 				passBoard();
-				System.out.println("board passed");
 				take = playerTake(playerID);
 				// player press undo/skip during playerTake
 				if(take[0] == -1){
@@ -487,27 +483,53 @@ public class GameInstance{
 		return null;
 	}
 
+	public void skip(){
+		
+		// Save current move as a skip and save prev moves
+		prevPrevTake = prevTake.clone();
+		prevTake = new int[] {-1,-1};
+		prevPrevMove = prevMove.clone();
+		prevMove =  new int[][] {{-2,-2},{-2,-2}};	//signifies skip
+		players[currentPlayer].incrementNumMoves();
+		passBoard();
+		currentPlayer = (currentPlayer+1) % 2;
+	}
+	
 	public void undo() {
 		// Only works for human players
 		// TODO do not allow two undoes in a row; now it changes players but not game board
 		// TODO do not allow undo on a players first movement turn
 		// TODO deal with undo/skip mid turn or during playerTake
 		
-		// UNDO
-		// Can Happen:
-		//	Beginning of next human player move if facing human
-		//	Beginning of your next move if facing computer
-		//	??Beginning of playerTake??  NO
 		System.out.println("undo function");
+		
+		
 		
 		if(myOptions.getComputerPlayer()){
 			System.out.println("undo hvc");
 			// Human vs Computer game
-			// assuming only players[0] can undo()
 			// UNDO Computer and Human moves here
-			System.out.println("undo piecesOS:" + myBoard.piecesOnSide(0));
-			// TODO disable button instead of checking here
-			if(prevPrevMove[0][0] != -1){
+			if (prevPrevMove[0][0] == -2){
+				//last human move was a skip
+				// UNDO Computer players[1] move here
+				System.out.println("Computer Move");
+				System.out.println(prevTake[0] + ", "+ prevTake[1]);
+				if(prevTake[0] != -1){
+					// 		undo take piece
+					// take piece from side and add to board
+					System.out.println("Adding Human Piece");
+					System.out.println(myBoard.addPiece(0, prevTake));
+					System.out.println("Added Human Piece");
+				}
+				myBoard.movePiece(prevMove[1], prevMove[0]);
+				players[1].decrementNumMoves();
+				players[currentPlayer].decrementNumMoves();
+				// reset saved moves
+				prevMove = new int[][] {{-1,-1},{-1,-1}};
+				prevPrevMove = new int[][] {{-1,-1},{-1,-1}};
+				prevTake = new int[] {-1,-1};
+				prevPrevTake = new int[] {-1,-1};
+			} else if(prevPrevMove[0][0] != -1){
 				System.out.println("undo allowed");
 				// Don't allow undo of placement
 				// UNDO Computer players[1] move here
@@ -547,25 +569,33 @@ public class GameInstance{
 		}else{
 			System.out.println("undo hvh");
 			// Human vs Human
-			System.out.println("undo piecesOS:" + myBoard.piecesOnSide((currentPlayer+1) % 2));
-			if(prevMove[0][0] != -1){
+			if (prevMove[0][0] == -2){
+				System.out.println("undoing a skip");
+				// last human move was a skip
+				// current player goes back to previous
+				currentPlayer = (currentPlayer+1) % 2;
+				players[currentPlayer].decrementNumMoves();
+				// reset saved moves
+				prevMove = new int[][] {{-1,-1},{-1,-1}};
+				prevPrevMove = new int[][] {{-1,-1},{-1,-1}};
+				prevTake = new int[] {-1,-1};
+				prevPrevTake = new int[] {-1,-1};				
+			} else if(prevMove[0][0] != -1){
 				System.out.println("undo allowed");
 				// Don't allow undo of placement
 				//prevBoard = prevPrevBoard;
-				//TEST undo prevMove
-				System.out.println(prevTake[0] + ", "+ prevTake[1]);
+				// current player goes back to previous
+				currentPlayer = (currentPlayer+1) % 2;
 				if(prevTake[0] != -1){
 					// 		undo take piece
 					// take piece from side and add to board
 					System.out.println("Adding Piece");
-					System.out.println(myBoard.addPiece(currentPlayer, prevTake));
+					System.out.println(myBoard.addPiece((currentPlayer+1) % 2, prevTake));
 					System.out.println("Added Piece");
 				}
 				myBoard.movePiece(prevMove[1], prevMove[0]);
 				
-				players[(currentPlayer+1) % 2].decrementNumMoves();
-				// current player goes back to previous
-				currentPlayer = (currentPlayer+1) % 2;
+				players[currentPlayer].decrementNumMoves();
 				//prevMove = prevPrevMove;
 				prevMove = new int[][] {{-1,-1},{-1,-1}};
 				prevPrevMove = new int[][] {{-1,-1},{-1,-1}};
