@@ -265,6 +265,9 @@ public class GameInstance{
 				{
 					position = ((Computer)players[playerID]).movePiece();
 					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
+					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
+					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
+					//System.out.println(position[0][0]+","+position[0][1] + "  to   " + position[1][0]+","+position[1][1]);
 				}
 	//			while(isGameOver() < 0 && 
 	//					(position[0][0] == -1 || 
